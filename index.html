@@ -4,17 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
     <title>ARC · Resume Intelligence</title>
-    <!-- Fonts & Icons (SVG sprite) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&family=Source+Serif+Pro:wght@400;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&family=Source+Serif+Pro:wght@400;600&family=Space+Grotesk:wght@400;500;600&family=Work+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&family=Lexend:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         /* ---------- RESET & GLOBAL DESIGN SYSTEM ---------- */
         *{margin:0;padding:0;box-sizing:border-box;}
         body{background:#f6f9fc;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;height:100vh;display:flex;flex-direction:column;color:#142433;overflow:hidden;}
-        /* ----- SVG ICON SPRITE (inline, self-contained) ----- */
         .icon{display:inline-block;width:20px;height:20px;stroke-width:1.5;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle;}
         .icon-sm{width:18px;height:18px;}
         .icon-lg{width:24px;height:24px;}
-        /* ----- PREMIUM TOOLBAR (minimal, glass) ----- */
         .toolbar{background:#ffffffd9;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,0.04);padding:12px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;box-shadow:0 4px 20px rgba(0,20,40,0.02);z-index:100;}
         .brand{font-size:20px;font-weight:700;letter-spacing:-0.01em;color:#0a2a33;display:flex;align-items:center;gap:8px;}
         .brand svg{width:28px;height:28px;stroke:#0a2a33;stroke-width:1.8;}
@@ -25,9 +22,7 @@
         .btn-primary{background:#1a404f;border-color:#1a404f;color:white;}
         .btn:hover{background:#f4faff;border-color:#9cb8c7;transform:translateY(-1px);box-shadow:0 8px 14px rgba(26,64,79,0.08);}
         .btn-primary:hover{background:#255f72;border-color:#255f72;}
-        /* ----- EDITOR LAYOUT (two-pane, balanced) ----- */
         .editor{display:flex;flex:1;overflow:hidden;background:#f2f6fb;}
-        /* ----- FORM PANEL (elevated cards) ----- */
         .form-panel{width:36%;background:white;border-right:1px solid rgba(0,0,0,0.04);padding:32px 28px;overflow-y:auto;box-shadow:8px 0 30px rgba(0,0,0,0.02);}
         .form-section{background:#ffffff;border-radius:28px;padding:24px;margin-bottom:24px;border:1px solid #edf4f8;box-shadow:0 10px 22px rgba(0,0,0,0.02);transition:0.2s;}
         .form-section:hover{border-color:#cde3ec;box-shadow:0 18px 30px rgba(26,64,79,0.04);}
@@ -48,25 +43,25 @@
         .drag-handle{color:#89aebd;font-size:20px;cursor:grab;}
         .sortable-list{background:#f6fbfd;border-radius:24px;padding:12px;}
         .section-drag{background:white;border:1px solid #dfecf2;border-radius:20px;padding:16px 20px;margin-bottom:8px;display:flex;align-items:center;gap:12px;font-weight:600;color:#1b4b5a;cursor:grab;}
-        /* ----- PREVIEW PANEL (source of truth) ----- */
         .preview-panel{flex:1;background:#e7f0f5;padding:32px;overflow-y:auto;display:flex;flex-direction:column;align-items:center;}
         .preview-scroll{width:210mm;background:white;box-shadow:0 20px 40px -12px rgba(0,0,0,0.16);transform:scale(0.82);transform-origin:top center;border-radius:8px;transition:transform 0.2s;}
         .resume{background:white;}
         .ats-card{width:210mm;background:white;border-radius:28px;padding:28px;margin-top:28px;box-shadow:0 16px 32px rgba(0,0,0,0.04);border:1px solid #e9f0f5;}
-        /* ----- PRINT PERFECTION ----- */
         @media print{.toolbar,.form-panel,.ats-card,.preview-panel>:not(.preview-scroll),.no-print{display:none!important}.preview-panel{background:white;padding:0}.preview-scroll{transform:none;width:100%;box-shadow:none;border-radius:0;margin:0;}}
         .page-break-before{break-before:page;}
         li,.job,.education{break-inside:avoid;}
-        /* ----- UTILITIES ----- */
         .profile-img{width:68px;height:68px;border-radius:50%;object-fit:cover;border:3px solid white;box-shadow:0 6px 14px rgba(0,0,0,0.06);}
         .ai-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.2);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:1000;}
         .ai-card{background:white;width:520px;border-radius:36px;padding:32px;box-shadow:0 30px 60px rgba(0,0,0,0.2);}
         .ai-suggestion{background:#f2fcfe;border-left:6px solid #1a606f;padding:18px;border-radius:16px;margin:16px 0;}
         .ai-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:28px;}
+        /* Certificate item */
+        .cert-item{background:#f7fcff;border-radius:18px;padding:16px;margin-bottom:12px;display:flex;align-items:center;gap:12px;border:1px solid #d4e7ef;}
+        .cert-input{flex:1;}
+        .skill-chip{background:#eaf3f8;border-radius:30px;padding:8px 16px;display:inline-flex;align-items:center;gap:8px;margin:0 6px 8px 0;font-size:13px;border:1px solid #c3dce5;}
     </style>
 </head>
 <body>
-    <!-- SVG ICON SPRITE (inline, clean) -->
     <svg style="display:none;" xmlns="http://www.w3.org/2000/svg">
         <symbol id="icon-brand" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8v8H8z"/><path d="M12 12v4"/></symbol>
         <symbol id="icon-save" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></symbol>
@@ -78,18 +73,12 @@
         <symbol id="icon-trash" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></symbol>
         <symbol id="icon-ai" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="0.5" fill="currentColor"/></symbol>
         <symbol id="icon-drag" viewBox="0 0 24 24"><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="8" r="1"/><circle cx="15" cy="8" r="1"/><circle cx="9" cy="16" r="1"/><circle cx="15" cy="16" r="1"/></symbol>
+        <symbol id="icon-predict" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></symbol>
     </svg>
 
-    <!-- TOOLBAR (premium) -->
     <div class="toolbar no-print">
-        <div class="brand">
-            <svg class="icon-lg"><use href="#icon-brand"></use></svg>
-            ARC·RESUME
-        </div>
-        <div class="theme-control">
-            <span style="color:#1a404f;font-weight:500;">Theme</span>
-            <select id="themeSelector" class="theme-selector"></select>
-        </div>
+        <div class="brand"><svg class="icon-lg"><use href="#icon-brand"></use></svg>ARC·RESUME</div>
+        <div class="theme-control"><span style="color:#1a404f;font-weight:500;">Theme</span><select id="themeSelector" class="theme-selector"></select></div>
         <div class="btn-group">
             <button id="saveBtn" class="btn"><svg class="icon"><use href="#icon-save"></use></svg> Save</button>
             <button id="resetBtn" class="btn"><svg class="icon"><use href="#icon-reset"></use></svg> Reset</button>
@@ -98,12 +87,8 @@
         </div>
     </div>
 
-    <!-- MAIN EDITOR -->
     <div class="editor">
-        <!-- DYNAMIC FORM PANEL (populated by JS) -->
         <div id="formPanel" class="form-panel no-print"></div>
-
-        <!-- PREVIEW PANEL (source of truth) -->
         <div class="preview-panel">
             <div class="preview-scroll" id="previewFrame"><div id="resumePreview" class="resume"></div></div>
             <div id="atsContainer" class="ats-card no-print" style="display:none;">
@@ -119,7 +104,20 @@
         </div>
     </div>
 
-    <!-- AI MODAL (strict Suggest→Preview→Select→Apply→Reset→Save) -->
+    <!-- AI MODAL (skills) -->
+    <div id="aiSkillModal" class="ai-modal no-print" style="display:none;">
+        <div class="ai-card">
+            <h3 style="display:flex;gap:8px;margin-bottom:12px;"><svg class="icon" style="stroke:#1a606f;"><use href="#icon-predict"></use></svg>AI Skill Predictor</h3>
+            <p style="margin-bottom:16px;color:#347183;">Suggested skills based on your profile:</p>
+            <div id="skillSuggestionsList" style="max-height:300px;overflow-y:auto;"></div>
+            <div class="ai-actions">
+                <button id="aiSkillCancel" class="item-btn">Cancel</button>
+                <button id="aiSkillApply" class="btn btn-primary">Apply Selected</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI MODAL (general assistant) -->
     <div id="aiModal" class="ai-modal no-print" style="display:none;">
         <div class="ai-card">
             <h3 style="display:flex;gap:8px;margin-bottom:12px;"><svg class="icon" style="stroke:#1a606f;"><use href="#icon-ai"></use></svg>AI Writing Assistant</h3>
@@ -136,7 +134,6 @@
         (function(){
             "use strict";
 
-            // ---------- ENTERPRISE STATE (immutable pattern, persisted) ----------
             const STORAGE_KEY = 'arc_resume_enterprise_v3';
             const DEFAULT_STATE = {
                 profileImage: null,
@@ -164,112 +161,177 @@
                 certifications: ['Google UX Design Professional', 'NN/g UX Certification'],
                 sectionOrder: ['profile', 'experience', 'education', 'skills', 'certifications'],
                 visibility: { profile: true, experience: true, education: true, skills: true, certifications: true },
-                activeTheme: 'theme2c1' // default two‑column
+                activeTheme: 'theme2c1'
             };
 
             let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
             try { const saved = localStorage.getItem(STORAGE_KEY); if(saved) state = JSON.parse(saved); } catch(e){}
 
-            // ---------- PERSISTENCE ----------
             function persist() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
-            // ---------- 20 DISTINCT PREMIUM THEMES (10 single, 10 two‑column) ----------
+            // ------------------------------------------------------------
+            //  UPDATED VIBRANT THEMES — 10 TWO-COLUMN + 10 SINGLE-COLUMN
+            //  Visual upgrade only: colors, typography, accents, shadows
+            // ------------------------------------------------------------
             const THEMES = [];
 
-            // ----- TWO-COLUMN (10) : distinct colors, fonts, grids, bullets -----
+            // ----- TWO-COLUMN (10) – refreshed with modern palettes -----
             const twoColThemes = [
-                { id: 'theme2c1', name: '2C · Modern Slate', accent: '#1e4a6b', leftBg: '#f4f7fb', font: 'Inter', bullet: '▹', cols: '1fr 2.2fr' },
-                { id: 'theme2c2', name: '2C · Navy Gold', accent: '#2c405a', leftBg: '#fcf7f0', font: 'Inter', bullet: '◆', cols: '1.2fr 1.8fr' },
-                { id: 'theme2c3', name: '2C · Sage', accent: '#6b8c7d', leftBg: '#f8f3e8', font: 'Georgia', bullet: '✦', cols: '1fr 2.1fr' },
-                { id: 'theme2c4', name: '2C · Warm Terracotta', accent: '#a6575a', leftBg: '#fef7f6', font: 'Times', bullet: '•', cols: '1fr 2.4fr' },
-                { id: 'theme2c5', name: '2C · Cool Graphite', accent: '#3e5a6b', leftBg: '#f0f4fc', font: 'Inter', bullet: '▪', cols: '1.2fr 2.2fr' },
-                { id: 'theme2c6', name: '2C · Deep Teal', accent: '#1b6b6f', leftBg: '#eef7f5', font: 'Inter', bullet: '▸', cols: '1.3fr 2fr' },
-                { id: 'theme2c7', name: '2C · Rosewood', accent: '#7c4f5a', leftBg: '#fef0f0', font: 'Georgia', bullet: '—', cols: '1.1fr 2.3fr' },
-                { id: 'theme2c8', name: '2C · Olive', accent: '#6a7159', leftBg: '#faf9f2', font: 'Source Serif Pro', bullet: '•', cols: '1fr 2.2fr' },
-                { id: 'theme2c9', name: '2C · Blue Steel', accent: '#2d6471', leftBg: '#ecf3f7', font: 'Inter', bullet: '▹', cols: '1.2fr 1.9fr' },
-                { id: 'theme2c10', name: '2C · Plum', accent: '#6f4f6e', leftBg: '#fcf0fa', font: 'Inter', bullet: '◇', cols: '1.3fr 2fr' }
+                { id: 'theme2c1', name: '2C · Ocean Splash', accent: '#0b5e7c', leftBg: '#e3f0f5', font: 'Inter', bullet: '▹', cols: '1fr 2.2fr', shadow: '0 8px 20px rgba(11,94,124,0.08)', radius: '16px' },
+                { id: 'theme2c2', name: '2C · Golden Hour', accent: '#b86f2c', leftBg: '#fff1e0', font: 'DM Sans', bullet: '◆', cols: '1.2fr 1.8fr', shadow: '0 8px 24px rgba(184,111,44,0.06)', radius: '20px' },
+                { id: 'theme2c3', name: '2C · Emerald', accent: '#2e6d5e', leftBg: '#e9f3ef', font: 'Lexend', bullet: '✦', cols: '1fr 2.1fr', shadow: '0 8px 24px rgba(46,109,94,0.06)', radius: '12px' },
+                { id: 'theme2c4', name: '2C · Blush', accent: '#b35e6b', leftBg: '#fdedf0', font: 'Work Sans', bullet: '•', cols: '1fr 2.4fr', shadow: '0 8px 24px rgba(179,94,107,0.06)', radius: '24px' },
+                { id: 'theme2c5', name: '2C · Graphite', accent: '#4d6a7e', leftBg: '#eef2f6', font: 'Inter', bullet: '▪', cols: '1.2fr 2.2fr', shadow: '0 8px 24px rgba(77,106,126,0.06)', radius: '8px' },
+                { id: 'theme2c6', name: '2C · Teal', accent: '#1d7a7c', leftBg: '#dcf0f0', font: 'Inter', bullet: '▸', cols: '1.3fr 2fr', shadow: '0 8px 24px rgba(29,122,124,0.06)', radius: '18px' },
+                { id: 'theme2c7', name: '2C · Mauve', accent: '#90648b', leftBg: '#f9edf7', font: 'Georgia', bullet: '—', cols: '1.1fr 2.3fr', shadow: '0 8px 24px rgba(144,100,139,0.06)', radius: '16px' },
+                { id: 'theme2c8', name: '2C · Olive', accent: '#6f7e4a', leftBg: '#f4f7e8', font: 'Source Serif Pro', bullet: '•', cols: '1fr 2.2fr', shadow: '0 8px 24px rgba(111,126,74,0.06)', radius: '12px' },
+                { id: 'theme2c9', name: '2C · Cobalt', accent: '#2c5f8a', leftBg: '#e3ecf5', font: 'Inter', bullet: '▹', cols: '1.2fr 1.9fr', shadow: '0 8px 24px rgba(44,95,138,0.06)', radius: '14px' },
+                { id: 'theme2c10', name: '2C · Orchid', accent: '#9565b3', leftBg: '#f5ebfa', font: 'Inter', bullet: '◇', cols: '1.3fr 2fr', shadow: '0 8px 24px rgba(149,101,179,0.06)', radius: '22px' }
             ];
             twoColThemes.forEach(t => {
                 THEMES.push({
                     id: t.id,
                     name: t.name,
-                    render: (d) => twoColRender(d, t.accent, t.leftBg, t.font, t.bullet, t.cols)
+                    render: (d) => twoColRender(d, t.accent, t.leftBg, t.font, t.bullet, t.cols, t.shadow, t.radius)
                 });
             });
 
-            // ----- SINGLE-COLUMN (10) : distinct vertical layouts, typography, colors -----
+            // ----- SINGLE-COLUMN (10) – modern vibrant redesign -----
             const singleThemes = [
-                { id: 'theme1c1', name: '1C · Executive', font: 'Playfair Display', accent: '#2a4d5c', style: 'executive' },
-                { id: 'theme1c2', name: '1C · ATS Pure', font: 'Arial', accent: '#2c3e50', style: 'ats' },
-                { id: 'theme1c3', name: '1C · Minimal Air', font: 'Inter', accent: '#3c6e71', style: 'minimal' },
-                { id: 'theme1c4', name: '1C · Creative Edge', font: 'Space Grotesk', accent: '#d88c4a', style: 'creative' },
-                { id: 'theme1c5', name: '1C · Dark Elegance', font: 'Georgia', accent: '#c9a959', style: 'dark' },
-                { id: 'theme1c6', name: '1C · Light Mono', font: 'Courier New', accent: '#4a6c7a', style: 'mono' },
-                { id: 'theme1c7', name: '1C · Serif Classic', font: 'Source Serif Pro', accent: '#6b4f3c', style: 'classic' },
-                { id: 'theme1c8', name: '1C · Clean Linen', font: 'Inter', accent: '#a38b6a', style: 'linen' },
-                { id: 'theme1c9', name: '1C · Ocean', font: 'Inter', accent: '#1e6f7a', style: 'ocean' },
-                { id: 'theme1c10', name: '1C · Noir', font: 'Inter', accent: '#2f2f2f', style: 'noir' }
+                { id: 'theme1c1', name: '1C · Executive Noir', font: 'Playfair Display', accent: '#2d3e50', bg: '#ffffff', style: 'executive' },
+                { id: 'theme1c2', name: '1C · ATS Pure', font: 'Arial', accent: '#1f5e6b', bg: '#ffffff', style: 'ats' },
+                { id: 'theme1c3', name: '1C · Soft Minimal', font: 'Inter', accent: '#567d7e', bg: '#fefefe', style: 'minimal' },
+                { id: 'theme1c4', name: '1C · Creative Pop', font: 'Space Grotesk', accent: '#e1693c', bg: '#fff9f5', style: 'creative' },
+                { id: 'theme1c5', name: '1C · Midnight', font: 'Georgia', accent: '#dbb957', bg: '#1a292f', style: 'dark' },
+                { id: 'theme1c6', name: '1C · Mono Tech', font: 'Courier New', accent: '#26738b', bg: '#f5f9fc', style: 'mono' },
+                { id: 'theme1c7', name: '1C · Serif Classic', font: 'Source Serif Pro', accent: '#7f5539', bg: '#fdf8f2', style: 'classic' },
+                { id: 'theme1c8', name: '1C · Linen', font: 'Inter', accent: '#a55d3d', bg: '#fff7ee', style: 'linen' },
+                { id: 'theme1c9', name: '1C · Arctic', font: 'Inter', accent: '#407c87', bg: '#f2fbfd', style: 'ocean' },
+                { id: 'theme1c10', name: '1C · Slate', font: 'Inter', accent: '#4f5b66', bg: '#fafbfc', style: 'noir' }
             ];
             singleThemes.forEach(t => {
                 THEMES.push({
                     id: t.id,
                     name: t.name,
-                    render: (d) => singleColumnRender(d, t.font, t.accent, t.style)
+                    render: (d) => singleColumnRender(d, t.font, t.accent, t.bg, t.style)
                 });
             });
 
-            // ---------- TWO-COLUMN RENDER ENGINE ----------
-            function twoColRender(d, accent, leftBg, font, bullet, cols) {
-                return `<div class="resume" style="width:210mm; padding:12mm; background:white; display:grid; grid-template-columns:${cols}; gap:6mm 8mm; font-family:'${font}', sans-serif; line-height:1.5; color:#1e2b3c;">
+            // ---------- TWO-COLUMN RENDER (enhanced visuals) ----------
+            function twoColRender(d, accent, leftBg, font, bullet, cols, shadow, radius) {
+                return `<div class="resume" style="width:210mm; padding:12mm; background:white; display:grid; grid-template-columns:${cols}; gap:6mm 8mm; font-family:'${font}', sans-serif; line-height:1.5; color:#1e2b3c; box-shadow:${shadow}; border-radius:${radius};">
                     <div style="grid-column:1/-1; display:flex; align-items:center; gap:16px; margin-bottom:2mm;">
-                        ${d.profileImage?`<img src="${d.profileImage}" class="profile-img-sm" style="width:56px;height:56px;border-radius:50%;border:2px solid ${accent};">`:''}
-                        <h1 style="font-size:28pt; font-weight:600; color:${accent}; margin:0;">${d.name}</h1>
+                        ${d.profileImage?`<img src="${d.profileImage}" style="width:56px;height:56px;border-radius:50%;border:3px solid ${accent}; box-shadow:0 4px 12px ${accent}30;">`:''}
+                        <h1 style="font-size:30pt; font-weight:700; color:${accent}; margin:0; letter-spacing:-0.02em;">${d.name}</h1>
                     </div>
-                    <div style="grid-column:1/-1; display:flex; gap:8mm; border-bottom:1pt solid ${accent}40; padding-bottom:3mm; font-size:11pt; color:#3a5a6a;">
+                    <div style="grid-column:1/-1; display:flex; gap:8mm; border-bottom:2px solid ${accent}30; padding-bottom:3mm; font-size:11pt; color:#2a4c5c;">
                         ${[d.email, d.phone, d.location].join(' · ')}
                     </div>
-                    <div style="background:${leftBg}; padding:5mm 4mm; border-radius:12px;">
-                        ${d.visibility.skills?`<section style="margin-bottom:5mm;"><h2 style="font-size:14pt; font-weight:600; color:${accent}; border-bottom:0.5pt solid ${accent}80; margin-bottom:3mm;">SKILLS</h2><div style="display:flex; flex-wrap:wrap; gap:2mm;">${d.skills.map(s=>`<span style="background:white; border:0.5pt solid ${accent}60; padding:1mm 2mm; font-size:10pt; border-radius:6px;">${s}</span>`).join('')}</div></section>`:''}
-                        ${d.visibility.education?`<section><h2 style="font-size:14pt; font-weight:600; color:${accent}; border-bottom:0.5pt solid ${accent}80; margin-bottom:3mm;">EDUCATION</h2>${d.education.map(e=>`<div style="margin-bottom:3mm;"><div style="display:flex; justify-content:space-between;"><span style="font-weight:600;">${e.degree}</span><span>${e.year}</span></div><p>${e.school}</p></div>`).join('')}</section>`:''}
-                        ${d.visibility.certifications && d.certifications.length?`<section style="margin-top:4mm;"><h2 style="font-size:14pt; font-weight:600; color:${accent}; border-bottom:0.5pt solid ${accent}80;">CERTIFICATIONS</h2><ul style="list-style:none; padding-left:2mm;">${d.certifications.map(c=>`<li style="position:relative; padding-left:4mm; margin-bottom:0.75mm;"><span style="position:absolute; left:0; color:${accent};">${bullet}</span>${c}</li>`).join('')}</ul></section>`:''}
+                    <div style="background:${leftBg}; padding:6mm 5mm; border-radius:20px; box-shadow:inset 0 0 0 1px ${accent}20;">
+                        ${d.visibility.skills?`<section style="margin-bottom:5mm;"><h2 style="font-size:15pt; font-weight:700; color:${accent}; border-bottom:2px solid ${accent}60; padding-bottom:2mm; margin-bottom:4mm; letter-spacing:0.5px;">SKILLS</h2><div style="display:flex; flex-wrap:wrap; gap:3mm;">${d.skills.map(s=>`<span style="background:white; border:1px solid ${accent}50; padding:2mm 4mm; font-size:10pt; border-radius:40px; color:${accent};">${s}</span>`).join('')}</div></section>`:''}
+                        ${d.visibility.education?`<section><h2 style="font-size:15pt; font-weight:700; color:${accent}; border-bottom:2px solid ${accent}60; padding-bottom:2mm; margin-bottom:4mm;">EDUCATION</h2>${d.education.map(e=>`<div style="margin-bottom:4mm;"><div style="display:flex; justify-content:space-between;"><span style="font-weight:700; color:#1e3a47;">${e.degree}</span><span style="color:${accent};">${e.year}</span></div><p style="color:#3d5a68;">${e.school}</p></div>`).join('')}</section>`:''}
+                        ${d.visibility.certifications && d.certifications.length?`<section style="margin-top:5mm;"><h2 style="font-size:15pt; font-weight:700; color:${accent}; border-bottom:2px solid ${accent}60; padding-bottom:2mm; margin-bottom:4mm;">CERTIFICATIONS</h2><ul style="list-style:none; padding-left:2mm;">${d.certifications.map(c=>`<li style="position:relative; padding-left:5mm; margin-bottom:1.5mm; color:#2d5a68;"><span style="position:absolute; left:0; color:${accent}; font-size:14px;">${bullet}</span>${c}</li>`).join('')}</ul></section>`:''}
                     </div>
                     <div style="padding-top:2mm;">
-                        ${d.visibility.profile?`<section style="margin-bottom:5mm;"><h2 style="font-size:14pt; font-weight:600; color:${accent};">PROFILE</h2><p>${d.summary}</p></section>`:''}
-                        ${d.visibility.experience?`<section><h2 style="font-size:14pt; font-weight:600; color:${accent};">EXPERIENCE</h2>${d.experience.map(job=>`<div style="margin-bottom:4mm;"><div style="display:flex; justify-content:space-between; font-weight:600;"><span>${job.role} · ${job.company}</span><span>${job.date}</span></div><ul style="list-style:none; padding-left:2mm;">${job.bullets.map(b=>`<li style="position:relative; padding-left:4mm; margin-bottom:0.75mm;"><span style="position:absolute; left:0; color:${accent};">${bullet}</span>${b}</li>`).join('')}</ul></div>`).join('')}</section>`:''}
+                        ${d.visibility.profile?`<section style="margin-bottom:6mm;"><h2 style="font-size:15pt; font-weight:700; color:${accent}; border-bottom:2px solid ${accent}60; padding-bottom:2mm; margin-bottom:4mm;">PROFILE</h2><p style="line-height:1.7; color:#2b4e5e;">${d.summary}</p></section>`:''}
+                        ${d.visibility.experience?`<section><h2 style="font-size:15pt; font-weight:700; color:${accent}; border-bottom:2px solid ${accent}60; padding-bottom:2mm; margin-bottom:4mm;">EXPERIENCE</h2>${d.experience.map(job=>`<div style="margin-bottom:5mm;"><div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:2mm;"><span style="font-weight:700; font-size:13pt; color:#1e3a47;">${job.role}</span><span style="color:${accent}; font-weight:500;">${job.company}</span><span style="color:#3f6a7a;">${job.date}</span></div><ul style="list-style:none; padding-left:2mm;">${job.bullets.map(b=>`<li style="position:relative; padding-left:5mm; margin-bottom:1.5mm; color:#2b4e5e; line-height:1.6;"><span style="position:absolute; left:0; color:${accent}; font-size:14px;">${bullet}</span>${b}</li>`).join('')}</ul></div>`).join('')}</section>`:''}
                     </div>
                 </div>`;
             }
 
-            // ---------- SINGLE-COLUMN RENDER ENGINE (10 distinct variants) ----------
-            function singleColumnRender(d, font, accent, style) {
-                if(style === 'executive') return `<div class="resume" style="width:210mm; padding:16mm; background:white; font-family:'${font}',serif;"><div style="display:flex; align-items:center; gap:20px;">${d.profileImage?`<img src="${d.profileImage}" style="width:70px;height:70px;border-radius:50%;">`:''}<h1 style="font-size:34pt; font-weight:400; color:#0b1c2e;">${d.name}</h1></div><div style="border-bottom:1px solid #aaa;margin:4mm 0;"></div>... (executive) ...</div>`;
-                if(style === 'ats') return `<div class="resume" style="width:210mm; padding:12mm; font-family:${font},sans-serif;">...</div>`;
-                if(style === 'minimal') return `<div class="resume" style="width:210mm; padding:10mm; font-family:${font},sans-serif;">...</div>`;
-                if(style === 'creative') return `<div class="resume" style="width:210mm; padding:14mm; border-left:8px solid ${accent};">...</div>`;
-                if(style === 'dark') return `<div class="resume" style="width:210mm; padding:14mm; background:#1e2b3c; color:#e6d8b5;">...</div>`;
-                if(style === 'mono') return `<div class="resume" style="width:210mm; padding:12mm; font-family:${font},monospace;">...</div>`;
-                if(style === 'classic') return `<div class="resume" style="width:210mm; padding:15mm; font-family:${font},serif;">...</div>`;
-                if(style === 'linen') return `<div class="resume" style="width:210mm; padding:12mm; background:#fefcf5;">...</div>`;
-                if(style === 'ocean') return `<div class="resume" style="width:210mm; padding:12mm; background:#ecf7fb;">...</div>`;
-                if(style === 'noir') return `<div class="resume" style="width:210mm; padding:12mm; background:#fafafa; border:1px solid #ddd;">...</div>`;
+            // ---------- SINGLE-COLUMN RENDER (enhanced visuals) ----------
+            function singleColumnRender(d, font, accent, bg, style) {
+                const baseStyle = `width:210mm; padding:14mm 16mm; background:${bg}; font-family:'${font}', sans-serif; line-height:1.7; color:#2c3e50;`;
+                if(style === 'executive') return `<div class="resume" style="${baseStyle} border-top:6px solid ${accent};"><div style="display:flex; align-items:center; gap:20px; margin-bottom:8mm;">${d.profileImage?`<img src="${d.profileImage}" style="width:80px;height:80px;border-radius:50%;border:3px solid ${accent};box-shadow:0 6px 16px rgba(0,0,0,0.1);">`:''}<div><h1 style="font-size:38pt; font-weight:600; color:${accent}; margin-bottom:4px;">${d.name}</h1><p style="font-size:18pt; font-weight:300; color:#6a7e8c;">${d.title}</p></div></div><div style="display:flex; gap:12mm; margin-bottom:8mm; color:#4a6676;">${[d.email,d.phone,d.location].join(' · ')}</div>...</div>`;
+                if(style === 'ats') return `<div class="resume" style="${baseStyle}"><h1 style="font-size:32pt; color:${accent};">${d.name}</h1>...</div>`;
+                if(style === 'minimal') return `<div class="resume" style="${baseStyle} border-bottom:4px solid ${accent};">...</div>`;
+                if(style === 'creative') return `<div class="resume" style="${baseStyle} border-left:10px solid ${accent}; border-radius:0 30px 30px 0;">...</div>`;
+                if(style === 'dark') return `<div class="resume" style="width:210mm; padding:14mm; background:#0f2129; color:#e2eef2; font-family:'${font}',serif;"><div style="display:flex; gap:20px;">${d.profileImage?`<img src="${d.profileImage}" style="width:70px;height:70px;border-radius:50%;border:3px solid ${accent};">`:''}<h1 style="color:${accent};">${d.name}</h1></div>...</div>`;
+                if(style === 'mono') return `<div class="resume" style="${baseStyle} font-family:'Courier New',monospace; background:#f6f9fc;">...</div>`;
+                if(style === 'classic') return `<div class="resume" style="${baseStyle} background:#fffcf7; border:1px solid #e4d5c0;">...</div>`;
+                if(style === 'linen') return `<div class="resume" style="${baseStyle} background:#fef7f0; border-bottom:5px solid ${accent};">...</div>`;
+                if(style === 'ocean') return `<div class="resume" style="${baseStyle} background:linear-gradient(145deg, #ffffff 0%, #f0fafc 100%);">...</div>`;
+                if(style === 'noir') return `<div class="resume" style="${baseStyle} background:#fbfdfe; border:1px solid #dadfe5;">...</div>`;
                 return `<div class="resume">fallback</div>`;
             }
 
-            // ---------- REACTIVE RENDER: PREVIEW + FORM ----------
             function renderPreview() {
                 const themeId = state.activeTheme;
                 const theme = THEMES.find(t => t.id === themeId) || THEMES[0];
-                const html = theme.render(state);
-                document.getElementById('resumePreview').innerHTML = html;
+                document.getElementById('resumePreview').innerHTML = theme.render(state);
             }
 
-            // ---------- DYNAMIC FORM BUILDER (fully wired) ----------
+            // ------------------------------------------------------------
+            //  CERTIFICATES — MULTI‑ENTRY WITH ADD/REMOVE (FULLY FIXED)
+            // ------------------------------------------------------------
+            function addCertificate() {
+                state.certifications.push('New Certification');
+                renderForm(); renderPreview(); persist();
+            }
+            function removeCertificate(index) {
+                state.certifications.splice(index, 1);
+                renderForm(); renderPreview(); persist();
+            }
+
+            // ------------------------------------------------------------
+            //  AI SKILL WORKFLOW — PREDICT → SUGGEST → APPLY (USER SELECT)
+            // ------------------------------------------------------------
+            let selectedSkillSuggestions = new Set();
+            function openSkillAIAssist() {
+                const modal = document.getElementById('aiSkillModal');
+                const listDiv = document.getElementById('skillSuggestionsList');
+                // Context‑aware predictions based on title, summary, existing skills
+                const titleWords = (state.title || '').toLowerCase().split(' ');
+                const summaryWords = (state.summary || '').toLowerCase().split(' ');
+                const existing = new Set(state.skills.map(s => s.toLowerCase()));
+                
+                const skillPool = [
+                    'User Research', 'Wireframing', 'Prototyping', 'Figma', 'Adobe XD', 'Sketch',
+                    'InVision', 'HTML', 'CSS', 'JavaScript', 'React', 'Vue', 'Angular', 'Node.js',
+                    'Python', 'SQL', 'AWS', 'Azure', 'DevOps', 'Docker', 'Kubernetes',
+                    'Agile', 'Scrum', 'Jira', 'Confluence', 'Leadership', 'Mentoring',
+                    'Product Management', 'A/B Testing', 'Analytics', 'Google Analytics',
+                    'UI Design', 'Interaction Design', 'Visual Design', 'Typography',
+                    'Color Theory', 'Branding', 'Illustrator', 'Photoshop', 'After Effects',
+                    'Responsive Design', 'Accessibility', 'WCAG', 'User Testing', 'Usability',
+                    'Information Architecture', 'Sitemaps', 'User Flows', 'Journey Mapping',
+                    'Design Systems', 'Storyboarding', 'Rapid Prototyping', 'Framer', 'Principle'
+                ];
+                // Score each skill: if appears in title/summary, boost; if already exists, exclude
+                const scored = skillPool.map(skill => {
+                    let score = 0;
+                    const skillLower = skill.toLowerCase();
+                    if (existing.has(skillLower)) score = -1; // exclude existing
+                    if (titleWords.some(w => skillLower.includes(w) || w.includes(skillLower))) score += 3;
+                    if (summaryWords.some(w => skillLower.includes(w) || w.includes(skillLower))) score += 2;
+                    // additional relevance: UX designer specific
+                    if (state.title.includes('UX') && skillLower.includes('user')) score += 2;
+                    if (state.title.includes('Product') && (skillLower.includes('product') || skillLower.includes('management'))) score += 2;
+                    return { skill, score };
+                }).filter(s => s.score >= 0).sort((a,b) => b.score - a.score).slice(0, 15);
+                
+                let html = '';
+                scored.forEach((item, idx) => {
+                    const checked = selectedSkillSuggestions.has(item.skill) ? 'checked' : '';
+                    html += `<div style="padding:12px; background:#f2fafd; border-radius:14px; margin-bottom:10px; display:flex; align-items:center;">
+                        <input type="checkbox" id="skill_${idx}" value="${item.skill}" ${checked} style="width:20px;height:20px;margin-right:16px;">
+                        <label for="skill_${idx}" style="font-size:15px; flex:1; cursor:pointer;">${item.skill}</label>
+                    </div>`;
+                });
+                listDiv.innerHTML = html || '<p style="color:#6f8f9c;">No new skill suggestions.</p>';
+                modal.style.display = 'flex';
+                selectedSkillSuggestions.clear();
+            }
+
+            // ------------------------------------------------------------
+            //  DYNAMIC FORM BUILDER (UPDATED: certificates multi‑entry, skills AI button)
+            // ------------------------------------------------------------
             function renderForm() {
                 const container = document.getElementById('formPanel');
                 let html = `<h2 style="margin-bottom:28px;font-size:24px;font-weight:600;color:#0f2a36;">✶ Profile Architect</h2>`;
                 // Photo upload
                 html += `<div class="form-section"><div class="section-title"><span><svg class="icon" style="stroke:#1a404f;"><use href="#icon-brand"></use></svg> Profile image</span></div><div onclick="document.getElementById('profileUpload').click()" style="display:flex;align-items:center;gap:16px;background:#f3f9fc;padding:16px;border-radius:40px;cursor:pointer;"><svg class="icon"><use href="#icon-plus"></use></svg><span>${state.profileImage?'Update photo':'Upload headshot'}</span></div><input type="file" id="profileUpload" accept="image/*" style="display:none;"><div id="profilePreview" style="margin-top:16px;text-align:center;">${state.profileImage?`<img src="${state.profileImage}" class="profile-img">`:''}</div></div>`;
-                // Section order (drag-drop)
+                // Section order
                 html += `<div class="form-section"><div class="section-title"><svg class="icon"><use href="#icon-drag"></use></svg> Section order</div><div id="sectionSortable" class="sortable-list">`;
                 state.sectionOrder.forEach(s => html += `<div class="section-drag" draggable="true" data-section="${s}"><span class="drag-handle"><svg class="icon"><use href="#icon-drag"></use></svg></span> ${s.charAt(0).toUpperCase()+s.slice(1)}</div>`);
                 html += `</div></div>`;
@@ -277,27 +339,22 @@
                 html += `<div class="form-section"><div class="section-title"><svg class="icon"><use href="#icon-ats"></use></svg> Visibility</div>`;
                 ['profile','experience','education','skills','certifications'].forEach(s => html += `<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;"><input type="checkbox" id="vis_${s}" ${state.visibility[s]?'checked':''} style="width:20px;height:20px;"><label for="vis_${s}" style="text-transform:capitalize;">${s}</label></div>`);
                 html += `</div>`;
-                // Personal fields
+                // Personal
                 html += `<div class="form-section"><div class="section-title">👤 Personal</div>`;
-                ['name','title','email','phone','location'].forEach(f => {
-                    html += `<div class="form-group"><label>${f}</label><input type="text" id="input_${f}" value="${(state[f]||'').replace(/"/g,'&quot;')}" placeholder="e.g. ${f}"><button class="ai-btn" data-field="${f}" data-type="text"><svg class="icon"><use href="#icon-ai"></use></svg></button></div>`;
-                });
+                ['name','title','email','phone','location'].forEach(f => html += `<div class="form-group"><label>${f}</label><input type="text" id="input_${f}" value="${(state[f]||'').replace(/"/g,'&quot;')}" placeholder="e.g. ${f}"><button class="ai-btn" data-field="${f}" data-type="text"><svg class="icon"><use href="#icon-ai"></use></svg></button></div>`);
                 html += `</div>`;
                 // Summary
                 html += `<div class="form-section"><div class="section-title">📝 Summary</div><div class="form-group"><textarea id="input_summary" rows="4" placeholder="Professional summary...">${state.summary}</textarea><button class="ai-btn" data-field="summary" data-type="textarea"><svg class="icon"><use href="#icon-ai"></use></svg></button></div></div>`;
-                // Experience (dynamic)
+                // Experience
                 html += `<div class="form-section"><div class="section-title"><span>💼 Experience</span><button id="addExpBtn" class="add-btn"><svg class="icon"><use href="#icon-plus"></use></svg> Add job</button></div><div id="expList">`;
                 state.experience.forEach((exp, idx) => {
                     html += `<div class="item-card" data-exp-id="${exp.id}"><div class="item-header"><span style="font-weight:700;">${exp.role || 'New role'}</span><div class="item-actions"><button class="item-btn duplicate-exp" data-id="${exp.id}"><svg class="icon-sm"><use href="#icon-duplicate"></use></svg> Duplicate</button><button class="item-btn remove-exp" data-id="${exp.id}"><svg class="icon-sm"><use href="#icon-trash"></use></svg> Remove</button></div></div>`;
                     html += `<div class="form-group"><label>Title · Company</label><input type="text" class="exp_role" data-id="${exp.id}" value="${exp.role} · ${exp.company}"><button class="ai-btn" data-field="exp_role_${exp.id}"><svg class="icon"><use href="#icon-ai"></use></svg></button></div>`;
                     html += `<div class="form-group"><label>Dates</label><input type="text" class="exp_date" data-id="${exp.id}" value="${exp.date}"></div>`;
-                    exp.bullets.forEach((b, bidx) => {
-                        html += `<div class="form-group"><label>Bullet ${bidx+1}</label><textarea rows="2" class="exp_bullet" data-id="${exp.id}" data-bidx="${bidx}">${b}</textarea><button class="ai-btn" data-field="exp_bullet_${exp.id}_${bidx}"><svg class="icon"><use href="#icon-ai"></use></svg></button></div>`;
-                    });
+                    exp.bullets.forEach((b, bidx) => html += `<div class="form-group"><label>Bullet ${bidx+1}</label><textarea rows="2" class="exp_bullet" data-id="${exp.id}" data-bidx="${bidx}">${b}</textarea><button class="ai-btn" data-field="exp_bullet_${exp.id}_${bidx}"><svg class="icon"><use href="#icon-ai"></use></svg></button></div>`);
                     html += `<button class="add-btn add-bullet" data-id="${exp.id}" style="margin-top:8px;"><svg class="icon"><use href="#icon-plus"></use></svg> Add bullet</button></div>`;
                 });
                 html += `</div></div>`;
-
                 // Education
                 html += `<div class="form-section"><div class="section-title"><span>🎓 Education</span><button id="addEduBtn" class="add-btn"><svg class="icon"><use href="#icon-plus"></use></svg> Add education</button></div><div id="eduList">`;
                 state.education.forEach(edu => {
@@ -308,100 +365,32 @@
                     html += `</div>`;
                 });
                 html += `</div></div>`;
-
-                // Skills
-                html += `<div class="form-section"><div class="section-title">🔧 Skills</div><div class="form-group"><label>Skills (comma separated)</label><input type="text" id="input_skills" value="${state.skills.join(', ')}"><button class="ai-btn" data-field="skills"><svg class="icon"><use href="#icon-ai"></use></svg></button></div></div>`;
-                // Certifications
-                html += `<div class="form-section"><div class="section-title">📜 Certifications</div><div class="form-group"><label>Certifications (comma)</label><input type="text" id="input_certs" value="${state.certifications.join(', ')}"><button class="ai-btn" data-field="certs"><svg class="icon"><use href="#icon-ai"></use></svg></button></div><button id="addCertBtn" class="add-btn" style="margin-top:12px;"><svg class="icon"><use href="#icon-plus"></use></svg> Add certification</button></div>`;
+                // SKILLS (with AI button – Predict/Suggest)
+                html += `<div class="form-section"><div class="section-title"><span>🔧 Skills</span><button id="skillAIBtn" class="add-btn" style="background:#d9eaf0;"><svg class="icon"><use href="#icon-predict"></use></svg> Predict skills</button></div><div class="form-group"><label>Skills (comma separated)</label><input type="text" id="input_skills" value="${state.skills.join(', ')}"><button class="ai-btn" data-field="skills"><svg class="icon"><use href="#icon-ai"></use></svg></button></div>`;
+                // also show as chips for clarity
+                html += `<div style="display:flex; flex-wrap:wrap; margin-top:12px;">${state.skills.map(s => `<span class="skill-chip">${s}</span>`).join('')}</div>`;
+                html += `</div>`;
+                // CERTIFICATIONS (multi‑entry with add/remove)
+                html += `<div class="form-section"><div class="section-title"><span>📜 Certifications</span><button id="addCertBtn" class="add-btn"><svg class="icon"><use href="#icon-plus"></use></svg> Add certification</button></div><div id="certList">`;
+                state.certifications.forEach((cert, idx) => {
+                    html += `<div class="cert-item"><input type="text" class="cert-input" data-cert-index="${idx}" value="${cert}" placeholder="Certification name"><button class="item-btn remove-cert" data-index="${idx}" style="margin-left:auto;"><svg class="icon-sm"><use href="#icon-trash"></use></svg> Remove</button></div>`;
+                });
+                html += `</div></div>`;
 
                 container.innerHTML = html;
                 attachFormEvents();
             }
 
-            // ---------- AI ASSISTANT (deterministic, rule‑based, full workflow) ----------
-            let activeAIField = null, activeAIElement = null, originalValue = '';
-            window.openAIAssist = (field, element, value) => {
-                activeAIField = field; activeAIElement = element; originalValue = value;
-                document.getElementById('aiOriginal').innerHTML = `<strong>Original:</strong> ${value}`;
-                let suggestions = [];
-                if(field.includes('summary') || field.includes('bullet')) {
-                    suggestions = [
-                        value + ' (clarity: active voice)',
-                        'Leveraged ' + value.split(' ').slice(0,5).join(' ') + ' to drive measurable outcomes.',
-                        'Spearheaded initiatives including ' + value.split(' ').slice(0,3).join(' ') + '... (ATS optimized)'
-                    ];
-                } else if(field.includes('role') || field.includes('degree')) {
-                    suggestions = [
-                        value + ' (senior-level focus)',
-                        value.split('·')[0] + ' · ' + (value.split('·')[1] || 'Company') + ' (leadership)',
-                        value.toUpperCase()
-                    ];
-                } else {
-                    suggestions = [
-                        value + ' (refined)',
-                        value.split(' ').map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' '),
-                        value.replace(/e/g, '3') // just for demo
-                    ];
-                }
-                let sugHtml = '<p style="margin-bottom:12px;font-weight:600;">Suggestions:</p>';
-                suggestions.forEach((s, i) => {
-                    sugHtml += `<div class="ai-suggestion" style="cursor:pointer;" data-suggestion="${s.replace(/"/g,'&quot;')}">${s}</div>`;
-                });
-                document.getElementById('aiSuggestions').innerHTML = sugHtml;
-                document.getElementById('aiModal').style.display = 'flex';
-                document.querySelectorAll('.ai-suggestion').forEach(el => {
-                    el.addEventListener('click', function(){
-                        // preview (selected)
-                        document.querySelectorAll('.ai-suggestion').forEach(e => e.style.background = '#f2fcfe');
-                        this.style.background = '#d5f0f5';
-                        // store selected
-                        document.getElementById('aiApply').onclick = () => {
-                            activeAIElement.value = this.dataset.suggestion;
-                            updateFieldFromAI(field, this.dataset.suggestion);
-                            document.getElementById('aiModal').style.display = 'none';
-                        };
-                    });
-                });
-            };
-            function updateFieldFromAI(field, val) {
-                if(field === 'summary') state.summary = val;
-                else if(field === 'name') state.name = val;
-                else if(field === 'title') state.title = val;
-                else if(field === 'email') state.email = val;
-                else if(field === 'phone') state.phone = val;
-                else if(field === 'location') state.location = val;
-                else if(field === 'skills') state.skills = val.split(',').map(s=>s.trim());
-                else if(field === 'certs') state.certifications = val.split(',').map(s=>s.trim());
-                else if(field.startsWith('exp_role_')) {
-                    let id = field.replace('exp_role_','');
-                    let exp = state.experience.find(e=>e.id===id);
-                    if(exp) { let parts = val.split('·'); exp.role = parts[0].trim(); exp.company = parts[1]?.trim()||''; }
-                } else if(field.startsWith('exp_bullet_')) {
-                    let parts = field.split('_');
-                    let id = parts[2]; let bidx = parseInt(parts[3]);
-                    let exp = state.experience.find(e=>e.id===id);
-                    if(exp && exp.bullets[bidx]) exp.bullets[bidx] = val;
-                } else if(field.startsWith('edu_degree_')) {
-                    let id = field.replace('edu_degree_','');
-                    let edu = state.education.find(e=>e.id===id);
-                    if(edu) edu.degree = val;
-                }
-                renderPreview(); persist();
-            }
-
-            // ---------- EVENT ATTACHMENT (full production) ----------
+            // ---------- ATTACH ALL EVENT LISTENERS (including certs and skill AI) ----------
             function attachFormEvents() {
-                // Profile image
                 const pu = document.getElementById('profileUpload');
                 if(pu) pu.addEventListener('change', function(e){
                     const f = e.target.files[0]; if(f) { const r = new FileReader(); r.onload = ev => { state.profileImage = ev.target.result; renderPreview(); renderForm(); persist(); }; r.readAsDataURL(f); }
                 });
-                // Visibility
                 ['profile','experience','education','skills','certifications'].forEach(s => {
                     const el = document.getElementById(`vis_${s}`);
                     if(el) el.addEventListener('change', e => { state.visibility[s] = e.target.checked; renderPreview(); persist(); });
                 });
-                // Text inputs
                 document.querySelectorAll('input[id^="input_"], #input_summary, #input_skills, #input_certs').forEach(el => {
                     el.addEventListener('input', function(e){
                         const id = this.id.replace('input_','');
@@ -412,13 +401,13 @@
                         renderPreview(); persist();
                     });
                 });
-                // AI buttons
+                // AI assist (general)
                 document.querySelectorAll('.ai-btn').forEach(btn => {
                     btn.addEventListener('click', function(e){
                         e.preventDefault();
                         const field = this.dataset.field;
                         const input = this.parentElement.querySelector('input,textarea');
-                        if(input) window.openAIAssist(field, input, input.value);
+                        if(input) openAIAssist(field, input, input.value);
                     });
                 });
                 // Add Experience
@@ -433,12 +422,24 @@
                     state.education.push({ id: newId, degree: 'New Degree', school: 'University', year: '2025' });
                     renderForm(); renderPreview(); persist();
                 });
-                // Add Certification
-                document.getElementById('addCertBtn')?.addEventListener('click', function(){
-                    state.certifications.push('New Certification');
-                    renderForm(); renderPreview(); persist();
+                // ADD CERTIFICATE (fixed)
+                document.getElementById('addCertBtn')?.addEventListener('click', addCertificate);
+                // REMOVE CERTIFICATE (fixed)
+                document.querySelectorAll('.remove-cert').forEach(btn => {
+                    btn.addEventListener('click', function(){
+                        const idx = parseInt(this.dataset.index);
+                        removeCertificate(idx);
+                    });
                 });
-                // Remove / Duplicate / Add bullet
+                // Update certificate input
+                document.querySelectorAll('.cert-input').forEach(inp => {
+                    inp.addEventListener('input', function(){
+                        const idx = parseInt(this.dataset.certIndex);
+                        state.certifications[idx] = this.value;
+                        renderPreview(); persist();
+                    });
+                });
+                // Remove / Duplicate / Add bullet (existing)
                 document.querySelectorAll('.remove-exp').forEach(btn => btn.addEventListener('click', function(){
                     state.experience = state.experience.filter(e => e.id !== this.dataset.id);
                     renderForm(); renderPreview(); persist();
@@ -491,6 +492,79 @@
                         state.sectionOrder = newOrder; renderPreview(); persist();
                     });
                 }
+                // SKILL AI BUTTON
+                document.getElementById('skillAIBtn')?.addEventListener('click', function(){
+                    openSkillAIAssist();
+                });
+            }
+
+            // AI Assist (general) – unchanged
+            let activeAIField = null, activeAIElement = null, originalValue = '';
+            window.openAIAssist = (field, element, value) => {
+                activeAIField = field; activeAIElement = element; originalValue = value;
+                document.getElementById('aiOriginal').innerHTML = `<strong>Original:</strong> ${value}`;
+                let suggestions = [];
+                if(field.includes('summary') || field.includes('bullet')) {
+                    suggestions = [
+                        value + ' (clarity: active voice)',
+                        'Leveraged ' + value.split(' ').slice(0,5).join(' ') + ' to drive measurable outcomes.',
+                        'Spearheaded initiatives including ' + value.split(' ').slice(0,3).join(' ') + '... (ATS optimized)'
+                    ];
+                } else if(field.includes('role') || field.includes('degree')) {
+                    suggestions = [
+                        value + ' (senior-level focus)',
+                        value.split('·')[0] + ' · ' + (value.split('·')[1] || 'Company') + ' (leadership)',
+                        value.toUpperCase()
+                    ];
+                } else {
+                    suggestions = [
+                        value + ' (refined)',
+                        value.split(' ').map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' '),
+                        value.replace(/e/g, '3')
+                    ];
+                }
+                let sugHtml = '<p style="margin-bottom:12px;font-weight:600;">Suggestions:</p>';
+                suggestions.forEach((s, i) => {
+                    sugHtml += `<div class="ai-suggestion" style="cursor:pointer;" data-suggestion="${s.replace(/"/g,'&quot;')}">${s}</div>`;
+                });
+                document.getElementById('aiSuggestions').innerHTML = sugHtml;
+                document.getElementById('aiModal').style.display = 'flex';
+                document.querySelectorAll('.ai-suggestion').forEach(el => {
+                    el.addEventListener('click', function(){
+                        document.querySelectorAll('.ai-suggestion').forEach(e => e.style.background = '#f2fcfe');
+                        this.style.background = '#d5f0f5';
+                        document.getElementById('aiApply').onclick = () => {
+                            activeAIElement.value = this.dataset.suggestion;
+                            updateFieldFromAI(field, this.dataset.suggestion);
+                            document.getElementById('aiModal').style.display = 'none';
+                        };
+                    });
+                });
+            };
+            function updateFieldFromAI(field, val) {
+                if(field === 'summary') state.summary = val;
+                else if(field === 'name') state.name = val;
+                else if(field === 'title') state.title = val;
+                else if(field === 'email') state.email = val;
+                else if(field === 'phone') state.phone = val;
+                else if(field === 'location') state.location = val;
+                else if(field === 'skills') state.skills = val.split(',').map(s=>s.trim());
+                else if(field === 'certs') state.certifications = val.split(',').map(s=>s.trim());
+                else if(field.startsWith('exp_role_')) {
+                    let id = field.replace('exp_role_','');
+                    let exp = state.experience.find(e=>e.id===id);
+                    if(exp) { let parts = val.split('·'); exp.role = parts[0].trim(); exp.company = parts[1]?.trim()||''; }
+                } else if(field.startsWith('exp_bullet_')) {
+                    let parts = field.split('_');
+                    let id = parts[2]; let bidx = parseInt(parts[3]);
+                    let exp = state.experience.find(e=>e.id===id);
+                    if(exp && exp.bullets[bidx]) exp.bullets[bidx] = val;
+                } else if(field.startsWith('edu_degree_')) {
+                    let id = field.replace('edu_degree_','');
+                    let edu = state.education.find(e=>e.id===id);
+                    if(edu) edu.degree = val;
+                }
+                renderPreview(); persist();
             }
 
             function getDragAfterElement(container, y) {
@@ -501,7 +575,7 @@
                 }, { offset: Number.NEGATIVE_INFINITY }).element;
             }
 
-            // ---------- ATS SCORER (real keyword extraction, synonyms) ----------
+            // ATS Engine (unchanged)
             const ATSEngine = {
                 synonyms: { js:'JavaScript', javascript:'JavaScript', reactjs:'React', react:'React', nodejs:'Node.js', node:'Node.js', figma:'Figma', 'adobe xd':'Adobe XD', html:'HTML', css:'CSS' },
                 stopwords: new Set(['a','an','the','and','or','but','if','because','as','what','which','this','that','these','those','then','just','so','than','such','both','through','about','for','is','of','while','during','to','from','in','on','at','by','with','without','has','have','be','been','being','was','were','will','would','could','should']),
@@ -521,12 +595,9 @@
                 }
             };
 
-            // ---------- PRINT & PAGINATION ----------
             function printResume() { window.print(); }
 
-            // ---------- SAVE / RESET / THEME / ATS ----------
             function init() {
-                // populate theme selector
                 const sel = document.getElementById('themeSelector');
                 THEMES.forEach(t => { let o = document.createElement('option'); o.value = t.id; o.textContent = t.name; if(t.id === state.activeTheme) o.selected = true; sel.appendChild(o); });
                 sel.addEventListener('change', e => { state.activeTheme = e.target.value; renderPreview(); persist(); });
@@ -542,6 +613,24 @@
                     document.getElementById('atsScore').innerHTML = `<div style="display:flex;align-items:center;gap:24px;"><span style="font-size:42px;font-weight:700;color:#1a404f;">${res.score}</span><span>/100</span></div><ul style="margin-top:16px;padding-left:20px;">${res.suggestions.map(s=>`<li>${s}</li>`).join('')}</ul>`;
                 });
                 document.getElementById('aiCancel').addEventListener('click', ()=> document.getElementById('aiModal').style.display = 'none');
+                // Skill AI modal controls
+                document.getElementById('aiSkillCancel').addEventListener('click', ()=> {
+                    document.getElementById('aiSkillModal').style.display = 'none';
+                    selectedSkillSuggestions.clear();
+                });
+                document.getElementById('aiSkillApply').addEventListener('click', ()=>{
+                    const checkboxes = document.querySelectorAll('#skillSuggestionsList input[type="checkbox"]:checked');
+                    const newSkills = Array.from(checkboxes).map(cb => cb.value).filter(s => !state.skills.includes(s));
+                    if(newSkills.length) {
+                        state.skills = [...state.skills, ...newSkills];
+                        // update input field value
+                        const skillInput = document.getElementById('input_skills');
+                        if(skillInput) skillInput.value = state.skills.join(', ');
+                        renderPreview(); persist();
+                    }
+                    document.getElementById('aiSkillModal').style.display = 'none';
+                    selectedSkillSuggestions.clear();
+                });
                 persist();
             }
             init();
