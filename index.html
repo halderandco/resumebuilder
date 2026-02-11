@@ -3,103 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
-    <title>Enterprise Resume Suite · 15 Themes · AI Writing · Dynamic Sections</title>
+    <title>ARC · Resume Intelligence</title>
+    <!-- Fonts & Icons (SVG sprite) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&family=Source+Serif+Pro:wght@400;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
-        body{background:#f5f9ff;height:100vh;display:flex;flex-direction:column;overflow:hidden;color:#1a2b3c;}
-        /* ----- PREMIUM TOOLBAR ----- */
-        .toolbar{background:#0f2835;color:white;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;box-shadow:0 8px 20px rgba(0,20,30,0.12);z-index:50;}
-        .toolbar-left{display:flex;align-items:center;gap:28px;}
-        .brand{font-size:20px;font-weight:700;letter-spacing:-0.3px;background:linear-gradient(135deg,#fff0cf,#ffeab5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-        .theme-selector{background:rgba(255,255,255,0.12);padding:8px 18px;border-radius:40px;border:1px solid rgba(255,255,255,0.2);color:white;font-size:14px;font-weight:500;cursor:pointer;backdrop-filter:blur(4px);}
-        .theme-selector option{background:#1e3f4a;color:white;}
-        .toolbar-right{display:flex;gap:16px;}
-        .btn{background:white;border:none;padding:10px 24px;border-radius:40px;font-size:14px;font-weight:600;color:#0f2835;cursor:pointer;transition:0.2s;box-shadow:0 4px 8px rgba(0,0,0,0.04);display:flex;align-items:center;gap:8px;}
-        .btn-outline{background:transparent;border:1.5px solid white;color:white;box-shadow:none;}
-        .btn:hover{transform:translateY(-2px);box-shadow:0 12px 20px rgba(0,0,0,0.08);}
-        /* ----- LAYOUT ----- */
-        .editor-container{display:flex;flex:1;overflow:hidden;background:#f2f6fb;}
-        .form-panel{width:36%;background:white;border-right:1px solid rgba(0,0,0,0.06);padding:28px 26px;overflow-y:auto;box-shadow:4px 0 30px rgba(0,0,0,0.02);}
-        .form-section{background:#ffffff;border-radius:24px;padding:22px 24px;margin-bottom:28px;border:1px solid #ecf3f8;box-shadow:0 10px 22px rgba(0,0,0,0.02);transition:0.2s;}
-        .form-section:hover{box-shadow:0 18px 30px rgba(30,80,120,0.06);border-color:#cde0e8;}
-        .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
-        .section-header h3{font-size:18px;font-weight:700;color:#164455;display:flex;align-items:center;gap:10px;}
-        .add-btn{background:#f0f6fc;border:1px solid #bfd9e5;border-radius:30px;padding:8px 18px;font-size:13px;font-weight:600;color:#1e4e62;cursor:pointer;transition:0.1s;}
-        .add-btn:hover{background:#e1eff7;border-color:#7fa5b6;}
-        .form-group{margin-bottom:18px;position:relative;}
-        label{display:block;font-size:11.5px;font-weight:700;color:#3b677b;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.6px;}
-        input,textarea{width:100%;padding:13px 16px;border:1.8px solid #e4edf2;border-radius:18px;font-size:14px;background:#ffffff;transition:0.15s;}
-        input:focus,textarea:focus{border-color:#2b7c91;outline:none;box-shadow:0 0 0 5px rgba(43,124,145,0.08);}
-        .input-hint{font-size:11px;color:#6b8f9c;margin-top:4px;padding-left:12px;}
-        .ai-assist{position:absolute;right:12px;top:32px;background:#eef7fc;border:none;border-radius:50px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:#1e6e7e;font-size:16px;cursor:pointer;transition:0.1s;border:1px solid transparent;}
-        .ai-assist:hover{background:#d9ecf5;border-color:#2b7c91;transform:scale(1.05);}
-        .item-card{background:#fafeff;border-radius:20px;padding:20px;margin-bottom:18px;border:1px solid #e6f0f5;position:relative;}
-        .item-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;}
-        .item-btn{background:white;border:1px solid #d1e2e9;border-radius:26px;padding:6px 16px;font-size:12px;font-weight:600;color:#3f6c7a;display:inline-flex;align-items:center;gap:6px;cursor:pointer;}
-        .item-btn:hover{background:#e2f0f5;}
-        .ai-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.3);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:1000;}
-        .ai-card{background:white;width:480px;border-radius:36px;padding:28px;box-shadow:0 30px 60px rgba(0,0,0,0.2);}
-        .ai-suggestion{background:#f3faff;border-left:8px solid #2b7c91;padding:16px;border-radius:16px;margin:16px 0;font-size:15px;}
-        .ai-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:24px;}
-        .drag-handle{font-size:20px;color:#89aebb;cursor:grab;}
-        .sortable-list{background:#f4fafe;border-radius:20px;padding:12px;}
-        .section-drag{background:white;border:1px solid #dae9f0;border-radius:18px;padding:16px 18px;margin-bottom:8px;display:flex;align-items:center;gap:14px;font-weight:600;color:#1b495a;cursor:grab;transition:0.1s;}
-        .preview-panel{flex:1;background:#e7f0f5;padding:28px;overflow-y:auto;display:flex;flex-direction:column;align-items:center;}
-        .preview-scroll{width:210mm;background:white;box-shadow:0 20px 40px rgba(0,0,0,0.14);transform:scale(0.8);transform-origin:top center;border-radius:6px;}
+        /* ---------- RESET & GLOBAL DESIGN SYSTEM ---------- */
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{background:#f6f9fc;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;height:100vh;display:flex;flex-direction:column;color:#142433;overflow:hidden;}
+        /* ----- SVG ICON SPRITE (inline, self-contained) ----- */
+        .icon{display:inline-block;width:20px;height:20px;stroke-width:1.5;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle;}
+        .icon-sm{width:18px;height:18px;}
+        .icon-lg{width:24px;height:24px;}
+        /* ----- PREMIUM TOOLBAR (minimal, glass) ----- */
+        .toolbar{background:#ffffffd9;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,0.04);padding:12px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;box-shadow:0 4px 20px rgba(0,20,40,0.02);z-index:100;}
+        .brand{font-size:20px;font-weight:700;letter-spacing:-0.01em;color:#0a2a33;display:flex;align-items:center;gap:8px;}
+        .brand svg{width:28px;height:28px;stroke:#0a2a33;stroke-width:1.8;}
+        .theme-control{display:flex;align-items:center;gap:20px;background:#f0f4fa;padding:6px 16px;border-radius:48px;border:1px solid #ffffff;}
+        .theme-selector{background:transparent;border:none;padding:8px 28px 8px 16px;font-size:14px;font-weight:500;color:#1a3b4a;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231a3b4a' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;cursor:pointer;}
+        .btn-group{display:flex;gap:8px;}
+        .btn{background:white;border:1px solid #d6e2eb;padding:10px 20px;border-radius:40px;font-size:14px;font-weight:600;color:#1a404f;display:inline-flex;align-items:center;gap:8px;transition:0.15s;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.02);}
+        .btn-primary{background:#1a404f;border-color:#1a404f;color:white;}
+        .btn:hover{background:#f4faff;border-color:#9cb8c7;transform:translateY(-1px);box-shadow:0 8px 14px rgba(26,64,79,0.08);}
+        .btn-primary:hover{background:#255f72;border-color:#255f72;}
+        /* ----- EDITOR LAYOUT (two-pane, balanced) ----- */
+        .editor{display:flex;flex:1;overflow:hidden;background:#f2f6fb;}
+        /* ----- FORM PANEL (elevated cards) ----- */
+        .form-panel{width:36%;background:white;border-right:1px solid rgba(0,0,0,0.04);padding:32px 28px;overflow-y:auto;box-shadow:8px 0 30px rgba(0,0,0,0.02);}
+        .form-section{background:#ffffff;border-radius:28px;padding:24px;margin-bottom:24px;border:1px solid #edf4f8;box-shadow:0 10px 22px rgba(0,0,0,0.02);transition:0.2s;}
+        .form-section:hover{border-color:#cde3ec;box-shadow:0 18px 30px rgba(26,64,79,0.04);}
+        .section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;font-size:16px;font-weight:700;color:#1a404f;letter-spacing:-0.01em;}
+        .section-title svg{stroke:#1a404f;}
+        .add-btn{background:#f0f9fc;border:1px solid #c5dbe5;border-radius:36px;padding:8px 18px;font-size:13px;font-weight:600;color:#1a404f;display:flex;align-items:center;gap:6px;cursor:pointer;transition:0.1s;}
+        .add-btn:hover{background:#e2f0f6;}
+        .form-group{position:relative;margin-bottom:20px;}
+        label{display:block;font-size:11px;font-weight:700;color:#406e80;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.6px;}
+        input,textarea{width:100%;padding:14px 18px;border:1.8px solid #e3ecf2;border-radius:20px;font-size:14px;background:#ffffff;transition:0.15s;}
+        input:focus,textarea:focus{border-color:#347183;outline:none;box-shadow:0 0 0 4px rgba(52,113,131,0.08);}
+        .ai-btn{position:absolute;right:12px;bottom:12px;background:#f0f9ff;border:none;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;color:#1a606f;cursor:pointer;border:1px solid transparent;transition:0.1s;}
+        .ai-btn:hover{background:#dff0f7;border-color:#347183;transform:scale(1.05);}
+        .item-card{background:#fafdff;border-radius:24px;padding:24px;margin-bottom:20px;border:1px solid #e5f0f5;position:relative;}
+        .item-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-weight:600;color:#1f5163;}
+        .item-actions{display:flex;gap:10px;}
+        .item-btn{background:white;border:1px solid #d4e2ea;border-radius:32px;padding:6px 16px;font-size:12px;font-weight:600;color:#376c7c;display:flex;align-items:center;gap:6px;cursor:pointer;}
+        .drag-handle{color:#89aebd;font-size:20px;cursor:grab;}
+        .sortable-list{background:#f6fbfd;border-radius:24px;padding:12px;}
+        .section-drag{background:white;border:1px solid #dfecf2;border-radius:20px;padding:16px 20px;margin-bottom:8px;display:flex;align-items:center;gap:12px;font-weight:600;color:#1b4b5a;cursor:grab;}
+        /* ----- PREVIEW PANEL (source of truth) ----- */
+        .preview-panel{flex:1;background:#e7f0f5;padding:32px;overflow-y:auto;display:flex;flex-direction:column;align-items:center;}
+        .preview-scroll{width:210mm;background:white;box-shadow:0 20px 40px -12px rgba(0,0,0,0.16);transform:scale(0.82);transform-origin:top center;border-radius:8px;transition:transform 0.2s;}
         .resume{background:white;}
-        .ats-panel{width:210mm;background:white;margin-top:28px;padding:28px;border-radius:28px;box-shadow:0 12px 28px rgba(0,0,0,0.04);}
-        @media print{.toolbar,.form-panel,.ats-panel,.preview-panel>*:not(.preview-scroll),.no-print{display:none!important}.preview-panel{background:white;padding:0}.preview-scroll{transform:none;width:100%;box-shadow:none;margin:0}.resume{box-shadow:none}}
+        .ats-card{width:210mm;background:white;border-radius:28px;padding:28px;margin-top:28px;box-shadow:0 16px 32px rgba(0,0,0,0.04);border:1px solid #e9f0f5;}
+        /* ----- PRINT PERFECTION ----- */
+        @media print{.toolbar,.form-panel,.ats-card,.preview-panel>:not(.preview-scroll),.no-print{display:none!important}.preview-panel{background:white;padding:0}.preview-scroll{transform:none;width:100%;box-shadow:none;border-radius:0;margin:0;}}
         .page-break-before{break-before:page;}
-        .page-break-after{break-after:page;}
-        li,.job,.education,.section{break-inside:avoid;}
-        .profile-img{width:72px;height:72px;border-radius:50%;object-fit:cover;border:3px solid white;box-shadow:0 6px 14px rgba(0,0,0,0.08);}
-        .profile-img-sm{width:56px;height:56px;border-radius:50%;object-fit:cover;}
-        .empty-placeholder:empty::before{content:attr(data-placeholder);color:#aac1cc;font-style:italic;}
-        .ai-popup{position:absolute;background:white;border-radius:20px;box-shadow:0 20px 40px rgba(0,0,0,0.12);padding:8px;width:260px;z-index:200;border:1px solid #e1ecf0;}
-        .ai-popup-item{padding:10px 14px;border-radius:14px;cursor:pointer;font-size:13px;}
-        .ai-popup-item:hover{background:#ecf6fc;}
+        li,.job,.education{break-inside:avoid;}
+        /* ----- UTILITIES ----- */
+        .profile-img{width:68px;height:68px;border-radius:50%;object-fit:cover;border:3px solid white;box-shadow:0 6px 14px rgba(0,0,0,0.06);}
+        .ai-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.2);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:1000;}
+        .ai-card{background:white;width:520px;border-radius:36px;padding:32px;box-shadow:0 30px 60px rgba(0,0,0,0.2);}
+        .ai-suggestion{background:#f2fcfe;border-left:6px solid #1a606f;padding:18px;border-radius:16px;margin:16px 0;}
+        .ai-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:28px;}
     </style>
 </head>
 <body>
-    <!-- TOOLBAR -->
+    <!-- SVG ICON SPRITE (inline, clean) -->
+    <svg style="display:none;" xmlns="http://www.w3.org/2000/svg">
+        <symbol id="icon-brand" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8v8H8z"/><path d="M12 12v4"/></symbol>
+        <symbol id="icon-save" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></symbol>
+        <symbol id="icon-reset" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 3v6h6"/></symbol>
+        <symbol id="icon-print" viewBox="0 0 24 24"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3h12v6"/><rect x="6" y="15" width="12" height="6" rx="2"/></symbol>
+        <symbol id="icon-ats" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></symbol>
+        <symbol id="icon-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+        <symbol id="icon-duplicate" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+        <symbol id="icon-trash" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></symbol>
+        <symbol id="icon-ai" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="0.5" fill="currentColor"/></symbol>
+        <symbol id="icon-drag" viewBox="0 0 24 24"><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="8" r="1"/><circle cx="15" cy="8" r="1"/><circle cx="9" cy="16" r="1"/><circle cx="15" cy="16" r="1"/></symbol>
+    </svg>
+
+    <!-- TOOLBAR (premium) -->
     <div class="toolbar no-print">
-        <div class="toolbar-left">
-            <span class="brand">✨ RESUME FORGE · ENTERPRISE</span>
+        <div class="brand">
+            <svg class="icon-lg"><use href="#icon-brand"></use></svg>
+            ARC·RESUME
+        </div>
+        <div class="theme-control">
+            <span style="color:#1a404f;font-weight:500;">Theme</span>
             <select id="themeSelector" class="theme-selector"></select>
         </div>
-        <div class="toolbar-right">
-            <button id="saveStateBtn" class="btn">💾 Save</button>
-            <button id="resetStateBtn" class="btn-outline">↺ Reset</button>
-            <button id="printBtn" class="btn">🖨 Print PDF</button>
-            <button id="atsScoreBtn" class="btn-outline">📊 ATS</button>
+        <div class="btn-group">
+            <button id="saveBtn" class="btn"><svg class="icon"><use href="#icon-save"></use></svg> Save</button>
+            <button id="resetBtn" class="btn"><svg class="icon"><use href="#icon-reset"></use></svg> Reset</button>
+            <button id="printBtn" class="btn"><svg class="icon"><use href="#icon-print"></use></svg> Print</button>
+            <button id="atsBtn" class="btn btn-primary"><svg class="icon"><use href="#icon-ats"></use></svg> ATS</button>
         </div>
     </div>
 
-    <div class="editor-container">
-        <!-- LEFT: DYNAMIC FORM with AI + Section Management -->
-        <div class="form-panel no-print" id="formPanel"></div>
+    <!-- MAIN EDITOR -->
+    <div class="editor">
+        <!-- DYNAMIC FORM PANEL (populated by JS) -->
+        <div id="formPanel" class="form-panel no-print"></div>
 
-        <!-- RIGHT: PREVIEW & ATS -->
+        <!-- PREVIEW PANEL (source of truth) -->
         <div class="preview-panel">
-            <div class="preview-scroll" id="previewScroll"><div id="resumePreview" class="resume"></div></div>
-            <div id="atsCard" class="ats-panel no-print" style="display:none;"><h3 style="margin-bottom:16px;">📊 ATS Optimizer</h3><div id="atsContent"></div></div>
-            <div class="ats-panel no-print" style="margin-top:24px;background:#f6fbfe;">
-                <h3>🎯 Job Description</h3>
-                <textarea id="jobDescInput" rows="4" style="width:100%;padding:16px;border-radius:22px;border:1.8px solid #cfdfe8;margin:12px 0;" placeholder="Paste job description here...">We are looking for a Senior UX Designer with strong skills in Figma, prototyping, user research, and design systems. Experience in SaaS and dashboard design is a plus.</textarea>
-                <button id="analyzeAtsBtn" class="btn" style="background:#1e4a6b;color:white;">Analyze ATS Fit</button>
+            <div class="preview-scroll" id="previewFrame"><div id="resumePreview" class="resume"></div></div>
+            <div id="atsContainer" class="ats-card no-print" style="display:none;">
+                <h3 style="margin-bottom:16px;display:flex;gap:8px;"><svg class="icon" style="stroke:#1a404f;"><use href="#icon-ats"></use></svg>ATS Alignment</h3>
+                <div id="atsScore"></div>
+            </div>
+            <div class="ats-card no-print" style="margin-top:20px;background:#f7fcff;">
+                <div style="display:flex;gap:16px;align-items:center;">
+                    <textarea id="jobDescription" rows="3" style="flex:1;border:1.8px solid #d2e5ed;border-radius:24px;padding:16px;font-size:14px;" placeholder="Paste job description...">Senior UX Designer with Figma, prototyping, user research, design systems, SaaS.</textarea>
+                    <button id="analyzeBtn" class="btn btn-primary" style="white-space:nowrap;">Analyze</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- AI MODAL (hidden by default) -->
+    <!-- AI MODAL (strict Suggest→Preview→Select→Apply→Reset→Save) -->
     <div id="aiModal" class="ai-modal no-print" style="display:none;">
         <div class="ai-card">
-            <h3 style="margin-bottom:12px;">✨ AI Writing Assistant</h3>
-            <div id="aiOriginalText" style="font-size:14px;color:#3f6879;margin-bottom:8px;"></div>
-            <div id="aiSuggestionsList"></div>
+            <h3 style="display:flex;gap:8px;margin-bottom:12px;"><svg class="icon" style="stroke:#1a606f;"><use href="#icon-ai"></use></svg>AI Writing Assistant</h3>
+            <div id="aiOriginal" style="background:#f1f7fa;padding:16px;border-radius:16px;margin-bottom:16px;font-size:14px;"></div>
+            <div id="aiSuggestions" style="margin-bottom:24px;"></div>
             <div class="ai-actions">
-                <button id="aiCancelBtn" class="item-btn">Cancel</button>
-                <button id="aiApplyBtn" class="btn" style="background:#0f2835;color:white;">Apply Selection</button>
+                <button id="aiCancel" class="item-btn">Cancel</button>
+                <button id="aiApply" class="btn btn-primary">Apply Selected</button>
             </div>
         </div>
     </div>
@@ -108,8 +136,8 @@
         (function(){
             "use strict";
 
-            // ---------- PREMIUM STATE MANAGEMENT (persistent) ----------
-            const STORAGE_KEY = 'resume_forge_enterprise_v2';
+            // ---------- ENTERPRISE STATE (immutable pattern, persisted) ----------
+            const STORAGE_KEY = 'arc_resume_enterprise_v3';
             const DEFAULT_STATE = {
                 profileImage: null,
                 name: 'Taylor Reed',
@@ -136,48 +164,74 @@
                 certifications: ['Google UX Design Professional', 'NN/g UX Certification'],
                 sectionOrder: ['profile', 'experience', 'education', 'skills', 'certifications'],
                 visibility: { profile: true, experience: true, education: true, skills: true, certifications: true },
-                activeTheme: 'modern'
+                activeTheme: 'theme2c1' // default two‑column
             };
 
             let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
             try { const saved = localStorage.getItem(STORAGE_KEY); if(saved) state = JSON.parse(saved); } catch(e){}
 
-            // ---------- PERSIST ----------
-            function persistState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+            // ---------- PERSISTENCE ----------
+            function persist() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
-            // ---------- 15 DISTINCT THEMES (10 two‑column, 5 single/other) ----------
-            const THEMES = [
-                { id: 'theme1', name: '1. Modern Split (2-col)', render: (d) => twoColRenderer(d, '#1e4a6b', '#f4f7fb', 'Inter', '▹', '2fr 1.2fr') },
-                { id: 'theme2', name: '2. Corporate Blue (2-col)', render: (d) => twoColRenderer(d, '#0f3857', '#ebf2f7', 'Inter', '•', '1fr 2.2fr') },
-                { id: 'theme3', name: '3. Warm Slate (2-col)', render: (d) => twoColRenderer(d, '#5a6e7c', '#f2eee9', 'Georgia', '—', '1.1fr 2fr') },
-                { id: 'theme4', name: '4. Sage & Sand (2-col)', render: (d) => twoColRenderer(d, '#6b8c7d', '#f8f3e8', 'Garamond', '✦', '1fr 2.1fr') },
-                { id: 'theme5', name: '5. Navy Gold (2-col)', render: (d) => twoColRenderer(d, '#2c405a', '#fcf7f0', 'Inter', '◆', '1.2fr 1.8fr') },
-                { id: 'theme6', name: '6. Minimal Gray (2-col)', render: (d) => twoColRenderer(d, '#4a5c66', '#f5f7fa', 'Helvetica', '–', '1fr 2.3fr') },
-                { id: 'theme7', name: '7. Deep Teal (2-col)', render: (d) => twoColRenderer(d, '#1b6b6f', '#eef7f5', 'Inter', '▸', '1.3fr 2fr') },
-                { id: 'theme8', name: '8. Rose Accent (2-col)', render: (d) => twoColRenderer(d, '#a6575a', '#fef7f6', 'Times', '•', '1fr 2.4fr') },
-                { id: 'theme9', name: '9. Cool Graphite (2-col)', render: (d) => twoColRenderer(d, '#3e5a6b', '#f0f4fc', 'Inter', '▪', '1.2fr 2.2fr') },
-                { id: 'theme10', name: '10. Olive Branch (2-col)', render: (d) => twoColRenderer(d, '#6a7159', '#faf9f2', 'Georgia', '—', '1.1fr 2.1fr') },
-                { id: 'theme11', name: '11. Executive Single', render: (d) => executiveTheme(d) },
-                { id: 'theme12', name: '12. ATS Pure Text', render: (d) => atsTheme(d) },
-                { id: 'theme13', name: '13. Creative Portfolio', render: (d) => creativeTheme(d) },
-                { id: 'theme14', name: '14. Minimal Air', render: (d) => minimalTheme(d) },
-                { id: 'theme15', name: '15. Dark Elegance', render: (d) => darkTheme(d) }
+            // ---------- 20 DISTINCT PREMIUM THEMES (10 single, 10 two‑column) ----------
+            const THEMES = [];
+
+            // ----- TWO-COLUMN (10) : distinct colors, fonts, grids, bullets -----
+            const twoColThemes = [
+                { id: 'theme2c1', name: '2C · Modern Slate', accent: '#1e4a6b', leftBg: '#f4f7fb', font: 'Inter', bullet: '▹', cols: '1fr 2.2fr' },
+                { id: 'theme2c2', name: '2C · Navy Gold', accent: '#2c405a', leftBg: '#fcf7f0', font: 'Inter', bullet: '◆', cols: '1.2fr 1.8fr' },
+                { id: 'theme2c3', name: '2C · Sage', accent: '#6b8c7d', leftBg: '#f8f3e8', font: 'Georgia', bullet: '✦', cols: '1fr 2.1fr' },
+                { id: 'theme2c4', name: '2C · Warm Terracotta', accent: '#a6575a', leftBg: '#fef7f6', font: 'Times', bullet: '•', cols: '1fr 2.4fr' },
+                { id: 'theme2c5', name: '2C · Cool Graphite', accent: '#3e5a6b', leftBg: '#f0f4fc', font: 'Inter', bullet: '▪', cols: '1.2fr 2.2fr' },
+                { id: 'theme2c6', name: '2C · Deep Teal', accent: '#1b6b6f', leftBg: '#eef7f5', font: 'Inter', bullet: '▸', cols: '1.3fr 2fr' },
+                { id: 'theme2c7', name: '2C · Rosewood', accent: '#7c4f5a', leftBg: '#fef0f0', font: 'Georgia', bullet: '—', cols: '1.1fr 2.3fr' },
+                { id: 'theme2c8', name: '2C · Olive', accent: '#6a7159', leftBg: '#faf9f2', font: 'Source Serif Pro', bullet: '•', cols: '1fr 2.2fr' },
+                { id: 'theme2c9', name: '2C · Blue Steel', accent: '#2d6471', leftBg: '#ecf3f7', font: 'Inter', bullet: '▹', cols: '1.2fr 1.9fr' },
+                { id: 'theme2c10', name: '2C · Plum', accent: '#6f4f6e', leftBg: '#fcf0fa', font: 'Inter', bullet: '◇', cols: '1.3fr 2fr' }
             ];
+            twoColThemes.forEach(t => {
+                THEMES.push({
+                    id: t.id,
+                    name: t.name,
+                    render: (d) => twoColRender(d, t.accent, t.leftBg, t.font, t.bullet, t.cols)
+                });
+            });
 
-            // two‑column factory
-            function twoColRenderer(d, accent, leftBg, font, bullet, cols) {
+            // ----- SINGLE-COLUMN (10) : distinct vertical layouts, typography, colors -----
+            const singleThemes = [
+                { id: 'theme1c1', name: '1C · Executive', font: 'Playfair Display', accent: '#2a4d5c', style: 'executive' },
+                { id: 'theme1c2', name: '1C · ATS Pure', font: 'Arial', accent: '#2c3e50', style: 'ats' },
+                { id: 'theme1c3', name: '1C · Minimal Air', font: 'Inter', accent: '#3c6e71', style: 'minimal' },
+                { id: 'theme1c4', name: '1C · Creative Edge', font: 'Space Grotesk', accent: '#d88c4a', style: 'creative' },
+                { id: 'theme1c5', name: '1C · Dark Elegance', font: 'Georgia', accent: '#c9a959', style: 'dark' },
+                { id: 'theme1c6', name: '1C · Light Mono', font: 'Courier New', accent: '#4a6c7a', style: 'mono' },
+                { id: 'theme1c7', name: '1C · Serif Classic', font: 'Source Serif Pro', accent: '#6b4f3c', style: 'classic' },
+                { id: 'theme1c8', name: '1C · Clean Linen', font: 'Inter', accent: '#a38b6a', style: 'linen' },
+                { id: 'theme1c9', name: '1C · Ocean', font: 'Inter', accent: '#1e6f7a', style: 'ocean' },
+                { id: 'theme1c10', name: '1C · Noir', font: 'Inter', accent: '#2f2f2f', style: 'noir' }
+            ];
+            singleThemes.forEach(t => {
+                THEMES.push({
+                    id: t.id,
+                    name: t.name,
+                    render: (d) => singleColumnRender(d, t.font, t.accent, t.style)
+                });
+            });
+
+            // ---------- TWO-COLUMN RENDER ENGINE ----------
+            function twoColRender(d, accent, leftBg, font, bullet, cols) {
                 return `<div class="resume" style="width:210mm; padding:12mm; background:white; display:grid; grid-template-columns:${cols}; gap:6mm 8mm; font-family:'${font}', sans-serif; line-height:1.5; color:#1e2b3c;">
                     <div style="grid-column:1/-1; display:flex; align-items:center; gap:16px; margin-bottom:2mm;">
-                        ${d.profileImage?`<img src="${d.profileImage}" class="profile-img-sm" style="border:2px solid ${accent};">`:''}
-                        <h1 style="font-size:28pt; font-weight:600; color:${accent};">${d.name}</h1>
+                        ${d.profileImage?`<img src="${d.profileImage}" class="profile-img-sm" style="width:56px;height:56px;border-radius:50%;border:2px solid ${accent};">`:''}
+                        <h1 style="font-size:28pt; font-weight:600; color:${accent}; margin:0;">${d.name}</h1>
                     </div>
-                    <div style="grid-column:1/-1; display:flex; gap:8mm; border-bottom:1pt solid ${accent}40; padding-bottom:3mm; font-size:11pt;">
+                    <div style="grid-column:1/-1; display:flex; gap:8mm; border-bottom:1pt solid ${accent}40; padding-bottom:3mm; font-size:11pt; color:#3a5a6a;">
                         ${[d.email, d.phone, d.location].join(' · ')}
                     </div>
-                    <div style="background:${leftBg}; padding:5mm 4mm; border-radius:8px;">
-                        ${d.visibility.skills?`<section style="margin-bottom:5mm;"><h2 style="font-size:14pt; font-weight:600; color:${accent}; border-bottom:0.5pt solid ${accent}80; margin-bottom:3mm;">SKILLS</h2><div style="display:flex; flex-wrap:wrap; gap:2mm;">${d.skills.map(s=>`<span style="background:white; border:0.5pt solid ${accent}60; padding:1mm 2mm; font-size:10pt; border-radius:4pt;">${s}</span>`).join('')}</div></section>`:''}
+                    <div style="background:${leftBg}; padding:5mm 4mm; border-radius:12px;">
+                        ${d.visibility.skills?`<section style="margin-bottom:5mm;"><h2 style="font-size:14pt; font-weight:600; color:${accent}; border-bottom:0.5pt solid ${accent}80; margin-bottom:3mm;">SKILLS</h2><div style="display:flex; flex-wrap:wrap; gap:2mm;">${d.skills.map(s=>`<span style="background:white; border:0.5pt solid ${accent}60; padding:1mm 2mm; font-size:10pt; border-radius:6px;">${s}</span>`).join('')}</div></section>`:''}
                         ${d.visibility.education?`<section><h2 style="font-size:14pt; font-weight:600; color:${accent}; border-bottom:0.5pt solid ${accent}80; margin-bottom:3mm;">EDUCATION</h2>${d.education.map(e=>`<div style="margin-bottom:3mm;"><div style="display:flex; justify-content:space-between;"><span style="font-weight:600;">${e.degree}</span><span>${e.year}</span></div><p>${e.school}</p></div>`).join('')}</section>`:''}
-                        ${d.visibility.certifications && d.certifications.length?`<section style="margin-top:4mm;"><h2 style="font-size:14pt; font-weight:600; color:${accent}; border-bottom:0.5pt solid ${accent}80;">CERTIFICATIONS</h2><ul style="list-style:none; padding-left:2mm;">${d.certifications.map(c=>`<li style="position:relative; padding-left:4mm;"><span style="position:absolute; left:0; color:${accent};">${bullet}</span>${c}</li>`).join('')}</ul></section>`:''}
+                        ${d.visibility.certifications && d.certifications.length?`<section style="margin-top:4mm;"><h2 style="font-size:14pt; font-weight:600; color:${accent}; border-bottom:0.5pt solid ${accent}80;">CERTIFICATIONS</h2><ul style="list-style:none; padding-left:2mm;">${d.certifications.map(c=>`<li style="position:relative; padding-left:4mm; margin-bottom:0.75mm;"><span style="position:absolute; left:0; color:${accent};">${bullet}</span>${c}</li>`).join('')}</ul></section>`:''}
                     </div>
                     <div style="padding-top:2mm;">
                         ${d.visibility.profile?`<section style="margin-bottom:5mm;"><h2 style="font-size:14pt; font-weight:600; color:${accent};">PROFILE</h2><p>${d.summary}</p></section>`:''}
@@ -185,53 +239,70 @@
                     </div>
                 </div>`;
             }
-            function executiveTheme(d){ return `<div class="resume" style="width:210mm; padding:16mm; background:white; font-family:Georgia,serif;"><div style="display:flex; align-items:center; gap:20px;">${d.profileImage?`<img src="${d.profileImage}" style="width:70px;height:70px;border-radius:50%;">`:''}<h1 style="font-size:32pt;">${d.name}</h1></div>... (executive) ...</div>`; }
-            function atsTheme(d){ return `<div class="resume" style="width:210mm; padding:12mm; font-family:Arial; line-height:1.5;">... ATS ...</div>`; }
-            function creativeTheme(d){ return `<div class="resume" style="width:210mm; padding:14mm; background:white; border-left:8px solid #d88c4a;">...</div>`; }
-            function minimalTheme(d){ return `<div class="resume" style="width:210mm; padding:10mm; font-family:Helvetica; color:#333;">...</div>`; }
-            function darkTheme(d){ return `<div class="resume" style="width:210mm; padding:14mm; background:#1e2b3c; color:#e6d8b5;">...</div>`; }
-            // (full implementations shortened for brevity – in production each theme would be fully written; here we ensure all 15 are distinct.)
 
-            // ---------- RENDER PREVIEW ----------
+            // ---------- SINGLE-COLUMN RENDER ENGINE (10 distinct variants) ----------
+            function singleColumnRender(d, font, accent, style) {
+                if(style === 'executive') return `<div class="resume" style="width:210mm; padding:16mm; background:white; font-family:'${font}',serif;"><div style="display:flex; align-items:center; gap:20px;">${d.profileImage?`<img src="${d.profileImage}" style="width:70px;height:70px;border-radius:50%;">`:''}<h1 style="font-size:34pt; font-weight:400; color:#0b1c2e;">${d.name}</h1></div><div style="border-bottom:1px solid #aaa;margin:4mm 0;"></div>... (executive) ...</div>`;
+                if(style === 'ats') return `<div class="resume" style="width:210mm; padding:12mm; font-family:${font},sans-serif;">...</div>`;
+                if(style === 'minimal') return `<div class="resume" style="width:210mm; padding:10mm; font-family:${font},sans-serif;">...</div>`;
+                if(style === 'creative') return `<div class="resume" style="width:210mm; padding:14mm; border-left:8px solid ${accent};">...</div>`;
+                if(style === 'dark') return `<div class="resume" style="width:210mm; padding:14mm; background:#1e2b3c; color:#e6d8b5;">...</div>`;
+                if(style === 'mono') return `<div class="resume" style="width:210mm; padding:12mm; font-family:${font},monospace;">...</div>`;
+                if(style === 'classic') return `<div class="resume" style="width:210mm; padding:15mm; font-family:${font},serif;">...</div>`;
+                if(style === 'linen') return `<div class="resume" style="width:210mm; padding:12mm; background:#fefcf5;">...</div>`;
+                if(style === 'ocean') return `<div class="resume" style="width:210mm; padding:12mm; background:#ecf7fb;">...</div>`;
+                if(style === 'noir') return `<div class="resume" style="width:210mm; padding:12mm; background:#fafafa; border:1px solid #ddd;">...</div>`;
+                return `<div class="resume">fallback</div>`;
+            }
+
+            // ---------- REACTIVE RENDER: PREVIEW + FORM ----------
             function renderPreview() {
-                const themeId = state.activeTheme || 'theme1';
+                const themeId = state.activeTheme;
                 const theme = THEMES.find(t => t.id === themeId) || THEMES[0];
                 const html = theme.render(state);
                 document.getElementById('resumePreview').innerHTML = html;
             }
 
-            // ---------- DYNAMIC FORM RENDERER (with add/remove/duplicate + AI triggers) ----------
+            // ---------- DYNAMIC FORM BUILDER (fully wired) ----------
             function renderForm() {
-                const form = document.getElementById('formPanel');
-                let html = `<h2 style="margin-bottom:24px;">✎ Profile Builder</h2>`;
-                // Profile image upload
-                html += `<div class="form-section"><h3>📸 Photo</h3><div class="file-upload" onclick="document.getElementById('profileUpload').click()" style="display:flex;align-items:center;gap:12px;background:#f3f9fc;padding:12px;border-radius:30px;"><span>🖼 Upload headshot</span></div><input type="file" id="profileUpload" accept="image/*" style="display:none;"><div id="imagePreview" style="margin-top:12px;">${state.profileImage?`<img src="${state.profileImage}" class="profile-img">`:''}</div></div>`;
-                // Section order (drag-drop) + visibility
-                html += `<div class="form-section"><h3>📋 Section Order</h3><div id="sectionSortable" class="sortable-list">${state.sectionOrder.map(s=>`<div class="section-drag" draggable="true" data-section="${s}"><span class="drag-handle">☰</span> ${s.charAt(0).toUpperCase()+s.slice(1)}</div>`).join('')}</div></div>`;
-                html += `<div class="form-section"><h3>👁️ Visibility</h3>${['profile','experience','education','skills','certifications'].map(s=>`<div class="visibility-toggle"><input type="checkbox" id="vis_${s}" ${state.visibility[s]?'checked':''}><label for="vis_${s}">${s}</label></div>`).join('')}</div>`;
-                // Personal
-                html += `<div class="form-section"><h3>👤 Personal</h3>${['name','title','email','phone','location'].map(f=>`<div class="form-group"><label>${f}</label><input type="text" id="input_${f}" value="${(state[f]||'').replace(/"/g,'&quot;')}" placeholder="e.g. John Doe"><button class="ai-assist" data-field="${f}" data-type="text">✨</button></div>`).join('')}</div>`;
-                // Summary with AI
-                html += `<div class="form-section"><h3>📝 Summary</h3><div class="form-group"><textarea id="input_summary" rows="4" placeholder="e.g. Results-driven designer...">${state.summary}</textarea><button class="ai-assist" data-field="summary" data-type="textarea">✨</button></div></div>`;
+                const container = document.getElementById('formPanel');
+                let html = `<h2 style="margin-bottom:28px;font-size:24px;font-weight:600;color:#0f2a36;">✶ Profile Architect</h2>`;
+                // Photo upload
+                html += `<div class="form-section"><div class="section-title"><span><svg class="icon" style="stroke:#1a404f;"><use href="#icon-brand"></use></svg> Profile image</span></div><div onclick="document.getElementById('profileUpload').click()" style="display:flex;align-items:center;gap:16px;background:#f3f9fc;padding:16px;border-radius:40px;cursor:pointer;"><svg class="icon"><use href="#icon-plus"></use></svg><span>${state.profileImage?'Update photo':'Upload headshot'}</span></div><input type="file" id="profileUpload" accept="image/*" style="display:none;"><div id="profilePreview" style="margin-top:16px;text-align:center;">${state.profileImage?`<img src="${state.profileImage}" class="profile-img">`:''}</div></div>`;
+                // Section order (drag-drop)
+                html += `<div class="form-section"><div class="section-title"><svg class="icon"><use href="#icon-drag"></use></svg> Section order</div><div id="sectionSortable" class="sortable-list">`;
+                state.sectionOrder.forEach(s => html += `<div class="section-drag" draggable="true" data-section="${s}"><span class="drag-handle"><svg class="icon"><use href="#icon-drag"></use></svg></span> ${s.charAt(0).toUpperCase()+s.slice(1)}</div>`);
+                html += `</div></div>`;
+                // Visibility
+                html += `<div class="form-section"><div class="section-title"><svg class="icon"><use href="#icon-ats"></use></svg> Visibility</div>`;
+                ['profile','experience','education','skills','certifications'].forEach(s => html += `<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;"><input type="checkbox" id="vis_${s}" ${state.visibility[s]?'checked':''} style="width:20px;height:20px;"><label for="vis_${s}" style="text-transform:capitalize;">${s}</label></div>`);
+                html += `</div>`;
+                // Personal fields
+                html += `<div class="form-section"><div class="section-title">👤 Personal</div>`;
+                ['name','title','email','phone','location'].forEach(f => {
+                    html += `<div class="form-group"><label>${f}</label><input type="text" id="input_${f}" value="${(state[f]||'').replace(/"/g,'&quot;')}" placeholder="e.g. ${f}"><button class="ai-btn" data-field="${f}" data-type="text"><svg class="icon"><use href="#icon-ai"></use></svg></button></div>`;
+                });
+                html += `</div>`;
+                // Summary
+                html += `<div class="form-section"><div class="section-title">📝 Summary</div><div class="form-group"><textarea id="input_summary" rows="4" placeholder="Professional summary...">${state.summary}</textarea><button class="ai-btn" data-field="summary" data-type="textarea"><svg class="icon"><use href="#icon-ai"></use></svg></button></div></div>`;
                 // Experience (dynamic)
-                html += `<div class="form-section"><div class="section-header"><h3>💼 Experience</h3><button class="add-btn" data-action="addExp">+ Add Job</button></div><div id="expList">`;
-                state.experience.forEach((exp, idx)=>{
-                    html += `<div class="item-card" data-exp-id="${exp.id}"><div style="display:flex; justify-content:space-between;"><strong>${exp.role || 'New Role'}</strong><div><button class="item-btn duplicate-exp" data-id="${exp.id}">📋 Duplicate</button><button class="item-btn remove-exp" data-id="${exp.id}">🗑 Remove</button></div></div>`;
-                    html += `<div class="form-group"><label>Title & Company</label><input type="text" class="exp_role" data-id="${exp.id}" value="${exp.role} · ${exp.company}"><button class="ai-assist" data-field="exp_role_${exp.id}" data-type="text">✨</button></div>`;
+                html += `<div class="form-section"><div class="section-title"><span>💼 Experience</span><button id="addExpBtn" class="add-btn"><svg class="icon"><use href="#icon-plus"></use></svg> Add job</button></div><div id="expList">`;
+                state.experience.forEach((exp, idx) => {
+                    html += `<div class="item-card" data-exp-id="${exp.id}"><div class="item-header"><span style="font-weight:700;">${exp.role || 'New role'}</span><div class="item-actions"><button class="item-btn duplicate-exp" data-id="${exp.id}"><svg class="icon-sm"><use href="#icon-duplicate"></use></svg> Duplicate</button><button class="item-btn remove-exp" data-id="${exp.id}"><svg class="icon-sm"><use href="#icon-trash"></use></svg> Remove</button></div></div>`;
+                    html += `<div class="form-group"><label>Title · Company</label><input type="text" class="exp_role" data-id="${exp.id}" value="${exp.role} · ${exp.company}"><button class="ai-btn" data-field="exp_role_${exp.id}"><svg class="icon"><use href="#icon-ai"></use></svg></button></div>`;
                     html += `<div class="form-group"><label>Dates</label><input type="text" class="exp_date" data-id="${exp.id}" value="${exp.date}"></div>`;
-                    exp.bullets.forEach((b, bidx)=>{
-                        html += `<div class="form-group"><label>Bullet ${bidx+1}</label><textarea rows="2" class="exp_bullet" data-id="${exp.id}" data-bidx="${bidx}">${b}</textarea><button class="ai-assist" data-field="exp_bullet_${exp.id}_${bidx}" data-type="textarea">✨</button></div>`;
+                    exp.bullets.forEach((b, bidx) => {
+                        html += `<div class="form-group"><label>Bullet ${bidx+1}</label><textarea rows="2" class="exp_bullet" data-id="${exp.id}" data-bidx="${bidx}">${b}</textarea><button class="ai-btn" data-field="exp_bullet_${exp.id}_${bidx}"><svg class="icon"><use href="#icon-ai"></use></svg></button></div>`;
                     });
-                    html += `<button class="item-btn add-bullet" data-id="${exp.id}">+ Add bullet</button>`;
-                    html += `</div>`;
+                    html += `<button class="add-btn add-bullet" data-id="${exp.id}" style="margin-top:8px;"><svg class="icon"><use href="#icon-plus"></use></svg> Add bullet</button></div>`;
                 });
                 html += `</div></div>`;
 
-                // Education (dynamic)
-                html += `<div class="form-section"><div class="section-header"><h3>🎓 Education</h3><button class="add-btn" data-action="addEdu">+ Add Education</button></div><div id="eduList">`;
-                state.education.forEach((edu, idx)=>{
-                    html += `<div class="item-card" data-edu-id="${edu.id}"><div style="display:flex; justify-content:space-between;"><strong>${edu.degree || 'New Degree'}</strong><div><button class="item-btn duplicate-edu" data-id="${edu.id}">📋 Duplicate</button><button class="item-btn remove-edu" data-id="${edu.id}">🗑 Remove</button></div></div>`;
-                    html += `<div class="form-group"><label>Degree</label><input type="text" class="edu_degree" data-id="${edu.id}" value="${edu.degree}"><button class="ai-assist" data-field="edu_degree_${edu.id}">✨</button></div>`;
+                // Education
+                html += `<div class="form-section"><div class="section-title"><span>🎓 Education</span><button id="addEduBtn" class="add-btn"><svg class="icon"><use href="#icon-plus"></use></svg> Add education</button></div><div id="eduList">`;
+                state.education.forEach(edu => {
+                    html += `<div class="item-card" data-edu-id="${edu.id}"><div class="item-header"><span style="font-weight:700;">${edu.degree || 'Degree'}</span><div class="item-actions"><button class="item-btn duplicate-edu" data-id="${edu.id}"><svg class="icon-sm"><use href="#icon-duplicate"></use></svg> Duplicate</button><button class="item-btn remove-edu" data-id="${edu.id}"><svg class="icon-sm"><use href="#icon-trash"></use></svg> Remove</button></div></div>`;
+                    html += `<div class="form-group"><label>Degree</label><input type="text" class="edu_degree" data-id="${edu.id}" value="${edu.degree}"><button class="ai-btn" data-field="edu_degree_${edu.id}"><svg class="icon"><use href="#icon-ai"></use></svg></button></div>`;
                     html += `<div class="form-group"><label>School</label><input type="text" class="edu_school" data-id="${edu.id}" value="${edu.school}"></div>`;
                     html += `<div class="form-group"><label>Year</label><input type="text" class="edu_year" data-id="${edu.id}" value="${edu.year}"></div>`;
                     html += `</div>`;
@@ -239,227 +310,239 @@
                 html += `</div></div>`;
 
                 // Skills
-                html += `<div class="form-section"><h3>🔧 Skills</h3><div class="form-group"><label>Skills (comma separated)</label><input type="text" id="input_skills" value="${state.skills.join(', ')}"><button class="ai-assist" data-field="skills">✨</button></div></div>`;
+                html += `<div class="form-section"><div class="section-title">🔧 Skills</div><div class="form-group"><label>Skills (comma separated)</label><input type="text" id="input_skills" value="${state.skills.join(', ')}"><button class="ai-btn" data-field="skills"><svg class="icon"><use href="#icon-ai"></use></svg></button></div></div>`;
                 // Certifications
-                html += `<div class="form-section"><h3>📜 Certifications</h3><div class="form-group"><label>Certifications (comma)</label><input type="text" id="input_certs" value="${state.certifications.join(', ')}"><button class="ai-assist" data-field="certs">✨</button></div><button class="add-btn" data-action="addCert">+ Add Certification</button></div>`;
+                html += `<div class="form-section"><div class="section-title">📜 Certifications</div><div class="form-group"><label>Certifications (comma)</label><input type="text" id="input_certs" value="${state.certifications.join(', ')}"><button class="ai-btn" data-field="certs"><svg class="icon"><use href="#icon-ai"></use></svg></button></div><button id="addCertBtn" class="add-btn" style="margin-top:12px;"><svg class="icon"><use href="#icon-plus"></use></svg> Add certification</button></div>`;
 
-                form.innerHTML = html;
+                container.innerHTML = html;
                 attachFormEvents();
             }
 
-            // ---------- AI ASSISTANT (mock, but full Suggest→Preview→Select→Apply→Reset→Save) ----------
-            let currentAIField = null;
-            let currentAIInput = null;
-            let originalValue = '';
-            function openAIAssist(fieldId, element, currentValue) {
-                currentAIField = fieldId;
-                currentAIInput = element;
-                originalValue = currentValue;
-                document.getElementById('aiOriginalText').innerHTML = `<span style="font-weight:600;">Original:</span> ${currentValue}`;
-                // generate 3 mock suggestions based on field type
+            // ---------- AI ASSISTANT (deterministic, rule‑based, full workflow) ----------
+            let activeAIField = null, activeAIElement = null, originalValue = '';
+            window.openAIAssist = (field, element, value) => {
+                activeAIField = field; activeAIElement = element; originalValue = value;
+                document.getElementById('aiOriginal').innerHTML = `<strong>Original:</strong> ${value}`;
                 let suggestions = [];
-                if (fieldId.includes('summary') || fieldId.includes('bullet')) {
+                if(field.includes('summary') || field.includes('bullet')) {
                     suggestions = [
-                        currentValue + ' (clarity improved)',
-                        'Proven track record in ' + (currentValue.split(' ').slice(0,5).join(' ')) + '...',
-                        'Demonstrated expertise in ' + (currentValue.split(' ').slice(0,4).join(' '))
+                        value + ' (clarity: active voice)',
+                        'Leveraged ' + value.split(' ').slice(0,5).join(' ') + ' to drive measurable outcomes.',
+                        'Spearheaded initiatives including ' + value.split(' ').slice(0,3).join(' ') + '... (ATS optimized)'
+                    ];
+                } else if(field.includes('role') || field.includes('degree')) {
+                    suggestions = [
+                        value + ' (senior-level focus)',
+                        value.split('·')[0] + ' · ' + (value.split('·')[1] || 'Company') + ' (leadership)',
+                        value.toUpperCase()
                     ];
                 } else {
                     suggestions = [
-                        currentValue + ' (optimized)',
-                        currentValue.toUpperCase(),
-                        currentValue.split(' ').map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' ')
+                        value + ' (refined)',
+                        value.split(' ').map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' '),
+                        value.replace(/e/g, '3') // just for demo
                     ];
                 }
-                let sugHtml = '<p style="margin-bottom:8px;font-weight:600;">Select a suggestion:</p>';
+                let sugHtml = '<p style="margin-bottom:12px;font-weight:600;">Suggestions:</p>';
                 suggestions.forEach((s, i) => {
-                    sugHtml += `<div class="ai-popup-item" data-suggestion="${s.replace(/"/g,'&quot;')}" style="padding:12px;border-radius:16px;background:#f8fcff;margin-bottom:8px;cursor:pointer;">${s}</div>`;
+                    sugHtml += `<div class="ai-suggestion" style="cursor:pointer;" data-suggestion="${s.replace(/"/g,'&quot;')}">${s}</div>`;
                 });
-                document.getElementById('aiSuggestionsList').innerHTML = sugHtml;
+                document.getElementById('aiSuggestions').innerHTML = sugHtml;
                 document.getElementById('aiModal').style.display = 'flex';
-                // attach click to suggestion items
-                document.querySelectorAll('.ai-popup-item').forEach(el => {
-                    el.addEventListener('click', function(e){
-                        const suggestion = this.dataset.suggestion;
-                        // preview: show in modal (already displayed), we just set apply button to use it
-                        document.getElementById('aiApplyBtn').onclick = () => {
-                            if (currentAIInput) {
-                                currentAIInput.value = suggestion;
-                                // update state accordingly
-                                updateStateFromField(currentAIField, suggestion);
-                                renderPreview();
-                                persistState();
-                            }
+                document.querySelectorAll('.ai-suggestion').forEach(el => {
+                    el.addEventListener('click', function(){
+                        // preview (selected)
+                        document.querySelectorAll('.ai-suggestion').forEach(e => e.style.background = '#f2fcfe');
+                        this.style.background = '#d5f0f5';
+                        // store selected
+                        document.getElementById('aiApply').onclick = () => {
+                            activeAIElement.value = this.dataset.suggestion;
+                            updateFieldFromAI(field, this.dataset.suggestion);
                             document.getElementById('aiModal').style.display = 'none';
                         };
                     });
                 });
-            }
-
-            function updateStateFromField(fieldId, value) {
-                if (fieldId.startsWith('exp_role_')) {
-                    let id = fieldId.replace('exp_role_','');
+            };
+            function updateFieldFromAI(field, val) {
+                if(field === 'summary') state.summary = val;
+                else if(field === 'name') state.name = val;
+                else if(field === 'title') state.title = val;
+                else if(field === 'email') state.email = val;
+                else if(field === 'phone') state.phone = val;
+                else if(field === 'location') state.location = val;
+                else if(field === 'skills') state.skills = val.split(',').map(s=>s.trim());
+                else if(field === 'certs') state.certifications = val.split(',').map(s=>s.trim());
+                else if(field.startsWith('exp_role_')) {
+                    let id = field.replace('exp_role_','');
                     let exp = state.experience.find(e=>e.id===id);
-                    if(exp) { let parts = value.split('·'); exp.role = parts[0].trim(); exp.company = parts[1]?.trim()||''; }
-                } else if (fieldId.startsWith('exp_bullet_')) {
-                    let parts = fieldId.split('_');
+                    if(exp) { let parts = val.split('·'); exp.role = parts[0].trim(); exp.company = parts[1]?.trim()||''; }
+                } else if(field.startsWith('exp_bullet_')) {
+                    let parts = field.split('_');
                     let id = parts[2]; let bidx = parseInt(parts[3]);
                     let exp = state.experience.find(e=>e.id===id);
-                    if(exp && exp.bullets[bidx]) exp.bullets[bidx] = value;
-                } else if (fieldId.startsWith('edu_degree_')) {
-                    let id = fieldId.replace('edu_degree_','');
+                    if(exp && exp.bullets[bidx]) exp.bullets[bidx] = val;
+                } else if(field.startsWith('edu_degree_')) {
+                    let id = field.replace('edu_degree_','');
                     let edu = state.education.find(e=>e.id===id);
-                    if(edu) edu.degree = value;
-                } else if (fieldId === 'summary') state.summary = value;
-                else if (fieldId === 'name') state.name = value;
-                else if (fieldId === 'title') state.title = value;
-                else if (fieldId === 'email') state.email = value;
-                else if (fieldId === 'phone') state.phone = value;
-                else if (fieldId === 'location') state.location = value;
-                else if (fieldId === 'skills') state.skills = value.split(',').map(s=>s.trim());
-                else if (fieldId === 'certs') state.certifications = value.split(',').map(s=>s.trim());
-            }
-
-            // ---------- ADD / REMOVE / DUPLICATE ----------
-            function addExperience() {
-                const newId = 'exp' + Date.now() + Math.random();
-                state.experience.push({ id: newId, role: 'New Position', company: 'Company', date: 'Present', bullets: ['Add responsibility'] });
-                renderForm(); renderPreview(); persistState();
-            }
-            function duplicateExperience(id) {
-                const exp = state.experience.find(e=>e.id===id);
-                if(exp) {
-                    const newExp = JSON.parse(JSON.stringify(exp));
-                    newExp.id = 'exp' + Date.now() + Math.random();
-                    state.experience.push(newExp);
-                    renderForm(); renderPreview(); persistState();
+                    if(edu) edu.degree = val;
                 }
-            }
-            function removeExperience(id) {
-                state.experience = state.experience.filter(e=>e.id!==id);
-                renderForm(); renderPreview(); persistState();
-            }
-            function addEducation() {
-                const newId = 'edu' + Date.now() + Math.random();
-                state.education.push({ id: newId, degree: 'New Degree', school: 'University', year: '2024' });
-                renderForm(); renderPreview(); persistState();
-            }
-            function duplicateEducation(id) {
-                const edu = state.education.find(e=>e.id===id);
-                if(edu) { let n = JSON.parse(JSON.stringify(edu)); n.id = 'edu' + Date.now() + Math.random(); state.education.push(n); renderForm(); renderPreview(); persistState(); }
-            }
-            function removeEducation(id) { state.education = state.education.filter(e=>e.id!==id); renderForm(); renderPreview(); persistState(); }
-            function addBullet(expId) {
-                const exp = state.experience.find(e=>e.id===expId);
-                if(exp) { exp.bullets.push('New achievement'); renderForm(); renderPreview(); persistState(); }
+                renderPreview(); persist();
             }
 
-            // ---------- ATTACH ALL EVENT LISTENERS ----------
+            // ---------- EVENT ATTACHMENT (full production) ----------
             function attachFormEvents() {
-                // profile upload
+                // Profile image
                 const pu = document.getElementById('profileUpload');
                 if(pu) pu.addEventListener('change', function(e){
-                    const file = e.target.files[0];
-                    if(file) { const r = new FileReader(); r.onload = ev => { state.profileImage = ev.target.result; renderPreview(); persistState(); }; r.readAsDataURL(file); }
+                    const f = e.target.files[0]; if(f) { const r = new FileReader(); r.onload = ev => { state.profileImage = ev.target.result; renderPreview(); renderForm(); persist(); }; r.readAsDataURL(f); }
                 });
-                // visibility
+                // Visibility
                 ['profile','experience','education','skills','certifications'].forEach(s => {
                     const el = document.getElementById(`vis_${s}`);
-                    if(el) el.addEventListener('change', e => { state.visibility[s] = e.target.checked; renderPreview(); persistState(); });
+                    if(el) el.addEventListener('change', e => { state.visibility[s] = e.target.checked; renderPreview(); persist(); });
                 });
-                // input listeners
-                document.querySelectorAll('input[id^="input_"], textarea[id="input_summary"], #input_skills, #input_certs').forEach(el => {
-                    el.addEventListener('input', function(e) {
+                // Text inputs
+                document.querySelectorAll('input[id^="input_"], #input_summary, #input_skills, #input_certs').forEach(el => {
+                    el.addEventListener('input', function(e){
                         const id = this.id.replace('input_','');
                         if(id === 'skills') state.skills = this.value.split(',').map(s=>s.trim());
                         else if(id === 'certs') state.certifications = this.value.split(',').map(s=>s.trim());
                         else if(id === 'summary') state.summary = this.value;
                         else state[id] = this.value;
-                        renderPreview(); persistState();
+                        renderPreview(); persist();
                     });
                 });
-                // AI assist buttons
-                document.querySelectorAll('.ai-assist').forEach(btn => {
+                // AI buttons
+                document.querySelectorAll('.ai-btn').forEach(btn => {
                     btn.addEventListener('click', function(e){
                         e.preventDefault();
                         const field = this.dataset.field;
-                        const input = this.previousElementSibling || this.parentElement.querySelector('input,textarea');
-                        if(input) openAIAssist(field, input, input.value);
+                        const input = this.parentElement.querySelector('input,textarea');
+                        if(input) window.openAIAssist(field, input, input.value);
                     });
                 });
                 // Add Experience
-                document.querySelector('[data-action="addExp"]')?.addEventListener('click', addExperience);
+                document.getElementById('addExpBtn')?.addEventListener('click', function(){
+                    const newId = 'exp' + Date.now() + Math.random();
+                    state.experience.push({ id: newId, role: 'New Position', company: 'Company', date: 'Present', bullets: ['Add accomplishment'] });
+                    renderForm(); renderPreview(); persist();
+                });
                 // Add Education
-                document.querySelector('[data-action="addEdu"]')?.addEventListener('click', addEducation);
-                // remove/duplicate experience
-                document.querySelectorAll('.remove-exp').forEach(btn => { btn.addEventListener('click', e => removeExperience(btn.dataset.id)); });
-                document.querySelectorAll('.duplicate-exp').forEach(btn => { btn.addEventListener('click', e => duplicateExperience(btn.dataset.id)); });
-                document.querySelectorAll('.remove-edu').forEach(btn => { btn.addEventListener('click', e => removeEducation(btn.dataset.id)); });
-                document.querySelectorAll('.duplicate-edu').forEach(btn => { btn.addEventListener('click', e => duplicateEducation(btn.dataset.id)); });
-                document.querySelectorAll('.add-bullet').forEach(btn => { btn.addEventListener('click', e => addBullet(btn.dataset.id)); });
-                // drag-drop reorder (simplified, updates sectionOrder)
+                document.getElementById('addEduBtn')?.addEventListener('click', function(){
+                    const newId = 'edu' + Date.now() + Math.random();
+                    state.education.push({ id: newId, degree: 'New Degree', school: 'University', year: '2025' });
+                    renderForm(); renderPreview(); persist();
+                });
+                // Add Certification
+                document.getElementById('addCertBtn')?.addEventListener('click', function(){
+                    state.certifications.push('New Certification');
+                    renderForm(); renderPreview(); persist();
+                });
+                // Remove / Duplicate / Add bullet
+                document.querySelectorAll('.remove-exp').forEach(btn => btn.addEventListener('click', function(){
+                    state.experience = state.experience.filter(e => e.id !== this.dataset.id);
+                    renderForm(); renderPreview(); persist();
+                }));
+                document.querySelectorAll('.duplicate-exp').forEach(btn => btn.addEventListener('click', function(){
+                    const exp = state.experience.find(e => e.id === this.dataset.id);
+                    if(exp) { const copy = JSON.parse(JSON.stringify(exp)); copy.id = 'exp' + Date.now() + Math.random(); state.experience.push(copy); renderForm(); renderPreview(); persist(); }
+                }));
+                document.querySelectorAll('.remove-edu').forEach(btn => btn.addEventListener('click', function(){
+                    state.education = state.education.filter(e => e.id !== this.dataset.id);
+                    renderForm(); renderPreview(); persist();
+                }));
+                document.querySelectorAll('.duplicate-edu').forEach(btn => btn.addEventListener('click', function(){
+                    const edu = state.education.find(e => e.id === this.dataset.id);
+                    if(edu) { const copy = JSON.parse(JSON.stringify(edu)); copy.id = 'edu' + Date.now() + Math.random(); state.education.push(copy); renderForm(); renderPreview(); persist(); }
+                }));
+                document.querySelectorAll('.add-bullet').forEach(btn => btn.addEventListener('click', function(){
+                    const exp = state.experience.find(e => e.id === this.dataset.id);
+                    if(exp) { exp.bullets.push('New responsibility'); renderForm(); renderPreview(); persist(); }
+                }));
+                // Experience / Education field updates
+                document.querySelectorAll('.exp_role').forEach(inp => inp.addEventListener('input', function(){
+                    let id = this.dataset.id; let parts = this.value.split('·'); let exp = state.experience.find(e=>e.id===id);
+                    if(exp) { exp.role = parts[0].trim(); exp.company = parts[1]?.trim()||''; renderPreview(); persist(); }
+                }));
+                document.querySelectorAll('.exp_date').forEach(inp => inp.addEventListener('input', function(){
+                    let id = this.dataset.id; let exp = state.experience.find(e=>e.id===id); if(exp) { exp.date = this.value; renderPreview(); persist(); }
+                }));
+                document.querySelectorAll('.exp_bullet').forEach(inp => inp.addEventListener('input', function(){
+                    let id = this.dataset.id; let bidx = this.dataset.bidx; let exp = state.experience.find(e=>e.id===id);
+                    if(exp && exp.bullets[bidx]) { exp.bullets[bidx] = this.value; renderPreview(); persist(); }
+                }));
+                document.querySelectorAll('.edu_degree').forEach(inp => inp.addEventListener('input', function(){
+                    let id = this.dataset.id; let edu = state.education.find(e=>e.id===id); if(edu) { edu.degree = this.value; renderPreview(); persist(); }
+                }));
+                document.querySelectorAll('.edu_school').forEach(inp => inp.addEventListener('input', function(){
+                    let id = this.dataset.id; let edu = state.education.find(e=>e.id===id); if(edu) { edu.school = this.value; renderPreview(); persist(); }
+                }));
+                document.querySelectorAll('.edu_year').forEach(inp => inp.addEventListener('input', function(){
+                    let id = this.dataset.id; let edu = state.education.find(e=>e.id===id); if(edu) { edu.year = this.value; renderPreview(); persist(); }
+                }));
+                // Drag & drop section order
                 const sortable = document.getElementById('sectionSortable');
-                if(sortable){
+                if(sortable) {
                     let dragged;
                     sortable.addEventListener('dragstart', e => { dragged = e.target; e.target.classList.add('dragging'); });
                     sortable.addEventListener('dragend', e => e.target.classList.remove('dragging'));
-                    sortable.addEventListener('dragover', e => { e.preventDefault(); const after = getDragAfterElement(sortable, e.clientY); if(after) sortable.insertBefore(dragged, after); else sortable.appendChild(dragged); 
+                    sortable.addEventListener('dragover', e => { e.preventDefault(); const after = getDragAfterElement(sortable, e.clientY); if(after) sortable.insertBefore(dragged, after); else sortable.appendChild(dragged);
                         const newOrder = Array.from(sortable.children).map(el => el.dataset.section);
-                        state.sectionOrder = newOrder; renderPreview(); persistState();
+                        state.sectionOrder = newOrder; renderPreview(); persist();
                     });
                 }
-                // Experience / Education field updates (role, date, bullets, school, etc.)
-                document.querySelectorAll('.exp_role').forEach(inp => { inp.addEventListener('input', function(){ 
-                    let id = this.dataset.id; let parts = this.value.split('·'); let exp = state.experience.find(e=>e.id===id); if(exp) { exp.role = parts[0].trim(); exp.company = parts[1]?.trim()||''; renderPreview(); persistState(); } }); });
-                document.querySelectorAll('.exp_date').forEach(inp => { inp.addEventListener('input', function(){ let id = this.dataset.id; let exp = state.experience.find(e=>e.id===id); if(exp) { exp.date = this.value; renderPreview(); persistState(); } }); });
-                document.querySelectorAll('.exp_bullet').forEach(inp => { inp.addEventListener('input', function(){ let id = this.dataset.id; let bidx = this.dataset.bidx; let exp = state.experience.find(e=>e.id===id); if(exp && exp.bullets[bidx]) { exp.bullets[bidx] = this.value; renderPreview(); persistState(); } }); });
-                document.querySelectorAll('.edu_degree').forEach(inp => { inp.addEventListener('input', function(){ let id = this.dataset.id; let edu = state.education.find(e=>e.id===id); if(edu) { edu.degree = this.value; renderPreview(); persistState(); } }); });
-                document.querySelectorAll('.edu_school').forEach(inp => { inp.addEventListener('input', function(){ let id = this.dataset.id; let edu = state.education.find(e=>e.id===id); if(edu) { edu.school = this.value; renderPreview(); persistState(); } }); });
-                document.querySelectorAll('.edu_year').forEach(inp => { inp.addEventListener('input', function(){ let id = this.dataset.id; let edu = state.education.find(e=>e.id===id); if(edu) { edu.year = this.value; renderPreview(); persistState(); } }); });
             }
 
-            function getDragAfterElement(container, y) { const draggable = [...container.querySelectorAll('.section-drag:not(.dragging)')]; return draggable.reduce((c, child) => { const box = child.getBoundingClientRect(); const offset = y - box.top - box.height/2; return (offset < 0 && offset > c.offset) ? { offset, element: child } : c; }, { offset: Number.NEGATIVE_INFINITY }).element; }
+            function getDragAfterElement(container, y) {
+                const draggable = [...container.querySelectorAll('.section-drag:not(.dragging)')];
+                return draggable.reduce((closest, child) => {
+                    const box = child.getBoundingClientRect(); const offset = y - box.top - box.height/2;
+                    return (offset < 0 && offset > closest.offset) ? { offset, element: child } : closest;
+                }, { offset: Number.NEGATIVE_INFINITY }).element;
+            }
 
-            // ---------- PAGINATION ENGINE (print) ----------
-            class PaginationEngine { constructor(c){ this.c = c; } paginate(){ /* simplified */ } }
+            // ---------- ATS SCORER (real keyword extraction, synonyms) ----------
+            const ATSEngine = {
+                synonyms: { js:'JavaScript', javascript:'JavaScript', reactjs:'React', react:'React', nodejs:'Node.js', node:'Node.js', figma:'Figma', 'adobe xd':'Adobe XD', html:'HTML', css:'CSS' },
+                stopwords: new Set(['a','an','the','and','or','but','if','because','as','what','which','this','that','these','those','then','just','so','than','such','both','through','about','for','is','of','while','during','to','from','in','on','at','by','with','without','has','have','be','been','being','was','were','will','would','could','should']),
+                extract(text) { if(!text) return []; return text.toLowerCase().split(/[^a-z0-9+.#-]+/).map(t=>t.trim()).filter(t=>t.length>=3 && !this.stopwords.has(t)).map(t=>this.synonyms[t]||t); },
+                score(resume, jd) {
+                    const jdKw = [...new Set(this.extract(jd))];
+                    const resumeText = [resume.summary, ...resume.experience.flatMap(e=>[e.role,e.company,...e.bullets]), ...resume.education.flatMap(e=>[e.degree,e.school]), ...resume.skills, ...resume.certifications].join(' ');
+                    const resumeKw = [...new Set(this.extract(resumeText))];
+                    const missing = jdKw.filter(k => !resumeKw.includes(k));
+                    const match = jdKw.length ? ((jdKw.length - missing.length)/jdKw.length)*100 : 100;
+                    let score = Math.min(100, Math.round(match));
+                    let suggestions = [];
+                    if(missing.length) suggestions.push(`Add missing keywords: ${missing.slice(0,7).join(', ')}`);
+                    if(!resume.experience.some(e=>e.bullets.some(b=>/\d+%|\d+ users|\$\d+/.test(b)))) suggestions.push('Quantify achievements with metrics');
+                    if(!resume.skills.length) suggestions.push('List relevant skills');
+                    return { score, missing, suggestions };
+                }
+            };
+
+            // ---------- PRINT & PAGINATION ----------
             function printResume() { window.print(); }
 
-            // ---------- ATS SCORER (production) ----------
-            function atsScore() {
-                const jd = document.getElementById('jobDescInput').value;
-                const ats = new ATSScorer();
-                const res = ats.score(state, jd);
-                let html = `<div style="display:flex;align-items:center;gap:20px;"><span class="ats-score">${res.score}</span><span>/100</span></div>`;
-                html += `<div class="ats-suggestions"><ul>${res.suggestions.map(s=>`<li>${s}</li>`).join('')}</ul></div>`;
-                document.getElementById('atsContent').innerHTML = html;
-                document.getElementById('atsCard').style.display = 'block';
-            }
-            class ATSScorer {
-                score(r, jd){ 
-                    let skillMatch = r.skills.filter(s=>jd.toLowerCase().includes(s.toLowerCase())).length;
-                    let score = 50 + skillMatch*3; if(score>100) score=100;
-                    return { score: Math.round(score), suggestions: ['Add more keywords from job description','Quantify achievements'] };
-                }
-            }
-
-            // ---------- SAVE / RESET / THEME ----------
-            function saveState() { persistState(); alert('Progress saved'); }
-            function resetState() { state = JSON.parse(JSON.stringify(DEFAULT_STATE)); renderForm(); renderPreview(); persistState(); }
-
-            // ---------- INIT ----------
+            // ---------- SAVE / RESET / THEME / ATS ----------
             function init() {
                 // populate theme selector
                 const sel = document.getElementById('themeSelector');
                 THEMES.forEach(t => { let o = document.createElement('option'); o.value = t.id; o.textContent = t.name; if(t.id === state.activeTheme) o.selected = true; sel.appendChild(o); });
-                sel.addEventListener('change', e => { state.activeTheme = e.target.value; renderPreview(); persistState(); });
+                sel.addEventListener('change', e => { state.activeTheme = e.target.value; renderPreview(); persist(); });
                 renderForm();
                 renderPreview();
-                document.getElementById('saveStateBtn').addEventListener('click', saveState);
-                document.getElementById('resetStateBtn').addEventListener('click', resetState);
+                document.getElementById('saveBtn').addEventListener('click', ()=>{ persist(); alert('Progress saved'); });
+                document.getElementById('resetBtn').addEventListener('click', ()=>{ state = JSON.parse(JSON.stringify(DEFAULT_STATE)); renderForm(); renderPreview(); persist(); });
                 document.getElementById('printBtn').addEventListener('click', printResume);
-                document.getElementById('analyzeAtsBtn').addEventListener('click', atsScore);
-                document.getElementById('aiCancelBtn').addEventListener('click', ()=> document.getElementById('aiModal').style.display = 'none');
-                persistState();
+                document.getElementById('analyzeBtn').addEventListener('click', ()=>{
+                    const jd = document.getElementById('jobDescription').value;
+                    const res = ATSEngine.score(state, jd);
+                    document.getElementById('atsContainer').style.display = 'block';
+                    document.getElementById('atsScore').innerHTML = `<div style="display:flex;align-items:center;gap:24px;"><span style="font-size:42px;font-weight:700;color:#1a404f;">${res.score}</span><span>/100</span></div><ul style="margin-top:16px;padding-left:20px;">${res.suggestions.map(s=>`<li>${s}</li>`).join('')}</ul>`;
+                });
+                document.getElementById('aiCancel').addEventListener('click', ()=> document.getElementById('aiModal').style.display = 'none');
+                persist();
             }
             init();
         })();
