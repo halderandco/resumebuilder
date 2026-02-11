@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Resume Builder – Full System (All 6 Phases)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+    <title>Enterprise Resume Builder – Premium Profile & 15 Themes</title>
     <style>
-        /* ---------- GLOBAL RESET & EDITOR LAYOUT ---------- */
+        /* ---------- GLOBAL RESET & ENTERPRISE DESIGN SYSTEM ---------- */
         * {
             margin: 0;
             padding: 0;
@@ -14,149 +14,227 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: #f0f4fa;
+            background: #f5f7fb;
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            color: #1e2e41;
         }
 
+        /* ---------- PREMIUM TOOLBAR ---------- */
         .toolbar {
-            background: #1e3b4c;
+            background: #0a1c2a;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            z-index: 10;
+        }
+
+        .toolbar-left {
             display: flex;
             align-items: center;
             gap: 24px;
-            flex-wrap: wrap;
         }
 
-        .toolbar button, .toolbar select {
+        .toolbar-left span {
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            color: #cbd5e1;
+        }
+
+        .toolbar select, .toolbar button {
             background: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 30px;
+            padding: 10px 22px;
+            border-radius: 40px;
             font-size: 14px;
             font-weight: 600;
-            color: #1e3b4c;
+            color: #0a1c2a;
             cursor: pointer;
-            transition: 0.2s;
+            transition: 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
 
-        .toolbar button:hover {
-            background: #d4e3ed;
+        .toolbar select:hover, .toolbar button:hover {
+            background: #e0ecf5;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 14px rgba(0,20,40,0.1);
         }
 
+        .toolbar-right {
+            display: flex;
+            gap: 16px;
+        }
+
+        /* ---------- MAIN EDITOR: ENTERPRISE TWO-PANE ---------- */
         .editor-container {
             display: flex;
             flex: 1;
             overflow: hidden;
+            background: #f0f4fa;
         }
 
-        /* ---------- LEFT FORM PANEL ---------- */
+        /* ---------- LEFT FORM PANEL – REDESIGNED, CARD-LIKE ---------- */
         .form-panel {
-            width: 32%;
+            width: 34%;
             background: white;
-            border-right: 1px solid #cfdce6;
-            padding: 20px;
+            border-right: 1px solid rgba(0,0,0,0.06);
+            padding: 28px 24px;
             overflow-y: auto;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.02);
+            box-shadow: 4px 0 20px rgba(0,0,0,0.02);
         }
 
-        .form-section {
+        .form-panel h2 {
+            font-size: 22px;
+            font-weight: 600;
             margin-bottom: 28px;
-            border-bottom: 1px solid #e2e9f0;
+            color: #0f293b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #e0ebf2;
             padding-bottom: 16px;
         }
 
+        .form-section {
+            background: #fafdff;
+            border-radius: 20px;
+            padding: 20px 22px;
+            margin-bottom: 28px;
+            border: 1px solid #edf2f7;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.02);
+            transition: box-shadow 0.2s;
+        }
+
+        .form-section:hover {
+            box-shadow: 0 12px 22px rgba(30,60,90,0.06);
+        }
+
         .form-section h3 {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 700;
-            color: #1e3b4c;
-            margin-bottom: 16px;
+            color: #1e3f5c;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 10px;
+            letter-spacing: -0.2px;
         }
 
         .form-group {
-            margin-bottom: 14px;
+            margin-bottom: 18px;
         }
 
         label {
             display: block;
             font-size: 12px;
             font-weight: 600;
-            color: #3a5f73;
-            margin-bottom: 4px;
+            color: #3e6279;
+            margin-bottom: 6px;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.5px;
         }
 
-        input, textarea {
+        input, textarea, .file-upload {
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #cbdae5;
-            border-radius: 8px;
-            font-size: 13px;
+            padding: 12px 16px;
+            border: 1.5px solid #e2eaf0;
+            border-radius: 14px;
+            font-size: 14px;
             font-family: inherit;
-            background: #fafcfd;
+            background: white;
+            transition: 0.2s;
         }
 
-        textarea {
-            min-height: 80px;
-            resize: vertical;
+        input:focus, textarea:focus {
+            border-color: #3a7999;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(58,121,153,0.08);
+        }
+
+        .file-upload {
+            background: #f0f6fa;
+            border-style: dashed;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .file-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #1e4a6b;
+            font-weight: 500;
         }
 
         .visibility-toggle {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-            font-size: 14px;
+            gap: 14px;
+            margin-bottom: 14px;
+            font-size: 15px;
+            background: #f6fafc;
+            padding: 10px 16px;
+            border-radius: 40px;
         }
 
+        .visibility-toggle input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #1e4a6b;
+            border-radius: 6px;
+        }
+
+        /* Drag and drop – premium */
         .sortable-list {
-            background: #f5f9ff;
-            padding: 8px;
-            border-radius: 12px;
+            background: #f3f8fc;
+            padding: 12px;
+            border-radius: 20px;
         }
 
         .section-drag {
             background: white;
-            border: 1px solid #d8e2ed;
-            padding: 12px 16px;
-            margin-bottom: 6px;
-            border-radius: 8px;
-            cursor: move;
+            border: 1px solid #dae6ed;
+            padding: 16px 18px;
+            margin-bottom: 8px;
+            border-radius: 16px;
+            cursor: grab;
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-weight: 500;
-            color: #1e3b4c;
+            gap: 14px;
+            font-weight: 600;
+            color: #1d3d51;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
             transition: 0.1s;
         }
 
         .section-drag:hover {
-            background: #ecf3fa;
-            border-color: #99b8cc;
-        }
-
-        .section-drag.dragging {
-            opacity: 0.4;
-            background: #cfe1ed;
+            background: #f0f9ff;
+            border-color: #8cb1c5;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.04);
         }
 
         .drag-handle {
-            font-size: 20px;
-            color: #6b8a9c;
+            font-size: 22px;
+            color: #5f859b;
         }
 
-        /* ---------- RIGHT PREVIEW PANEL ---------- */
+        /* ---------- RIGHT PREVIEW PANEL – ELEGANT ---------- */
         .preview-panel {
             flex: 1;
-            background: #e6ecf0;
-            padding: 24px;
+            background: #e3eaf0;
+            padding: 28px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -166,60 +244,63 @@
         .preview-scroll {
             width: 210mm;
             background: white;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
-            transform: scale(0.85);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+            transform: scale(0.82);
             transform-origin: top center;
-            margin-bottom: 20px;
+            border-radius: 4px;
+            transition: transform 0.2s;
+        }
+
+        @media (max-width: 1400px) {
+            .preview-scroll {
+                transform: scale(0.7);
+            }
         }
 
         .resume {
-            /* dimensions and padding will be set by each template's inline styles */
             background: white;
         }
 
-        /* ---------- ATS SCORING PANEL (below preview) ---------- */
+        /* ---------- ATS CARD – POLISHED ---------- */
         .ats-panel {
             width: 210mm;
             background: white;
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-            font-size: 14px;
+            margin-top: 28px;
+            padding: 28px;
+            border-radius: 24px;
+            box-shadow: 0 16px 30px rgba(0,0,0,0.06);
+            font-size: 14.5px;
+            border: 1px solid rgba(0,0,0,0.04);
         }
 
         .ats-panel h3 {
-            font-size: 18px;
-            margin-bottom: 12px;
-            color: #1e3b4c;
-            border-bottom: 2px solid #d0e0eb;
-            padding-bottom: 6px;
-        }
-
-        .ats-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 16px;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #0f2a36;
+            border-bottom: 2px solid #e0ecf2;
+            padding-bottom: 12px;
         }
 
         .ats-score {
-            background: #1e4a6b;
+            background: #0f2a36;
             color: white;
-            padding: 12px 24px;
-            border-radius: 40px;
+            padding: 14px 30px;
+            border-radius: 60px;
             font-weight: 700;
-            font-size: 28px;
+            font-size: 32px;
             display: inline-block;
+            letter-spacing: -0.5px;
         }
 
         .ats-suggestions {
-            background: #fef9e7;
-            border-left: 6px solid #f5b042;
-            padding: 16px;
-            border-radius: 8px;
+            background: #fefcf0;
+            border-left: 8px solid #e6a020;
+            padding: 20px;
+            border-radius: 16px;
         }
 
-        /* ---------- PRINT OVERRIDES (Phase 6) ---------- */
+        /* ---------- PRINT PERFECTION (Phase 6) ---------- */
         @media print {
             .toolbar, .form-panel, .ats-panel, .preview-panel > *:not(.preview-scroll), .no-print {
                 display: none !important;
@@ -237,58 +318,103 @@
             }
             .resume {
                 box-shadow: none;
-                page-break-after: avoid;
             }
             body {
                 background: white;
             }
         }
 
-        /* ---------- PAGE BREAK UTILITIES (Phase 3) ---------- */
-        .page-break-before {
-            break-before: page;
+        /* ---------- PAGINATION UTILITIES ---------- */
+        .page-break-before { break-before: page; }
+        .page-break-after { break-after: page; }
+        li, .job, .education, .section { break-inside: avoid; }
+
+        /* ---------- PROFILE IMAGE STYLES ---------- */
+        .profile-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.08);
         }
-        .page-break-after {
-            break-after: page;
+        .profile-img-sm {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
         }
-        li, .job, .education, .section {
-            break-inside: avoid;
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
     </style>
 </head>
 <body>
 
-    <!-- ---------- TOP TOOLBAR (Template selector, export) ---------- -->
+    <!-- ---------- PREMIUM TOOLBAR ---------- -->
     <div class="toolbar no-print">
-        <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-weight: 600;">📄 Template:</span>
-            <select id="templateSelector">
-                <option value="ats">1. ATS‑Optimized (Single Column)</option>
-                <option value="modern" selected>2. Modern Professional</option>
-                <option value="executive">3. Executive / Leadership</option>
-                <option value="minimal">4. Minimal</option>
-                <option value="creative">5. Creative (ATS‑Aware)</option>
-            </select>
+        <div class="toolbar-left">
+            <span style="font-size:18px; font-weight:700;">✨ Resume Forge</span>
+            <div style="display:flex; gap:8px; align-items:center;">
+                <span>Theme:</span>
+                <select id="templateSelector" style="min-width:240px;">
+                    <!-- 5 ORIGINAL TEMPLATES + 10 NEW PREMIUM THEMES = 15 -->
+                    <option value="ats">1. ATS‑Optimized (Text)</option>
+                    <option value="modern" selected>2. Modern Professional</option>
+                    <option value="executive">3. Executive Leadership</option>
+                    <option value="minimal">4. Minimal</option>
+                    <option value="creative">5. Creative (ATS‑Aware)</option>
+                    <option value="premium6">6. Dark Elegance</option>
+                    <option value="premium7">7. Compact Serif</option>
+                    <option value="premium8">8. Two‑Column Classic</option>
+                    <option value="premium9">9. Corporate Blue</option>
+                    <option value="premium10">10. Warm Earth</option>
+                    <option value="premium11">11. Tech Mono</option>
+                    <option value="premium12">12. Minimalist Air</option>
+                    <option value="premium13">13. Border Accent</option>
+                    <option value="premium14">14. Playful Rounded</option>
+                    <option value="premium15">15. Editorial</option>
+                </select>
+            </div>
         </div>
-        <button id="printBtn">🖨 Export PDF (Print)</button>
-        <button id="runAtsBtn">📊 Run ATS Score</button>
+        <div class="toolbar-right">
+            <button id="printBtn">🖨 Export PDF</button>
+            <button id="runAtsBtn">📊 ATS Score</button>
+        </div>
     </div>
 
-    <!-- ---------- MAIN EDITOR: LEFT FORM + RIGHT PREVIEW ---------- -->
+    <!-- ---------- MAIN EDITOR ---------- -->
     <div class="editor-container">
-        <!-- LEFT FORM PANEL -->
+        <!-- LEFT: ENHANCED FORM PANEL -->
         <div class="form-panel no-print">
-            <h2 style="margin-bottom: 20px; color: #0f2a36;">✎ Resume Builder</h2>
+            <h2>✎ Your Professional Profile</h2>
+
+            <!-- PROFILE PICTURE UPLOAD – NEW PREMIUM FEATURE -->
+            <div class="form-section">
+                <h3>📸 Profile Picture</h3>
+                <div class="file-upload" onclick="document.getElementById('profileUpload').click()">
+                    <div class="file-label">
+                        <span style="font-size:24px;">🖼</span>
+                        <span id="uploadText">Click to upload headshot</span>
+                    </div>
+                    <input type="file" id="profileUpload" accept="image/*">
+                </div>
+                <div id="imagePreview" style="margin-top:16px; display:flex; justify-content:center;">
+                    <!-- Image preview will appear here -->
+                </div>
+            </div>
 
             <!-- Section Order (Drag & Drop) -->
             <div class="form-section">
-                <h3>📋 Section Order <span style="font-size:12px; font-weight:normal;">(drag to reorder)</span></h3>
+                <h3>📋 Section Order <span style="font-size:13px; font-weight:400;">(drag to rearrange)</span></h3>
                 <div id="section-sortable" class="sortable-list">
-                    <div class="section-drag" draggable="true" data-section="profile">☰ Profile</div>
-                    <div class="section-drag" draggable="true" data-section="experience">☰ Experience</div>
-                    <div class="section-drag" draggable="true" data-section="education">☰ Education</div>
-                    <div class="section-drag" draggable="true" data-section="skills">☰ Skills</div>
-                    <div class="section-drag" draggable="true" data-section="certifications">☰ Certifications</div>
+                    <div class="section-drag" draggable="true" data-section="profile"><span class="drag-handle">☰</span> Profile</div>
+                    <div class="section-drag" draggable="true" data-section="experience"><span class="drag-handle">☰</span> Experience</div>
+                    <div class="section-drag" draggable="true" data-section="education"><span class="drag-handle">☰</span> Education</div>
+                    <div class="section-drag" draggable="true" data-section="skills"><span class="drag-handle">☰</span> Skills</div>
+                    <div class="section-drag" draggable="true" data-section="certifications"><span class="drag-handle">☰</span> Certifications</div>
                 </div>
             </div>
 
@@ -306,7 +432,7 @@
             <div class="form-section">
                 <h3>👤 Personal</h3>
                 <div class="form-group"><label>Full Name</label><input type="text" id="name" value="Taylor Reed"></div>
-                <div class="form-group"><label>Title / Role</label><input type="text" id="title" value="Senior UX Designer"></div>
+                <div class="form-group"><label>Professional Title</label><input type="text" id="title" value="Senior UX Designer"></div>
                 <div class="form-group"><label>Email</label><input type="email" id="email" value="taylor.reed@email.com"></div>
                 <div class="form-group"><label>Phone</label><input type="text" id="phone" value="+1 (415) 555-0198"></div>
                 <div class="form-group"><label>Location</label><input type="text" id="location" value="San Francisco, CA"></div>
@@ -314,35 +440,35 @@
 
             <!-- Profile Summary -->
             <div class="form-section">
-                <h3>📝 Profile</h3>
-                <textarea id="summary">Senior UX designer with 6 years of experience in enterprise SaaS. Passionate about inclusive design and data‑driven decision making.</textarea>
+                <h3>📝 Professional Summary</h3>
+                <textarea id="summary" rows="4">Senior UX designer with 6 years of experience in enterprise SaaS. Passionate about inclusive design and data‑driven decision making.</textarea>
             </div>
 
-            <!-- Experience (simplified – two jobs) -->
+            <!-- Experience -->
             <div class="form-section">
-                <h3>💼 Experience</h3>
+                <h3>💼 Work Experience</h3>
                 <div class="form-group"><label>Job 1 Title & Company</label><input type="text" id="job1-title" value="Lead UX Designer · DesignFlow"></div>
                 <div class="form-group"><label>Dates</label><input type="text" id="job1-date" value="2021 – present"></div>
                 <div class="form-group"><label>Bullet 1</label><input type="text" id="job1-b1" value="Spearheaded redesign of analytics dashboard, increasing user engagement by 34%."></div>
                 <div class="form-group"><label>Bullet 2</label><input type="text" id="job1-b2" value="Established component library used by 8 product teams."></div>
-                <div style="margin-top: 16px;"><div class="form-group"><label>Job 2 Title & Company</label><input type="text" id="job2-title" value="UX/UI Designer · AppCraft"></div></div>
+                <div style="margin-top:20px;"><div class="form-group"><label>Job 2 Title & Company</label><input type="text" id="job2-title" value="UX/UI Designer · AppCraft"></div></div>
                 <div class="form-group"><label>Dates</label><input type="text" id="job2-date" value="2018 – 2021"></div>
                 <div class="form-group"><label>Bullet 1</label><input type="text" id="job2-b1" value="Designed end‑to‑end mobile app for inventory management."></div>
                 <div class="form-group"><label>Bullet 2</label><input type="text" id="job2-b2" value="Conducted 25+ usability sessions, iterating on low‑fidelity prototypes."></div>
             </div>
 
-            <!-- Education (two entries) -->
+            <!-- Education -->
             <div class="form-section">
                 <h3>🎓 Education</h3>
                 <div class="form-group"><label>Degree 1</label><input type="text" id="edu1-degree" value="M.S. Human‑Computer Interaction"></div>
                 <div class="form-group"><label>School 1</label><input type="text" id="edu1-school" value="Stanford University"></div>
                 <div class="form-group"><label>Year 1</label><input type="text" id="edu1-year" value="2018"></div>
-                <div style="margin-top: 12px;"><div class="form-group"><label>Degree 2</label><input type="text" id="edu2-degree" value="B.A. Psychology"></div></div>
+                <div style="margin-top:16px;"><div class="form-group"><label>Degree 2</label><input type="text" id="edu2-degree" value="B.A. Psychology"></div></div>
                 <div class="form-group"><label>School 2</label><input type="text" id="edu2-school" value="UC Berkeley"></div>
                 <div class="form-group"><label>Year 2</label><input type="text" id="edu2-year" value="2016"></div>
             </div>
 
-            <!-- Skills (comma separated) -->
+            <!-- Skills -->
             <div class="form-section">
                 <h3>🔧 Skills</h3>
                 <div class="form-group"><label>Skills (comma separated)</label><input type="text" id="skills" value="UX Research, Wireframing, Prototyping, Figma, Adobe XD, User Testing, HTML/CSS"></div>
@@ -355,21 +481,21 @@
             </div>
         </div>
 
-        <!-- RIGHT PREVIEW PANEL (Resume + ATS results) -->
+        <!-- RIGHT: PREVIEW & ATS -->
         <div class="preview-panel">
             <div class="preview-scroll">
                 <div id="resume-preview" class="resume"></div>
             </div>
-            <!-- ATS SCORING CARD (hidden until "Run ATS Score" is clicked) -->
+            <!-- ATS RESULT CARD -->
             <div id="atsResultCard" class="ats-panel no-print" style="display: none;">
-                <h3>📊 ATS Compatibility Analysis</h3>
+                <h3>📊 ATS Compatibility Report</h3>
                 <div id="atsContent"></div>
             </div>
-            <!-- Job Description input for ATS -->
-            <div class="ats-panel no-print" style="margin-top: 20px; background: #f6fafd;">
-                <h3>🎯 Job Description (for ATS scoring)</h3>
-                <textarea id="jobDesc" rows="5" style="width:100%; padding:12px; border:1px solid #b8d1dc; border-radius:10px; margin-bottom:12px;">We are looking for a Senior UX Designer with strong skills in Figma, prototyping, user research, and design systems. Experience in SaaS and dashboard design is a plus. Must have excellent communication and leadership abilities.</textarea>
-                <button id="scoreBtn" style="background:#1e4a6b; color:white; padding:10px 22px; border:none; border-radius:30px; font-weight:600; cursor:pointer;">Run ATS Score</button>
+            <!-- Job Description Input -->
+            <div class="ats-panel no-print" style="margin-top: 24px; background: #f8fbfe;">
+                <h3>🎯 Target Job Description</h3>
+                <textarea id="jobDesc" rows="5" style="width:100%; padding:16px; border:1.5px solid #d1e0e8; border-radius:18px; margin-bottom:16px; font-size:14px;">We are looking for a Senior UX Designer with strong skills in Figma, prototyping, user research, and design systems. Experience in SaaS and dashboard design is a plus. Must have excellent communication and leadership abilities.</textarea>
+                <button id="scoreBtn" style="background:#1e4a6b; color:white; padding:12px 28px; border:none; border-radius:40px; font-weight:600; font-size:15px; cursor:pointer;">🚀 Analyze ATS Fit</button>
             </div>
         </div>
     </div>
@@ -379,164 +505,7 @@
             "use strict";
 
             // ------------------------------------------------------------
-            //  PHASE 2: FIVE TEMPLATES – each as a separate rendering function
-            // ------------------------------------------------------------
-            const templates = {
-                ats: function(data) {
-                    return ` <div class="resume" style="width:210mm; padding:12mm 15mm; background:white; font-family:Arial, Helvetica, sans-serif; line-height:1.5;">
-                        <h1 style="font-size:28pt; font-weight:700; margin-bottom:1mm;">${data.name}</h1>
-                        <div style="font-size:12pt; color:#2c3e50; margin-bottom:3mm;">${data.title} · ${data.email} · ${data.phone} · ${data.location}</div>
-                        ${data.visibility.profile ? `<section style="margin-bottom:5mm;"><h2 style="font-size:16pt; border-bottom:0.5pt solid #2c3e50; padding-bottom:1mm; margin-bottom:3mm;">SUMMARY</h2><p>${data.summary}</p></section>` : ''}
-                        ${data.visibility.experience ? `<section style="margin-bottom:5mm;"><h2 style="font-size:16pt; border-bottom:0.5pt solid #2c3e50; padding-bottom:1mm; margin-bottom:3mm;">EXPERIENCE</h2>${data.experience.map(job => `<div style="margin-bottom:4mm;"><div style="display:flex; justify-content:space-between; font-weight:600;"><span>${job.role} · ${job.company}</span><span>${job.date}</span></div><ul style="list-style:none; padding-left:2mm;">${job.bullets.map(b => `<li style="position:relative; padding-left:4mm; margin-bottom:0.75mm; break-inside:avoid;"><span style="position:absolute; left:0;">•</span>${b}</li>`).join('')}</ul></div>`).join('')}</section>` : ''}
-                        ${data.visibility.education ? `<section><h2 style="font-size:16pt; border-bottom:0.5pt solid #2c3e50; padding-bottom:1mm; margin-bottom:3mm;">EDUCATION</h2>${data.education.map(edu => `<div style="margin-bottom:3mm;"><div style="display:flex; justify-content:space-between; font-weight:600;"><span>${edu.degree}</span><span>${edu.year}</span></div><p>${edu.school}</p></div>`).join('')}</section>` : ''}
-                        ${data.visibility.skills ? `<section style="margin-top:4mm;"><h2 style="font-size:16pt; border-bottom:0.5pt solid #2c3e50; padding-bottom:1mm; margin-bottom:3mm;">SKILLS</h2><ul style="list-style:none; padding-left:2mm;">${data.skills.map(s => `<li style="position:relative; padding-left:4mm;"><span style="position:absolute; left:0;">•</span>${s}</li>`).join('')}</ul></section>` : ''}
-                        ${data.visibility.certifications && data.certifications.length ? `<section style="margin-top:4mm;"><h2 style="font-size:16pt; border-bottom:0.5pt solid #2c3e50; padding-bottom:1mm; margin-bottom:3mm;">CERTIFICATIONS</h2><ul style="list-style:none; padding-left:2mm;">${data.certifications.map(c => `<li style="position:relative; padding-left:4mm;"><span style="position:absolute; left:0;">•</span>${c}</li>`).join('')}</ul></section>` : ''}
-                    </div>`;
-                },
-                modern: function(data) {
-                    return `<div class="resume" style="width:210mm; padding:12mm; background:white; display:grid; grid-template-columns:1fr 2.2fr; gap:6mm 8mm; font-family:'Inter', sans-serif; line-height:1.5; color:#1e2b3c;">
-                        <h1 style="font-size:28pt; font-weight:700; grid-column:1/-1; margin-bottom:2mm;">${data.name}</h1>
-                        <div style="grid-column:1/-1; display:flex; gap:8mm; border-bottom:1pt solid #8a9aa8; padding-bottom:3mm; font-size:11pt;">${[data.email, data.phone, data.location, `linkedin.com/in/${data.name.toLowerCase().replace(' ', '-')}`].join('<span> </span>')}</div>
-                        <div style="background:#f4f7fb; padding:5mm 4mm;">
-                            ${data.visibility.skills ? `<section style="margin-bottom:5mm;"><h2 style="font-size:14pt; font-weight:600; color:#1e4a6b; border-bottom:0.5pt solid #8a9aa8; margin-bottom:3mm;">SKILLS</h2><div style="display:flex; flex-wrap:wrap; gap:2mm;">${data.skills.map(s => `<span style="background:white; border:0.5pt solid #8a9aa8; padding:1mm 2mm; font-size:10pt; border-radius:2pt;">${s}</span>`).join('')}</div></section>` : ''}
-                            ${data.visibility.education ? `<section><h2 style="font-size:14pt; font-weight:600; color:#1e4a6b; border-bottom:0.5pt solid #8a9aa8; margin-bottom:3mm;">EDUCATION</h2>${data.education.map(edu => `<div style="margin-bottom:3mm;"><div style="display:flex; justify-content:space-between;"><span style="font-weight:600;">${edu.degree}</span><span>${edu.year}</span></div><p>${edu.school}</p></div>`).join('')}</section>` : ''}
-                            ${data.visibility.certifications && data.certifications.length ? `<section style="margin-top:4mm;"><h2 style="font-size:14pt; font-weight:600; color:#1e4a6b; border-bottom:0.5pt solid #8a9aa8; margin-bottom:3mm;">CERTIFICATIONS</h2><ul style="list-style:none; padding-left:2mm;">${data.certifications.map(c => `<li style="position:relative; padding-left:4mm; margin-bottom:0.75mm;"><span style="position:absolute; left:0; color:#1e4a6b;">▹</span>${c}</li>`).join('')}</ul></section>` : ''}
-                        </div>
-                        <div style="padding-top:2mm;">
-                            ${data.visibility.profile ? `<section style="margin-bottom:5mm;"><h2 style="font-size:14pt; font-weight:600; color:#1e4a6b; border-bottom:0.5pt solid #8a9aa8; margin-bottom:3mm;">PROFILE</h2><p>${data.summary}</p></section>` : ''}
-                            ${data.visibility.experience ? `<section><h2 style="font-size:14pt; font-weight:600; color:#1e4a6b; border-bottom:0.5pt solid #8a9aa8; margin-bottom:3mm;">EXPERIENCE</h2>${data.experience.map(job => `<div style="margin-bottom:4mm;"><div style="display:flex; justify-content:space-between; font-weight:600;"><span>${job.role} · ${job.company}</span><span>${job.date}</span></div><ul style="list-style:none; padding-left:2mm;">${job.bullets.map(b => `<li style="position:relative; padding-left:4mm; margin-bottom:0.75mm;"><span style="position:absolute; left:0; color:#1e4a6b;">▹</span>${b}</li>`).join('')}</ul></div>`).join('')}</section>` : ''}
-                        </div>
-                    </div>`;
-                },
-                executive: function(data) {
-                    return `<div class="resume" style="width:210mm; padding:18mm 20mm; background:white; font-family:Georgia, 'Times New Roman', serif; line-height:1.6;">
-                        <h1 style="font-size:36pt; font-weight:400; letter-spacing:-0.5px; margin-bottom:0.5mm; color:#0b1c2e;">${data.name}</h1>
-                        <div style="font-size:18pt; font-weight:300; color:#3a5f6e; border-bottom:0.5pt solid #8f9aa5; padding-bottom:3mm; margin-bottom:3mm;">${data.title}</div>
-                        <div style="display:flex; gap:8mm; font-size:12pt; margin-bottom:4mm; color:#2f4a5c;">${[data.email, data.phone, data.location].join(' · ')}</div>
-                        ${data.visibility.profile ? `<section style="margin-bottom:6mm;"><h2 style="font-size:18pt; font-weight:400; color:#1e3f4a; border-bottom:0.5pt solid #b3c2c9; padding-bottom:1mm; margin-bottom:4mm;">EXECUTIVE SUMMARY</h2><p>${data.summary}</p></section>` : ''}
-                        ${data.visibility.experience ? `<section><h2 style="font-size:18pt; font-weight:400; color:#1e3f4a; border-bottom:0.5pt solid #b3c2c9; padding-bottom:1mm; margin-bottom:4mm;">SELECTED ACHIEVEMENTS</h2>${data.experience.map(job => `<div style="margin-bottom:5mm;"><div style="display:flex; justify-content:space-between; font-size:14pt; font-weight:600;"><span>${job.role} · ${job.company}</span><span>${job.date}</span></div><ul style="list-style:none; padding-left:2mm;">${job.bullets.map(b => `<li style="position:relative; padding-left:5mm; margin-bottom:1.5mm; font-size:12pt;"><span style="position:absolute; left:0; color:#3a5f6e;">—</span>${b}</li>`).join('')}</ul></div>`).join('')}</section>` : ''}
-                        ${data.visibility.education ? `<section style="margin-top:5mm;"><h2 style="font-size:18pt; font-weight:400; color:#1e3f4a; border-bottom:0.5pt solid #b3c2c9; padding-bottom:1mm; margin-bottom:4mm;">EDUCATION</h2>${data.education.map(edu => `<div style="display:flex; justify-content:space-between; font-size:12pt;"><span style="font-weight:600;">${edu.degree}</span><span>${edu.year}</span></div><p>${edu.school}</p>`).join('')}</section>` : ''}
-                    </div>`;
-                },
-                minimal: function(data) {
-                    return `<div class="resume" style="width:210mm; padding:10mm 12mm; background:white; font-family:'Inter', Helvetica, Arial, sans-serif; line-height:1.5; color:black;">
-                        <h1 style="font-size:28pt; font-weight:600; margin-bottom:1mm; letter-spacing:-0.5px;">${data.name}</h1>
-                        <div style="display:flex; flex-wrap:wrap; gap:4mm; font-size:10.5pt; margin-bottom:4mm; border-bottom:0.25pt solid #aaa; padding-bottom:2mm;">${[data.email, data.phone, data.location].join(' · ')}</div>
-                        ${data.visibility.profile ? `<section style="margin-bottom:3mm;"><h2 style="font-size:12pt; font-weight:600; margin-bottom:1.5mm; text-transform:uppercase; letter-spacing:1px;">SUMMARY</h2><p style="font-size:10.5pt;">${data.summary}</p></section>` : ''}
-                        ${data.visibility.skills ? `<section style="margin-bottom:3mm;"><h2 style="font-size:12pt; font-weight:600; margin-bottom:1.5mm; text-transform:uppercase; letter-spacing:1px;">TECHNICAL SKILLS</h2><p style="font-size:10.5pt;">${data.skills.join(' · ')}</p></section>` : ''}
-                        ${data.visibility.experience ? `<section style="margin-bottom:3mm;"><h2 style="font-size:12pt; font-weight:600; margin-bottom:1.5mm; text-transform:uppercase; letter-spacing:1px;">EXPERIENCE</h2>${data.experience.map(job => `<div style="margin-bottom:2.5mm;"><div style="display:flex; justify-content:space-between; font-weight:600; font-size:11pt;"><span>${job.role} · ${job.company}</span><span style="font-weight:400;">${job.date}</span></div><ul style="list-style:none; padding-left:0;">${job.bullets.map(b => `<li style="font-size:10.5pt; margin-bottom:0.5mm;">${b}</li>`).join('')}</ul></div>`).join('')}</section>` : ''}
-                        ${data.visibility.education ? `<section><h2 style="font-size:12pt; font-weight:600; margin-bottom:1.5mm; text-transform:uppercase; letter-spacing:1px;">EDUCATION</h2>${data.education.map(edu => `<div style="display:flex; justify-content:space-between; font-size:10.5pt;"><span style="font-weight:600;">${edu.degree}</span><span>${edu.year}</span></div><p style="font-size:10.5pt;">${edu.school}</p>`).join('')}</section>` : ''}
-                    </div>`;
-                },
-                creative: function(data) {
-                    return `<div class="resume" style="width:210mm; padding:14mm 16mm; background:white; font-family:'Inter', Helvetica, Arial, sans-serif; line-height:1.5; color:#2e2e2e;">
-                        <h1 style="font-size:36pt; font-weight:700; margin-bottom:1mm; position:relative; display:inline-block;">${data.name}</h1>
-                        <div style="display:flex; flex-wrap:wrap; gap:6mm; font-size:11pt; margin-top:2mm; margin-bottom:3mm; border-bottom:0.5pt dashed #d88c4a; padding-bottom:2mm;">${[data.email, data.phone, data.location].join(' · ')}</div>
-                        ${data.visibility.profile ? `<section style="margin-bottom:5mm;"><h2 style="font-size:16pt; font-weight:600; color:#1a1a1a; border-left:4mm solid #d88c4a; padding-left:2mm; margin-bottom:3mm;">Creative Direction</h2><p>${data.summary}</p></section>` : ''}
-                        ${data.visibility.experience ? `<section><h2 style="font-size:16pt; font-weight:600; border-left:4mm solid #d88c4a; padding-left:2mm; margin-bottom:3mm;">Select Work</h2>${data.experience.map(job => `<div style="margin-bottom:4mm;"><div style="display:flex; justify-content:space-between; font-weight:600;"><span>${job.role} · ${job.company}</span><span>${job.date}</span></div><ul style="list-style:none; padding-left:2mm;">${job.bullets.map(b => `<li style="position:relative; padding-left:4mm; margin-bottom:0.75mm;"><span style="position:absolute; left:0; color:#d88c4a; font-size:9pt;">◆</span>${b}</li>`).join('')}</ul></div>`).join('')}</section>` : ''}
-                        ${data.visibility.skills ? `<section style="margin-top:4mm;"><h2 style="font-size:16pt; font-weight:600; border-left:4mm solid #d88c4a; padding-left:2mm; margin-bottom:3mm;">Skills</h2><div style="display:flex; flex-wrap:wrap; gap:2mm 4mm;">${data.skills.map(s => `<span style="font-weight:600; min-width:30mm;">${s}</span>`).join('')}</div></section>` : ''}
-                        ${data.visibility.education ? `<section style="margin-top:4mm;"><h2 style="font-size:16pt; font-weight:600; border-left:4mm solid #d88c4a; padding-left:2mm; margin-bottom:3mm;">Education</h2>${data.education.map(edu => `<div style="display:flex; justify-content:space-between;"><span style="font-weight:600;">${edu.degree}</span><span>${edu.year}</span></div><p>${edu.school}</p>`).join('')}</section>` : ''}
-                    </div>`;
-                }
-            };
-
-            // ------------------------------------------------------------
-            //  PHASE 3: PAGINATION ENGINE (simplified, but functional)
-            // ------------------------------------------------------------
-            class PaginationEngine {
-                constructor(container) {
-                    this.container = container;
-                    this.pxPerMm = 3.779527559;
-                }
-                getElementHeightInMm(el) {
-                    return el.getBoundingClientRect().height / this.pxPerMm;
-                }
-                paginate() {
-                    // Clear previous breaks
-                    document.querySelectorAll('.page-break-before, .page-break-after').forEach(el => {
-                        el.classList.remove('page-break-before', 'page-break-after');
-                    });
-                    const children = Array.from(this.container.children);
-                    let remaining = 277; // A4 content height (297-10-10)
-                    for (let i = 0; i < children.length; i++) {
-                        const el = children[i];
-                        const h = this.getElementHeightInMm(el);
-                        if (h > remaining && i > 0) {
-                            el.classList.add('page-break-before');
-                            remaining = 277 - h;
-                        } else {
-                            remaining -= h;
-                        }
-                    }
-                }
-            }
-
-            // ------------------------------------------------------------
-            //  PHASE 5: ATS SCORING ENGINE (standalone)
-            // ------------------------------------------------------------
-            const ATSScorer = {
-                skillSynonyms: { js:'JavaScript', javascript:'JavaScript', reactjs:'React', react:'React', nodejs:'Node.js', node:'Node.js', figma:'Figma', 'adobe xd':'Adobe XD', html:'HTML', css:'CSS' },
-                stopwords: new Set(['a','an','the','and','or','but','if','because','as','what','which','this','that','these','those','then','just','so','than','such','both','through','about','for','is','of','while','during','to','from','in','on','at','by','with','without','has','have','be','been','being','was','were','will','would','could','should']),
-                extractKeywords(text) {
-                    if (!text) return [];
-                    return text.toLowerCase().split(/[^a-z0-9+.#-]+/).map(t=>t.trim()).filter(t=>t.length>=3 && !this.stopwords.has(t)).map(t=>this.skillSynonyms[t]||t);
-                },
-                flattenResume(resume) {
-                    let parts = [resume.summary];
-                    resume.experience.forEach(j=>{ parts.push(j.role, j.company, j.date, ...j.bullets); });
-                    resume.education.forEach(e=>{ parts.push(e.degree, e.school, e.year); });
-                    parts.push(...resume.skills, ...resume.certifications);
-                    return parts.join(' ');
-                },
-                score(resume, jdText) {
-                    const jdKeywords = this.extractKeywords(jdText);
-                    const resumeText = this.flattenResume(resume);
-                    const resumeKeywords = this.extractKeywords(resumeText);
-                    const uniqueJD = [...new Set(jdKeywords)];
-                    const uniqueResume = [...new Set(resumeKeywords)];
-                    
-                    // Skills match (40%)
-                    const normalizedResumeSkills = resume.skills.map(s=>this.skillSynonyms[s.toLowerCase()]||s.toLowerCase());
-                    const jdSkills = uniqueJD.filter(k=>k.length>2 && !['with','using','based','years','experience'].includes(k));
-                    let skillMatch = jdSkills.filter(s=>normalizedResumeSkills.includes(s)).length;
-                    let skillScore = jdSkills.length ? (skillMatch / jdSkills.length) * 40 : 40;
-
-                    // Experience relevance (30%)
-                    let expScore = 0;
-                    if (resume.experience.length) {
-                        let relevance = 0;
-                        resume.experience.forEach(job => {
-                            job.role.toLowerCase().split(/\s+/).forEach(w => { if(w.length>3 && jdText.toLowerCase().includes(w)) relevance+=0.5; });
-                        });
-                        expScore = Math.min(30, relevance * 5);
-                    }
-
-                    // Keyword placement (20%)
-                    const missing = uniqueJD.filter(kw => !uniqueResume.includes(kw));
-                    const overused = Object.entries(resumeKeywords.reduce((acc,kw)=>{acc[kw]=(acc[kw]||0)+1; return acc;},{})).filter(([k,v])=>v>3).map(([k])=>k);
-                    let kwScore = 20 - (missing.length * 2) - (overused.length * 1);
-                    kwScore = Math.max(0, kwScore);
-
-                    // Structure (10%)
-                    let gaps = [];
-                    if (!resume.summary) gaps.push('Summary');
-                    if (!resume.experience.length) gaps.push('Experience');
-                    if (!resume.education.length) gaps.push('Education');
-                    if (!resume.skills.length) gaps.push('Skills');
-                    let structScore = Math.max(0, 10 - gaps.length * 2);
-
-                    const total = Math.round(skillScore + expScore + kwScore + structScore);
-                    const suggestions = [];
-                    if (missing.length) suggestions.push(`Add missing keywords: ${missing.slice(0,5).join(', ')}${missing.length>5?'...':''}`);
-                    if (overused.length) suggestions.push(`Reduce overuse of: ${overused.slice(0,3).join(', ')}`);
-                    if (gaps.length) suggestions.push(`Complete missing sections: ${gaps.join(', ')}`);
-
-                    return { score: total, missing, overused, gaps, suggestions };
-                }
-            };
-
-            // ------------------------------------------------------------
-            //  RESUME DATA MODEL (connected to form fields)
+            //  PREMIUM RESUME DATA MODEL (with profileImage)
             // ------------------------------------------------------------
             let resumeData = {
                 name: 'Taylor Reed',
@@ -562,11 +531,257 @@
                 skills: ['UX Research', 'Wireframing', 'Prototyping', 'Figma', 'Adobe XD', 'User Testing', 'HTML/CSS'],
                 certifications: ['Google UX Design Professional', 'NN/g UX Certification'],
                 sectionOrder: ['profile', 'experience', 'education', 'skills', 'certifications'],
-                visibility: { profile: true, experience: true, education: true, skills: true, certifications: true }
+                visibility: { profile: true, experience: true, education: true, skills: true, certifications: true },
+                profileImage: null   // data URL
             };
 
             // ------------------------------------------------------------
-            //  RENDER PREVIEW (based on selected template)
+            //  PROFILE IMAGE UPLOAD HANDLER
+            // ------------------------------------------------------------
+            function setupProfileUpload() {
+                const fileInput = document.getElementById('profileUpload');
+                const uploadText = document.getElementById('uploadText');
+                const previewDiv = document.getElementById('imagePreview');
+
+                fileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            resumeData.profileImage = event.target.result;
+                            // show preview
+                            previewDiv.innerHTML = `<img src="${event.target.result}" class="profile-img" alt="profile preview">`;
+                            uploadText.innerHTML = '✓ Image uploaded';
+                            renderPreview();
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        resumeData.profileImage = null;
+                        previewDiv.innerHTML = '';
+                        uploadText.innerHTML = 'Click to upload headshot';
+                        renderPreview();
+                    }
+                });
+            }
+
+            // ------------------------------------------------------------
+            //  15 DISTINCT THEMES (5 original + 10 new premium)
+            // ------------------------------------------------------------
+            const templates = {
+                // ----- ORIGINAL 5 (with conditional profile image) -----
+                ats: function(data) {
+                    // ATS-Optimized: deliberately no image
+                    return `<div class="resume" style="width:210mm; padding:12mm 15mm; background:white; font-family:Arial, Helvetica, sans-serif; line-height:1.5;">
+                        <h1 style="font-size:28pt; font-weight:700; margin-bottom:1mm;">${data.name}</h1>
+                        <div style="font-size:12pt; color:#2c3e50; margin-bottom:3mm;">${data.title} · ${data.email} · ${data.phone} · ${data.location}</div>
+                        ${data.visibility.profile ? `<section style="margin-bottom:5mm;"><h2 style="font-size:16pt; border-bottom:0.5pt solid #2c3e50; padding-bottom:1mm; margin-bottom:3mm;">SUMMARY</h2><p>${data.summary}</p></section>` : ''}
+                        ${data.visibility.experience ? `<section style="margin-bottom:5mm;"><h2 style="font-size:16pt; border-bottom:0.5pt solid #2c3e50; padding-bottom:1mm; margin-bottom:3mm;">EXPERIENCE</h2>${data.experience.map(job => `<div style="margin-bottom:4mm;"><div style="display:flex; justify-content:space-between; font-weight:600;"><span>${job.role} · ${job.company}</span><span>${job.date}</span></div><ul style="list-style:none; padding-left:2mm;">${job.bullets.map(b => `<li style="position:relative; padding-left:4mm; margin-bottom:0.75mm; break-inside:avoid;"><span style="position:absolute; left:0;">•</span>${b}</li>`).join('')}</ul></div>`).join('')}</section>` : ''}
+                        ${data.visibility.education ? `<section><h2 style="font-size:16pt; border-bottom:0.5pt solid #2c3e50; padding-bottom:1mm; margin-bottom:3mm;">EDUCATION</h2>${data.education.map(edu => `<div style="margin-bottom:3mm;"><div style="display:flex; justify-content:space-between; font-weight:600;"><span>${edu.degree}</span><span>${edu.year}</span></div><p>${edu.school}</p></div>`).join('')}</section>` : ''}
+                        ${data.visibility.skills ? `<section style="margin-top:4mm;"><h2 style="font-size:16pt; border-bottom:0.5pt solid #2c3e50; padding-bottom:1mm; margin-bottom:3mm;">SKILLS</h2><ul style="list-style:none; padding-left:2mm;">${data.skills.map(s => `<li style="position:relative; padding-left:4mm;"><span style="position:absolute; left:0;">•</span>${s}</li>`).join('')}</ul></section>` : ''}
+                        ${data.visibility.certifications && data.certifications.length ? `<section style="margin-top:4mm;"><h2 style="font-size:16pt; border-bottom:0.5pt solid #2c3e50; padding-bottom:1mm; margin-bottom:3mm;">CERTIFICATIONS</h2><ul style="list-style:none; padding-left:2mm;">${data.certifications.map(c => `<li style="position:relative; padding-left:4mm;"><span style="position:absolute; left:0;">•</span>${c}</li>`).join('')}</ul></section>` : ''}
+                    </div>`;
+                },
+                modern: function(data) {
+                    return `<div class="resume" style="width:210mm; padding:12mm; background:white; display:grid; grid-template-columns:1fr 2.2fr; gap:6mm 8mm; font-family:'Inter', sans-serif; line-height:1.5; color:#1e2b3c;">
+                        <div style="grid-column:1/-1; display:flex; align-items:center; gap:16px;">
+                            ${data.profileImage ? `<img src="${data.profileImage}" class="profile-img-sm" style="border:2px solid #1e4a6b;">` : ''}
+                            <h1 style="font-size:28pt; font-weight:700; margin:0;">${data.name}</h1>
+                        </div>
+                        <div style="grid-column:1/-1; display:flex; gap:8mm; border-bottom:1pt solid #8a9aa8; padding-bottom:3mm; font-size:11pt;">${[data.email, data.phone, data.location, `linkedin.com/in/${data.name.toLowerCase().replace(' ', '-')}`].join(' · ')}</div>
+                        <div style="background:#f4f7fb; padding:5mm 4mm;">
+                            ${data.visibility.skills ? `<section style="margin-bottom:5mm;"><h2 style="font-size:14pt; font-weight:600; color:#1e4a6b; border-bottom:0.5pt solid #8a9aa8; margin-bottom:3mm;">SKILLS</h2><div style="display:flex; flex-wrap:wrap; gap:2mm;">${data.skills.map(s => `<span style="background:white; border:0.5pt solid #8a9aa8; padding:1mm 2mm; font-size:10pt; border-radius:2pt;">${s}</span>`).join('')}</div></section>` : ''}
+                            ${data.visibility.education ? `<section><h2 style="font-size:14pt; font-weight:600; color:#1e4a6b; border-bottom:0.5pt solid #8a9aa8; margin-bottom:3mm;">EDUCATION</h2>${data.education.map(edu => `<div style="margin-bottom:3mm;"><div style="display:flex; justify-content:space-between;"><span style="font-weight:600;">${edu.degree}</span><span>${edu.year}</span></div><p>${edu.school}</p></div>`).join('')}</section>` : ''}
+                            ${data.visibility.certifications && data.certifications.length ? `<section style="margin-top:4mm;"><h2 style="font-size:14pt; font-weight:600; color:#1e4a6b; border-bottom:0.5pt solid #8a9aa8; margin-bottom:3mm;">CERTIFICATIONS</h2><ul style="list-style:none; padding-left:2mm;">${data.certifications.map(c => `<li style="position:relative; padding-left:4mm; margin-bottom:0.75mm;"><span style="position:absolute; left:0; color:#1e4a6b;">▹</span>${c}</li>`).join('')}</ul></section>` : ''}
+                        </div>
+                        <div style="padding-top:2mm;">
+                            ${data.visibility.profile ? `<section style="margin-bottom:5mm;"><h2 style="font-size:14pt; font-weight:600; color:#1e4a6b; border-bottom:0.5pt solid #8a9aa8; margin-bottom:3mm;">PROFILE</h2><p>${data.summary}</p></section>` : ''}
+                            ${data.visibility.experience ? `<section><h2 style="font-size:14pt; font-weight:600; color:#1e4a6b; border-bottom:0.5pt solid #8a9aa8; margin-bottom:3mm;">EXPERIENCE</h2>${data.experience.map(job => `<div style="margin-bottom:4mm;"><div style="display:flex; justify-content:space-between; font-weight:600;"><span>${job.role} · ${job.company}</span><span>${job.date}</span></div><ul style="list-style:none; padding-left:2mm;">${job.bullets.map(b => `<li style="position:relative; padding-left:4mm; margin-bottom:0.75mm;"><span style="position:absolute; left:0; color:#1e4a6b;">▹</span>${b}</li>`).join('')}</ul></div>`).join('')}</section>` : ''}
+                        </div>
+                    </div>`;
+                },
+                executive: function(data) {
+                    return `<div class="resume" style="width:210mm; padding:18mm 20mm; background:white; font-family:Georgia, 'Times New Roman', serif; line-height:1.6;">
+                        <div style="display:flex; align-items:center; gap:20px; margin-bottom:4mm;">
+                            ${data.profileImage ? `<img src="${data.profileImage}" class="profile-img" style="width:80px; height:80px;">` : ''}
+                            <div><h1 style="font-size:36pt; font-weight:400; letter-spacing:-0.5px; color:#0b1c2e;">${data.name}</h1>
+                            <div style="font-size:18pt; font-weight:300; color:#3a5f6e;">${data.title}</div></div>
+                        </div>
+                        <div style="display:flex; gap:8mm; font-size:12pt; margin-bottom:6mm; color:#2f4a5c;">${[data.email, data.phone, data.location].join(' · ')}</div>
+                        ${data.visibility.profile ? `<section style="margin-bottom:6mm;"><h2 style="font-size:18pt; font-weight:400; color:#1e3f4a; border-bottom:0.5pt solid #b3c2c9; padding-bottom:1mm; margin-bottom:4mm;">EXECUTIVE SUMMARY</h2><p>${data.summary}</p></section>` : ''}
+                        ${data.visibility.experience ? `<section><h2 style="font-size:18pt; font-weight:400; color:#1e3f4a; border-bottom:0.5pt solid #b3c2c9; padding-bottom:1mm; margin-bottom:4mm;">SELECTED ACHIEVEMENTS</h2>${data.experience.map(job => `<div style="margin-bottom:5mm;"><div style="display:flex; justify-content:space-between; font-size:14pt; font-weight:600;"><span>${job.role} · ${job.company}</span><span>${job.date}</span></div><ul style="list-style:none; padding-left:2mm;">${job.bullets.map(b => `<li style="position:relative; padding-left:5mm; margin-bottom:1.5mm; font-size:12pt;"><span style="position:absolute; left:0; color:#3a5f6e;">—</span>${b}</li>`).join('')}</ul></div>`).join('')}</section>` : ''}
+                        ${data.visibility.education ? `<section style="margin-top:5mm;"><h2 style="font-size:18pt; font-weight:400; color:#1e3f4a; border-bottom:0.5pt solid #b3c2c9; padding-bottom:1mm; margin-bottom:4mm;">EDUCATION</h2>${data.education.map(edu => `<div style="display:flex; justify-content:space-between; font-size:12pt;"><span style="font-weight:600;">${edu.degree}</span><span>${edu.year}</span></div><p>${edu.school}</p>`).join('')}</section>` : ''}
+                    </div>`;
+                },
+                minimal: function(data) {
+                    return `<div class="resume" style="width:210mm; padding:10mm 12mm; background:white; font-family:'Inter', Helvetica, Arial, sans-serif; line-height:1.5; color:black;">
+                        <div style="display:flex; align-items:center; gap:16px; margin-bottom:4mm;">
+                            ${data.profileImage ? `<img src="${data.profileImage}" style="width:60px; height:60px; border-radius:50%; object-fit:cover;">` : ''}
+                            <h1 style="font-size:28pt; font-weight:600; letter-spacing:-0.5px;">${data.name}</h1>
+                        </div>
+                        <div style="display:flex; flex-wrap:wrap; gap:4mm; font-size:10.5pt; margin-bottom:4mm; border-bottom:0.25pt solid #aaa; padding-bottom:2mm;">${[data.email, data.phone, data.location].join(' · ')}</div>
+                        ${data.visibility.profile ? `<section style="margin-bottom:3mm;"><h2 style="font-size:12pt; font-weight:600; margin-bottom:1.5mm; text-transform:uppercase; letter-spacing:1px;">SUMMARY</h2><p style="font-size:10.5pt;">${data.summary}</p></section>` : ''}
+                        ${data.visibility.skills ? `<section style="margin-bottom:3mm;"><h2 style="font-size:12pt; font-weight:600; margin-bottom:1.5mm; text-transform:uppercase; letter-spacing:1px;">TECHNICAL SKILLS</h2><p style="font-size:10.5pt;">${data.skills.join(' · ')}</p></section>` : ''}
+                        ${data.visibility.experience ? `<section style="margin-bottom:3mm;"><h2 style="font-size:12pt; font-weight:600; margin-bottom:1.5mm; text-transform:uppercase; letter-spacing:1px;">EXPERIENCE</h2>${data.experience.map(job => `<div style="margin-bottom:2.5mm;"><div style="display:flex; justify-content:space-between; font-weight:600; font-size:11pt;"><span>${job.role} · ${job.company}</span><span style="font-weight:400;">${job.date}</span></div><ul style="list-style:none; padding-left:0;">${job.bullets.map(b => `<li style="font-size:10.5pt; margin-bottom:0.5mm;">${b}</li>`).join('')}</ul></div>`).join('')}</section>` : ''}
+                        ${data.visibility.education ? `<section><h2 style="font-size:12pt; font-weight:600; margin-bottom:1.5mm; text-transform:uppercase; letter-spacing:1px;">EDUCATION</h2>${data.education.map(edu => `<div style="display:flex; justify-content:space-between; font-size:10.5pt;"><span style="font-weight:600;">${edu.degree}</span><span>${edu.year}</span></div><p style="font-size:10.5pt;">${edu.school}</p>`).join('')}</section>` : ''}
+                    </div>`;
+                },
+                creative: function(data) {
+                    return `<div class="resume" style="width:210mm; padding:14mm 16mm; background:white; font-family:'Inter', Helvetica, Arial, sans-serif; line-height:1.5; color:#2e2e2e;">
+                        <div style="display:flex; align-items:center; gap:20px; margin-bottom:6mm;">
+                            ${data.profileImage ? `<img src="${data.profileImage}" class="profile-img" style="border:3px solid #d88c4a;">` : ''}
+                            <h1 style="font-size:36pt; font-weight:700; margin-bottom:1mm; position:relative; display:inline-block;">${data.name}</h1>
+                        </div>
+                        <div style="display:flex; flex-wrap:wrap; gap:6mm; font-size:11pt; margin-bottom:3mm; border-bottom:0.5pt dashed #d88c4a; padding-bottom:2mm;">${[data.email, data.phone, data.location].join(' · ')}</div>
+                        ${data.visibility.profile ? `<section style="margin-bottom:5mm;"><h2 style="font-size:16pt; font-weight:600; color:#1a1a1a; border-left:4mm solid #d88c4a; padding-left:2mm; margin-bottom:3mm;">Creative Direction</h2><p>${data.summary}</p></section>` : ''}
+                        ${data.visibility.experience ? `<section><h2 style="font-size:16pt; font-weight:600; border-left:4mm solid #d88c4a; padding-left:2mm; margin-bottom:3mm;">Select Work</h2>${data.experience.map(job => `<div style="margin-bottom:4mm;"><div style="display:flex; justify-content:space-between; font-weight:600;"><span>${job.role} · ${job.company}</span><span>${job.date}</span></div><ul style="list-style:none; padding-left:2mm;">${job.bullets.map(b => `<li style="position:relative; padding-left:4mm; margin-bottom:0.75mm;"><span style="position:absolute; left:0; color:#d88c4a; font-size:9pt;">◆</span>${b}</li>`).join('')}</ul></div>`).join('')}</section>` : ''}
+                        ${data.visibility.skills ? `<section style="margin-top:4mm;"><h2 style="font-size:16pt; font-weight:600; border-left:4mm solid #d88c4a; padding-left:2mm; margin-bottom:3mm;">Skills</h2><div style="display:flex; flex-wrap:wrap; gap:2mm 4mm;">${data.skills.map(s => `<span style="font-weight:600; min-width:30mm;">${s}</span>`).join('')}</div></section>` : ''}
+                        ${data.visibility.education ? `<section style="margin-top:4mm;"><h2 style="font-size:16pt; font-weight:600; border-left:4mm solid #d88c4a; padding-left:2mm; margin-bottom:3mm;">Education</h2>${data.education.map(edu => `<div style="display:flex; justify-content:space-between;"><span style="font-weight:600;">${edu.degree}</span><span>${edu.year}</span></div><p>${edu.school}</p>`).join('')}</section>` : ''}
+                    </div>`;
+                },
+                // ----- 10 NEW PREMIUM THEMES (6–15) -----
+                premium6: function(data) {
+                    // Dark Elegance
+                    return `<div class="resume" style="width:210mm; padding:14mm; background:#1e2b3c; color:#f0f6fc; font-family:'Inter', sans-serif; line-height:1.5;">
+                        <div style="display:flex; align-items:center; gap:20px; margin-bottom:6mm;">
+                            ${data.profileImage ? `<img src="${data.profileImage}" style="width:70px; height:70px; border-radius:50%; border:3px solid #c9a959; object-fit:cover;">` : ''}
+                            <div><h1 style="font-size:30pt; font-weight:600; color:#e6d8b5;">${data.name}</h1>
+                            <div style="font-size:16pt; color:#cbd5e1;">${data.title}</div></div>
+                        </div>
+                        <div style="display:flex; gap:8mm; font-size:11pt; margin-bottom:5mm; color:#aac3d4;">${[data.email, data.phone, data.location].join(' · ')}</div>
+                        ${data.visibility.profile ? `<section style="margin-bottom:5mm; background:#263544; padding:4mm; border-radius:8px;"><h2 style="font-size:16pt; font-weight:500; color:#e6d8b5; border-bottom:1px solid #4f687a; padding-bottom:2mm; margin-bottom:3mm;">PROFILE</h2><p>${data.summary}</p></section>` : ''}
+                        ${data.visibility.experience ? `<section><h2 style="font-size:18pt; font-weight:500; color:#e6d8b5; border-bottom:1px solid #4f687a; margin-bottom:4mm;">EXPERIENCE</h2>${data.experience.map(job => `<div style="margin-bottom:5mm;"><div style="display:flex; justify-content:space-between; font-weight:600;"><span style="color:#d8c99b;">${job.role} · ${job.company}</span><span>${job.date}</span></div><ul style="list-style:none; padding-left:2mm;">${job.bullets.map(b => `<li style="position:relative; padding-left:4mm; margin-bottom:0.75mm;"><span style="position:absolute; left:0; color:#c9a959;">✦</span>${b}</li>`).join('')}</ul></div>`).join('')}</section>` : ''}
+                        ${data.visibility.education ? `<section><h2 style="font-size:18pt; font-weight:500; color:#e6d8b5; border-bottom:1px solid #4f687a; margin-bottom:4mm;">EDUCATION</h2>${data.education.map(edu => `<div style="margin-bottom:3mm;"><span style="font-weight:600;">${edu.degree}</span> — ${edu.school}, ${edu.year}</div>`).join('')}</section>` : ''}
+                    </div>`;
+                },
+                premium7: function(data) {
+                    // Compact Serif
+                    return `<div class="resume" style="width:210mm; padding:10mm 12mm; background:#fefefe; font-family:Georgia, 'Times New Roman', serif; color:#2e3b4e;">
+                        <div style="display:flex; align-items:center; gap:16px; margin-bottom:4mm;">
+                            ${data.profileImage ? `<img src="${data.profileImage}" style="width:55px; height:55px; border-radius:50%; border:1px solid #aaa; object-fit:cover;">` : ''}
+                            <h1 style="font-size:24pt; font-weight:500; letter-spacing:-0.3px;">${data.name}</h1>
+                        </div>
+                        <div style="display:flex; gap:6mm; font-size:10.5pt; border-top:1px solid #bbb; border-bottom:1px solid #bbb; padding:2mm 0; margin-bottom:4mm;">${[data.email, data.phone, data.location].join(' · ')}</div>
+                        ${data.visibility.profile ? `<p style="font-size:11pt; margin-bottom:4mm;"><strong>Summary</strong> ${data.summary}</p>` : ''}
+                        ${data.visibility.experience ? `<div><h2 style="font-size:14pt; font-weight:600; border-bottom:0.5pt solid #aaa; margin-bottom:3mm;">Experience</h2>${data.experience.map(job => `<div style="margin-bottom:3mm;"><div style="display:flex; justify-content:space-between; font-weight:600;"><span>${job.role}, ${job.company}</span><span style="font-weight:400;">${job.date}</span></div><ul style="padding-left:4mm; margin-top:1mm;">${job.bullets.map(b => `<li style="font-size:10.5pt;">${b}</li>`).join('')}</ul></div>`).join('')}</div>` : ''}
+                        ${data.visibility.education ? `<div style="margin-top:3mm;"><h2 style="font-size:14pt; font-weight:600; border-bottom:0.5pt solid #aaa; margin-bottom:3mm;">Education</h2>${data.education.map(edu => `<div><span style="font-weight:600;">${edu.degree}</span>, ${edu.school} (${edu.year})</div>`).join('')}</div>` : ''}
+                    </div>`;
+                },
+                premium8: function(data) {
+                    // Two-Column Classic
+                    return `<div class="resume" style="width:210mm; padding:12mm; background:white; display:grid; grid-template-columns:1fr 2.2fr; gap:6mm; font-family:'Inter', sans-serif;">
+                        <div style="border-right:1px solid #d0dde5; padding-right:5mm;">
+                            <div style="margin-bottom:5mm;">
+                                ${data.profileImage ? `<img src="${data.profileImage}" style="width:100px; height:100px; border-radius:50%; margin-bottom:4mm;">` : ''}
+                                <h1 style="font-size:24pt; font-weight:700;">${data.name}</h1>
+                                <div style="font-size:12pt; color:#3e5c6f;">${data.title}</div>
+                            </div>
+                            ${data.visibility.skills ? `<section><h2 style="font-size:14pt; font-weight:600; border-bottom:1px solid #2c3e50; margin-bottom:3mm;">Skills</h2><ul style="list-style:none; padding:0;">${data.skills.map(s => `<li style="margin-bottom:2mm;">${s}</li>`).join('')}</ul></section>` : ''}
+                            ${data.visibility.education ? `<section style="margin-top:5mm;"><h2 style="font-size:14pt; font-weight:600; border-bottom:1px solid #2c3e50; margin-bottom:3mm;">Education</h2>${data.education.map(edu => `<div style="margin-bottom:2mm;"><strong>${edu.degree}</strong><br>${edu.school}, ${edu.year}</div>`).join('')}</section>` : ''}
+                        </div>
+                        <div>
+                            ${data.visibility.profile ? `<section style="margin-bottom:5mm;"><h2 style="font-size:16pt; font-weight:600; border-bottom:1px solid #2c3e50; margin-bottom:3mm;">Profile</h2><p>${data.summary}</p></section>` : ''}
+                            ${data.visibility.experience ? `<section><h2 style="font-size:16pt; font-weight:600; border-bottom:1px solid #2c3e50; margin-bottom:3mm;">Experience</h2>${data.experience.map(job => `<div style="margin-bottom:4mm;"><div style="display:flex; justify-content:space-between; font-weight:600;"><span>${job.role}, ${job.company}</span><span>${job.date}</span></div><ul>${job.bullets.map(b => `<li style="margin-bottom:1mm;">${b}</li>`).join('')}</ul></div>`).join('')}</section>` : ''}
+                        </div>
+                    </div>`;
+                },
+                premium9: function(data) {
+                    // Corporate Blue
+                    return `<div class="resume" style="width:210mm; padding:14mm; background:white; font-family:'Inter', sans-serif; color:#1e2e3f;">
+                        <div style="background:#0f3857; color:white; padding:8mm; margin-bottom:6mm; border-radius:0 0 20px 20px;">
+                            <div style="display:flex; align-items:center; gap:20px;">
+                                ${data.profileImage ? `<img src="${data.profileImage}" style="width:80px; height:80px; border-radius:50%; border:3px solid white;">` : ''}
+                                <div><h1 style="font-size:32pt; font-weight:600;">${data.name}</h1>
+                                <div style="font-size:16pt; font-weight:300;">${data.title}</div></div>
+                            </div>
+                            <div style="display:flex; gap:10mm; margin-top:4mm; font-size:11pt;">${[data.email, data.phone, data.location].join(' · ')}</div>
+                        </div>
+                        ${data.visibility.profile ? `<section style="margin-bottom:5mm;"><h2 style="font-size:16pt; font-weight:600; color:#0f3857;">Profile</h2><p>${data.summary}</p></section>` : ''}
+                        ${data.visibility.experience ? `<section><h2 style="font-size:16pt; font-weight:600; color:#0f3857;">Experience</h2>${data.experience.map(job => `<div style="margin-bottom:4mm;"><div style="display:flex; justify-content:space-between;"><span style="font-weight:700;">${job.role}</span><span style="color:#3f6b85;">${job.company}</span><span>${job.date}</span></div><ul>${job.bullets.map(b => `<li>${b}</li>`).join('')}</ul></div>`).join('')}</section>` : ''}
+                        ${data.visibility.education ? `<section><h2 style="font-size:16pt; font-weight:600; color:#0f3857;">Education</h2>${data.education.map(edu => `<div><span style="font-weight:700;">${edu.degree}</span>, ${edu.school} (${edu.year})</div>`).join('')}</section>` : ''}
+                    </div>`;
+                },
+                premium10: function(data) {
+                    // Warm Earth
+                    return `<div class="resume" style="width:210mm; padding:14mm; background:#fef7e9; font-family:Georgia, serif; color:#4a3b2a;">
+                        <div style="display:flex; align-items:center; gap:20px; border-bottom:2px solid #c7a97e; padding-bottom:4mm; margin-bottom:5mm;">
+                            ${data.profileImage ? `<img src="${data.profileImage}" style="width:70px; height:70px; border-radius:50%; border:3px solid #c7a97e;">` : ''}
+                            <div><h1 style="font-size:28pt; font-weight:600; color:#6b4f32;">${data.name}</h1>
+                            <div style="font-size:14pt; color:#8b6b4f;">${data.title}</div></div>
+                        </div>
+                        <div style="display:flex; gap:8mm; font-size:11pt; margin-bottom:5mm; color:#6a5a4a;">${[data.email, data.phone, data.location].join(' · ')}</div>
+                        ${data.visibility.profile ? `<section style="background:#faeeda; padding:4mm; border-radius:12px; margin-bottom:5mm;"><h2 style="font-size:16pt; font-weight:500; color:#8b6b4f;">About</h2><p>${data.summary}</p></section>` : ''}
+                        ${data.visibility.experience ? `<section><h2 style="font-size:18pt; font-weight:500; color:#8b6b4f;">Work</h2>${data.experience.map(job => `<div style="margin-bottom:4mm;"><div style="display:flex; justify-content:space-between;"><span style="font-weight:700;">${job.role}</span><span>${job.company} · ${job.date}</span></div><ul>${job.bullets.map(b => `<li>${b}</li>`).join('')}</ul></div>`).join('')}</section>` : ''}
+                    </div>`;
+                },
+                premium11: function(data) {
+                    // Tech Mono
+                    return `<div class="resume" style="width:210mm; padding:12mm; background:#0e1c2a; color:#b3e0f2; font-family:'Courier New', Courier, monospace;">
+                        <div style="display:flex; align-items:center; gap:16px; border-bottom:2px dashed #3e92a0; padding-bottom:4mm;">
+                            ${data.profileImage ? `<img src="${data.profileImage}" style="width:60px; height:60px; border-radius:4px; border:2px solid #3e92a0; object-fit:cover;">` : ''}
+                            <div><h1 style="font-size:26pt; font-weight:600; color:#8ed6e5;">${data.name}</h1>
+                            <div style="font-size:14pt; color:#9fc7d0;">> ${data.title}</div></div>
+                        </div>
+                        <pre style="font-size:10pt; margin:4mm 0; color:#b3dce0;">${[data.email, data.phone, data.location].join(' | ')}</pre>
+                        ${data.visibility.profile ? `<section><h2 style="font-size:16pt; color:#8ed6e5;"># Profile</h2><p>${data.summary}</p></section>` : ''}
+                        ${data.visibility.experience ? `<section><h2 style="font-size:16pt; color:#8ed6e5;">// Experience</h2>${data.experience.map(job => `<div><p><strong>${job.role}</strong> @ ${job.company} [${job.date}]</p><ul>${job.bullets.map(b => `<li>> ${b}</li>`).join('')}</ul></div>`).join('')}</section>` : ''}
+                    </div>`;
+                },
+                premium12: function(data) {
+                    // Minimalist Air
+                    return `<div class="resume" style="width:210mm; padding:15mm 20mm; background:white; font-family:'Inter', sans-serif; line-height:1.7;">
+                        <div style="display:flex; align-items:center; gap:24px; margin-bottom:8mm;">
+                            ${data.profileImage ? `<img src="${data.profileImage}" style="width:70px; height:70px; border-radius:50%; filter:grayscale(100%); opacity:0.9;">` : ''}
+                            <h1 style="font-size:32pt; font-weight:300; letter-spacing:-1px; color:#1d1d1d;">${data.name}</h1>
+                        </div>
+                        <div style="font-size:11pt; color:#4f4f4f; margin-bottom:6mm;">${data.email}  ·  ${data.phone}  ·  ${data.location}</div>
+                        ${data.visibility.profile ? `<p style="font-size:12pt; color:#333; margin-bottom:6mm;">${data.summary}</p>` : ''}
+                        ${data.visibility.experience ? `<div><h2 style="font-size:14pt; font-weight:400; border-bottom:1px solid #ccc; margin-bottom:4mm;">Experience</h2>${data.experience.map(job => `<div style="margin-bottom:5mm;"><div style="display:flex; gap:10px;"><span style="font-weight:600;">${job.role}</span><span style="color:#666;">${job.company}</span><span style="margin-left:auto; color:#888;">${job.date}</span></div><ul style="padding-left:4mm; color:#444;">${job.bullets.map(b => `<li style="margin-bottom:1mm;">${b}</li>`).join('')}</ul></div>`).join('')}</div>` : ''}
+                    </div>`;
+                },
+                premium13: function(data) {
+                    // Border Accent
+                    return `<div class="resume" style="width:210mm; padding:0; background:white; font-family:'Inter', sans-serif; border:8px solid #2d5f73; border-top:0; border-bottom:0;">
+                        <div style="padding:12mm 15mm;">
+                            <div style="display:flex; align-items:center; gap:20px; margin-bottom:5mm; border-left:10px solid #2d5f73; padding-left:8mm;">
+                                ${data.profileImage ? `<img src="${data.profileImage}" style="width:70px; height:70px; border-radius:50%;">` : ''}
+                                <h1 style="font-size:30pt; font-weight:600; color:#0d3342;">${data.name}</h1>
+                            </div>
+                            <div style="display:flex; gap:8mm; margin-bottom:6mm; padding-left:8mm;">${[data.email, data.phone, data.location].join(' · ')}</div>
+                            ${data.visibility.profile ? `<div style="background:#f0f6fa; padding:5mm; border-radius:0 20px 20px 0; margin-bottom:5mm;"><h2 style="font-size:16pt; font-weight:600; color:#2d5f73;">Summary</h2><p>${data.summary}</p></div>` : ''}
+                            ${data.visibility.experience ? `<div><h2 style="font-size:18pt; font-weight:600; color:#2d5f73; border-bottom:2px solid #2d5f73;">Experience</h2>${data.experience.map(job => `<div style="margin-top:4mm;"><div style="display:flex; justify-content:space-between;"><span style="font-weight:700;">${job.role}</span><span>${job.company}</span><span>${job.date}</span></div><ul>${job.bullets.map(b => `<li>${b}</li>`).join('')}</ul></div>`).join('')}</div>` : ''}
+                        </div>
+                    </div>`;
+                },
+                premium14: function(data) {
+                    // Playful Rounded
+                    return `<div class="resume" style="width:210mm; padding:14mm; background:#fff9f2; font-family:'Inter', sans-serif; border-radius:30px;">
+                        <div style="display:flex; align-items:center; gap:20px; background:#ffdab9; padding:6mm; border-radius:50px; margin-bottom:6mm;">
+                            ${data.profileImage ? `<img src="${data.profileImage}" style="width:70px; height:70px; border-radius:50%; border:4px solid white;">` : ''}
+                            <div><h1 style="font-size:30pt; font-weight:700; color:#784421;">${data.name}</h1>
+                            <div style="font-size:16pt; color:#b15e2e;">${data.title}</div></div>
+                        </div>
+                        <div style="display:flex; flex-wrap:wrap; gap:8mm; background:#ffe9d1; padding:4mm 8mm; border-radius:40px; margin-bottom:6mm;">${[data.email, data.phone, data.location].join(' · ')}</div>
+                        ${data.visibility.profile ? `<div style="background:#fff0df; padding:5mm; border-radius:20px; margin-bottom:5mm;"><h2 style="font-size:16pt; color:#8b4513;">About</h2><p>${data.summary}</p></div>` : ''}
+                        ${data.visibility.experience ? `<div><h2 style="font-size:20pt; color:#8b4513;">✨ Experience</h2>${data.experience.map(job => `<div style="background:white; padding:4mm; border-radius:16px; margin-bottom:4mm; box-shadow:0 4px 8px rgba(0,0,0,0.02);"><div style="display:flex; justify-content:space-between;"><span style="font-weight:700;">${job.role}</span><span>${job.company}</span><span>${job.date}</span></div><ul>${job.bullets.map(b => `<li>${b}</li>`).join('')}</ul></div>`).join('')}</div>` : ''}
+                    </div>`;
+                },
+                premium15: function(data) {
+                    // Editorial
+                    return `<div class="resume" style="width:210mm; padding:16mm 20mm; background:white; font-family:'Times New Roman', serif; column-count:2; column-gap:8mm;">
+                        <div style="column-span:all; display:flex; align-items:center; gap:20px; margin-bottom:6mm;">
+                            ${data.profileImage ? `<img src="${data.profileImage}" style="width:70px; height:70px; border-radius:0; border:1px solid #000;">` : ''}
+                            <h1 style="font-size:32pt; font-weight:400; text-transform:uppercase; letter-spacing:4px;">${data.name}</h1>
+                        </div>
+                        <div style="column-span:all; border-bottom:2px solid #222; margin-bottom:6mm;"></div>
+                        <div style="column-span:all; display:flex; gap:10mm; font-size:11pt; margin-bottom:6mm;">${[data.email, data.phone, data.location].join(' | ')}</div>
+                        ${data.visibility.profile ? `<p style="font-size:12pt; line-height:1.6;"><strong>Profile</strong> ${data.summary}</p>` : ''}
+                        ${data.visibility.experience ? `<h2 style="font-size:18pt; font-weight:400; margin-top:4mm;">Experience</h2>${data.experience.map(job => `<div style="margin-bottom:5mm;"><div style="font-weight:700;">${job.role}, ${job.company}</div><div style="font-style:italic;">${job.date}</div><ul>${job.bullets.map(b => `<li>${b}</li>`).join('')}</ul></div>`).join('')}` : ''}
+                    </div>`;
+                }
+            };
+
+            // ------------------------------------------------------------
+            //  RENDER PREVIEW (template selector)
             // ------------------------------------------------------------
             function renderPreview() {
                 const templateName = document.getElementById('templateSelector').value;
@@ -576,7 +791,7 @@
             }
 
             // ------------------------------------------------------------
-            //  BIND FORM INPUTS TO resumeData AND RE-RENDER
+            //  BIND ALL FORM INPUTS (keep original + profile image)
             // ------------------------------------------------------------
             function bindFormEvents() {
                 document.getElementById('name').addEventListener('input', e => { resumeData.name = e.target.value; renderPreview(); });
@@ -621,7 +836,7 @@
                     renderPreview();
                 });
 
-                // Visibility toggles
+                // Visibility
                 document.getElementById('vis-profile').addEventListener('change', e => { resumeData.visibility.profile = e.target.checked; renderPreview(); });
                 document.getElementById('vis-experience').addEventListener('change', e => { resumeData.visibility.experience = e.target.checked; renderPreview(); });
                 document.getElementById('vis-education').addEventListener('change', e => { resumeData.visibility.education = e.target.checked; renderPreview(); });
@@ -630,7 +845,7 @@
             }
 
             // ------------------------------------------------------------
-            //  DRAG & DROP SECTION REORDERING (Phase 4)
+            //  DRAG & DROP (maintained)
             // ------------------------------------------------------------
             function initDragDrop() {
                 const sortable = document.getElementById('section-sortable');
@@ -642,7 +857,6 @@
                     const afterElement = getDragAfterElement(sortable, e.clientY);
                     if (afterElement) sortable.insertBefore(dragged, afterElement);
                     else sortable.appendChild(dragged);
-                    // update order in resumeData (optional)
                 });
                 function getDragAfterElement(container, y) {
                     const draggable = [...container.querySelectorAll('.section-drag:not(.dragging)')];
@@ -655,22 +869,85 @@
             }
 
             // ------------------------------------------------------------
-            //  PRINT & PAGINATION (Phase 6 & 3)
+            //  PAGINATION ENGINE (Phase 3)
+            // ------------------------------------------------------------
+            class PaginationEngine {
+                constructor(container) { this.container = container; this.pxPerMm = 3.779527559; }
+                getElementHeightInMm(el) { return el.getBoundingClientRect().height / this.pxPerMm; }
+                paginate() {
+                    document.querySelectorAll('.page-break-before, .page-break-after').forEach(el => el.classList.remove('page-break-before', 'page-break-after'));
+                    const children = Array.from(this.container.children);
+                    let remaining = 277;
+                    for (let i = 0; i < children.length; i++) {
+                        const el = children[i];
+                        const h = this.getElementHeightInMm(el);
+                        if (h > remaining && i > 0) { el.classList.add('page-break-before'); remaining = 277 - h; }
+                        else { remaining -= h; }
+                    }
+                }
+            }
+
+            // ------------------------------------------------------------
+            //  ATS SCORER (Phase 5) – unchanged
+            // ------------------------------------------------------------
+            const ATSScorer = {
+                skillSynonyms: { js:'JavaScript', javascript:'JavaScript', reactjs:'React', react:'React', nodejs:'Node.js', node:'Node.js', figma:'Figma', 'adobe xd':'Adobe XD', html:'HTML', css:'CSS' },
+                stopwords: new Set(['a','an','the','and','or','but','if','because','as','what','which','this','that','these','those','then','just','so','than','such','both','through','about','for','is','of','while','during','to','from','in','on','at','by','with','without','has','have','be','been','being','was','were','will','would','could','should']),
+                extractKeywords(text) { if (!text) return []; return text.toLowerCase().split(/[^a-z0-9+.#-]+/).map(t=>t.trim()).filter(t=>t.length>=3 && !this.stopwords.has(t)).map(t=>this.skillSynonyms[t]||t); },
+                flattenResume(resume) {
+                    let parts = [resume.summary];
+                    resume.experience.forEach(j=>{ parts.push(j.role, j.company, j.date, ...j.bullets); });
+                    resume.education.forEach(e=>{ parts.push(e.degree, e.school, e.year); });
+                    parts.push(...resume.skills, ...resume.certifications);
+                    return parts.join(' ');
+                },
+                score(resume, jdText) {
+                    const jdKeywords = this.extractKeywords(jdText);
+                    const resumeText = this.flattenResume(resume);
+                    const resumeKeywords = this.extractKeywords(resumeText);
+                    const uniqueJD = [...new Set(jdKeywords)];
+                    const uniqueResume = [...new Set(resumeKeywords)];
+                    const normalizedResumeSkills = resume.skills.map(s=>this.skillSynonyms[s.toLowerCase()]||s.toLowerCase());
+                    const jdSkills = uniqueJD.filter(k=>k.length>2 && !['with','using','based','years','experience'].includes(k));
+                    let skillMatch = jdSkills.filter(s=>normalizedResumeSkills.includes(s)).length;
+                    let skillScore = jdSkills.length ? (skillMatch / jdSkills.length) * 40 : 40;
+                    let expScore = 0;
+                    if (resume.experience.length) {
+                        let relevance = 0;
+                        resume.experience.forEach(job => {
+                            job.role.toLowerCase().split(/\s+/).forEach(w => { if(w.length>3 && jdText.toLowerCase().includes(w)) relevance+=0.5; });
+                        });
+                        expScore = Math.min(30, relevance * 5);
+                    }
+                    const missing = uniqueJD.filter(kw => !uniqueResume.includes(kw));
+                    const overused = Object.entries(resumeKeywords.reduce((acc,kw)=>{acc[kw]=(acc[kw]||0)+1; return acc;},{})).filter(([k,v])=>v>3).map(([k])=>k);
+                    let kwScore = 20 - (missing.length * 2) - (overused.length * 1); kwScore = Math.max(0, kwScore);
+                    let gaps = [];
+                    if (!resume.summary) gaps.push('Summary');
+                    if (!resume.experience.length) gaps.push('Experience');
+                    if (!resume.education.length) gaps.push('Education');
+                    if (!resume.skills.length) gaps.push('Skills');
+                    let structScore = Math.max(0, 10 - gaps.length * 2);
+                    const total = Math.round(skillScore + expScore + kwScore + structScore);
+                    const suggestions = [];
+                    if (missing.length) suggestions.push(`Add missing keywords: ${missing.slice(0,5).join(', ')}${missing.length>5?'...':''}`);
+                    if (overused.length) suggestions.push(`Reduce overuse of: ${overused.slice(0,3).join(', ')}`);
+                    if (gaps.length) suggestions.push(`Complete missing sections: ${gaps.join(', ')}`);
+                    return { score: total, missing, overused, gaps, suggestions };
+                }
+            };
+
+            // ------------------------------------------------------------
+            //  SETUP PRINT, ATS, TEMPLATE SWITCH
             // ------------------------------------------------------------
             function setupPrint() {
                 document.getElementById('printBtn').addEventListener('click', function() {
                     const resumeEl = document.querySelector('.resume');
-                    if (resumeEl) {
-                        const paginator = new PaginationEngine(resumeEl);
-                        paginator.paginate();
-                    }
+                    if (resumeEl) { const p = new PaginationEngine(resumeEl); p.paginate(); }
                     setTimeout(() => window.print(), 50);
                 });
             }
 
-            // ------------------------------------------------------------
-            //  ATS SCORING UI (Phase 5)
-            // ------------------------------------------------------------
             function setupAts() {
                 document.getElementById('scoreBtn').addEventListener('click', function() {
                     const jd = document.getElementById('jobDesc').value;
@@ -689,17 +966,15 @@
                 });
             }
 
-            // ------------------------------------------------------------
-            //  TEMPLATE SWITCHING
-            // ------------------------------------------------------------
             function setupTemplateSwitch() {
                 document.getElementById('templateSelector').addEventListener('change', renderPreview);
             }
 
             // ------------------------------------------------------------
-            //  INITIALISE
+            //  INIT
             // ------------------------------------------------------------
             window.onload = function() {
+                setupProfileUpload();
                 renderPreview();
                 bindFormEvents();
                 initDragDrop();
