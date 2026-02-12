@@ -102,6 +102,38 @@
         .cert-item{background:#ffffff;border-color:#e2ddd6;}
         .skill-chip{background:#f5f3f0;border-color:#d6d2cb;color:#4d5766;}
     </style>
+    <!-- RESPONSIVE OPTIMIZATION – added per requirements -->
+    <style>
+        @media screen and (max-width: 1024px) {
+            .toolbar { padding: 12px 20px; }
+            .brand { font-size: 18px; }
+            .btn-group { gap: 6px; }
+            .btn { padding: 8px 16px; font-size: 13px; }
+            .preview-scroll { transform: scale(0.7); }
+        }
+        @media screen and (max-width: 768px) {
+            body { overflow: auto; }
+            .editor { flex-direction: column; overflow: visible; }
+            .form-panel { width: 100%; border-right: none; border-bottom: 1px solid #eae5de; padding: 24px 20px; }
+            .preview-panel { padding: 24px 16px; }
+            .preview-scroll { width: 100%; transform: scale(0.65); }
+            .toolbar { flex-direction: column; align-items: stretch; gap: 12px; }
+            .toolbar-left, .toolbar-right { justify-content: center; }
+            .theme-control { align-self: center; }
+            .btn-group { flex-wrap: wrap; justify-content: center; }
+        }
+        @media screen and (max-width: 480px) {
+            .form-panel { padding: 20px 16px; }
+            .form-section { padding: 18px; }
+            .preview-panel { padding: 16px 8px; }
+            .preview-scroll { transform: scale(0.5); }
+            .btn { padding: 8px 12px; font-size: 12px; }
+            .brand { font-size: 16px; }
+            .brand svg { width: 24px; height: 24px; }
+            .theme-control { gap: 8px; padding: 4px 12px; }
+            .theme-selector { padding: 6px 24px 6px 12px; font-size: 12px; }
+        }
+    </style>
 </head>
 <body>
     <svg style="display:none;" xmlns="http://www.w3.org/2000/svg">
@@ -119,10 +151,12 @@
         <symbol id="icon-import" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
         <symbol id="icon-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
         <symbol id="icon-crop" viewBox="0 0 24 24"><path d="M6.13 1L6 16a2 2 0 0 0 2 2h15"/><path d="M1 6.13L16 6a2 2 0 0 1 2 2v15"/></symbol>
+        <!-- NEW: Icon for Resume Import -->
+        <symbol id="icon-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></symbol>
     </svg>
 
     <div class="toolbar no-print">
-        <div class="brand"><svg class="icon-lg"><use href="#icon-brand"></use></svg>ARC·RESUME</div>
+        <div class="brand"><svg class="icon-lg"><use href="#icon-brand"></use></svg>RESUME BUILDER</div>
         <div class="theme-control"><span style="color:#1a404f;font-weight:500;">Theme</span><select id="themeSelector" class="theme-selector"></select></div>
         <div class="btn-group">
             <button id="saveBtn" class="btn"><svg class="icon"><use href="#icon-save"></use></svg> Save</button>
@@ -130,6 +164,8 @@
             <button id="printBtn" class="btn"><svg class="icon"><use href="#icon-print"></use></svg> Print</button>
             <button id="atsBtn" class="btn btn-primary"><svg class="icon"><use href="#icon-ats"></use></svg> ATS</button>
             <button id="importBtn" class="btn"><svg class="icon"><use href="#icon-import"></use></svg> Import</button>
+            <!-- NEW: Import Resume button -->
+            <button id="importResumeBtn" class="btn"><svg class="icon"><use href="#icon-upload"></use></svg> Upload</button>
             <button id="downloadPdfBtn" class="btn"><svg class="icon"><use href="#icon-download"></use></svg> Download PDF</button>
         </div>
     </div>
@@ -213,6 +249,24 @@
             <div class="ai-actions">
                 <button id="cropCancelBtn" class="item-btn">Cancel</button>
                 <button id="cropSaveBtn" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Resume Import Modal -->
+    <div id="resumeImportModal" class="ai-modal no-print" style="display:none;">
+        <div class="ai-card">
+            <h3 style="display:flex;gap:8px;margin-bottom:12px;"><svg class="icon" style="stroke:#1a606f;"><use href="#icon-upload"></use></svg>Import from Resume</h3>
+            <p style="margin-bottom:16px;color:#347183;">Upload your existing resume (PDF, DOC, DOCX)</p>
+            <div style="display:flex; align-items:center; gap:16px; background:#f5f3f0; padding:16px; border-radius:40px; margin-bottom:20px; cursor:pointer;" onclick="document.getElementById('resumeFileInput').click()">
+                <svg class="icon"><use href="#icon-upload"></use></svg>
+                <span id="resumeUploadText">Choose file or drag here</span>
+            </div>
+            <input type="file" id="resumeFileInput" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none;">
+            <div id="resumeImportPreview" style="background:#f1f7fa;padding:16px;border-radius:16px;margin-bottom:16px;font-size:14px;max-height:250px;overflow-y:auto;"></div>
+            <div class="ai-actions">
+                <button id="resumeImportCancelBtn" class="item-btn">Cancel</button>
+                <button id="resumeImportApplyBtn" class="btn btn-primary" disabled>Apply Import</button>
             </div>
         </div>
     </div>
@@ -528,6 +582,128 @@
                         certifications: ['CSPO','Pragmatic Institute']
                     };
                 }
+            }
+
+            // ------------------------------------------------------------
+            //  RESUME IMPORT – MOCK EXTRACTION
+            // ------------------------------------------------------------
+            function parseResumeFile(file) {
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const fileName = file.name.toLowerCase();
+                        let mockData;
+                        if (fileName.includes('sarah')) {
+                            mockData = fetchLinkedInProfile('linkedin.com/in/sarah-chen');
+                        } else if (fileName.includes('marcus')) {
+                            mockData = fetchLinkedInProfile('linkedin.com/in/marcus-rivera');
+                        } else if (fileName.includes('alex')) {
+                            mockData = fetchLinkedInProfile('linkedin.com/in/alex-morgan');
+                        } else {
+                            mockData = {
+                                name: 'Jordan Lee',
+                                title: 'Product Manager',
+                                email: 'jordan.lee@example.com',
+                                phone: '+1 (555) 777-1234',
+                                location: 'Chicago, IL',
+                                summary: 'Product manager with 6 years of experience in B2B software.',
+                                experience: [
+                                    { role: 'Product Manager', company: 'TechSolutions', date: '2020 – present', bullets: ['Launched new analytics module','Increased user engagement by 25%'] },
+                                    { role: 'Associate Product Manager', company: 'StartupCo', date: '2017 – 2020', bullets: ['Managed product backlog','Coordinated with engineering teams'] }
+                                ],
+                                education: [
+                                    { degree: 'MBA', school: 'Northwestern University', year: '2017' },
+                                    { degree: 'B.S. Marketing', school: 'University of Illinois', year: '2013' }
+                                ],
+                                skills: ['Product Strategy', 'Agile', 'User Research', 'Roadmapping', 'Data Analysis'],
+                                certifications: ['CSPO']
+                            };
+                        }
+                        resolve(mockData);
+                    };
+                    reader.readAsDataURL(file); // just to trigger onload, we ignore content
+                });
+            }
+
+            let importedResumeData = null;
+            function setupResumeImportModal() {
+                const modal = document.getElementById('resumeImportModal');
+                const fileInput = document.getElementById('resumeFileInput');
+                const uploadText = document.getElementById('resumeUploadText');
+                const previewDiv = document.getElementById('resumeImportPreview');
+                const applyBtn = document.getElementById('resumeImportApplyBtn');
+                const cancelBtn = document.getElementById('resumeImportCancelBtn');
+
+                fileInput.addEventListener('change', async function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        uploadText.innerText = file.name;
+                        const profile = await parseResumeFile(file);
+                        importedResumeData = profile;
+                        let previewHtml = `<p><strong>Name:</strong> ${profile.name}</p>
+                                          <p><strong>Title:</strong> ${profile.title}</p>
+                                          <p><strong>Email:</strong> ${profile.email}</p>
+                                          <p><strong>Phone:</strong> ${profile.phone}</p>
+                                          <p><strong>Location:</strong> ${profile.location}</p>
+                                          <p><strong>Summary:</strong> ${profile.summary.substring(0,100)}...</p>
+                                          <p><strong>Experience:</strong> ${profile.experience.length} positions</p>
+                                          <p><strong>Education:</strong> ${profile.education.length} degrees</p>
+                                          <p><strong>Skills:</strong> ${profile.skills.join(', ')}</p>`;
+                        previewDiv.innerHTML = previewHtml;
+                        applyBtn.disabled = false;
+                    } else {
+                        uploadText.innerText = 'Choose file or drag here';
+                        previewDiv.innerHTML = '';
+                        applyBtn.disabled = true;
+                        importedResumeData = null;
+                    }
+                });
+
+                applyBtn.addEventListener('click', function() {
+                    if (importedResumeData) {
+                        state.name = importedResumeData.name;
+                        state.title = importedResumeData.title;
+                        state.email = importedResumeData.email;
+                        state.phone = importedResumeData.phone;
+                        state.location = importedResumeData.location;
+                        state.summary = importedResumeData.summary;
+                        state.experience = importedResumeData.experience.map((e,i) => ({ 
+                            id: `exp_import_${i}_${Date.now()}`, 
+                            role: e.role, 
+                            company: e.company, 
+                            date: e.date, 
+                            bullets: e.bullets 
+                        }));
+                        state.education = importedResumeData.education.map((e,i) => ({ 
+                            id: `edu_import_${i}_${Date.now()}`, 
+                            degree: e.degree, 
+                            school: e.school, 
+                            year: e.year 
+                        }));
+                        state.skills = importedResumeData.skills;
+                        if (importedResumeData.certifications) {
+                            state.certifications = importedResumeData.certifications;
+                        }
+                        renderForm();
+                        renderPreview();
+                        persist();
+                    }
+                    modal.style.display = 'none';
+                    fileInput.value = '';
+                    uploadText.innerText = 'Choose file or drag here';
+                    previewDiv.innerHTML = '';
+                    applyBtn.disabled = true;
+                    importedResumeData = null;
+                });
+
+                cancelBtn.addEventListener('click', function() {
+                    modal.style.display = 'none';
+                    fileInput.value = '';
+                    uploadText.innerText = 'Choose file or drag here';
+                    previewDiv.innerHTML = '';
+                    applyBtn.disabled = true;
+                    importedResumeData = null;
+                });
             }
 
             // ------------------------------------------------------------
@@ -1007,7 +1183,7 @@
                 setupCropEvents();
             }
 
-            // ---------- INIT (unchanged) ----------
+            // ---------- INIT (added resume import setup) ----------
             function init() {
                 const sel = document.getElementById('themeSelector');
                 THEMES.forEach(t => { let o = document.createElement('option'); o.value = t.id; o.textContent = t.name; if(t.id === state.activeTheme) o.selected = true; sel.appendChild(o); });
@@ -1044,8 +1220,13 @@
                 document.getElementById('importBtn').addEventListener('click', function() {
                     document.getElementById('importModal').style.display = 'flex';
                 });
+                // NEW: Resume Import button
+                document.getElementById('importResumeBtn').addEventListener('click', function() {
+                    document.getElementById('resumeImportModal').style.display = 'flex';
+                });
                 setupImportModal();
                 setupCropModal();
+                setupResumeImportModal();
                 persist();
             }
             init();
