@@ -72,6 +72,9 @@
         <symbol id="icon-ai" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="0.5" fill="currentColor"/></symbol>
         <symbol id="icon-drag" viewBox="0 0 24 24"><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="8" r="1"/><circle cx="15" cy="8" r="1"/><circle cx="9" cy="16" r="1"/><circle cx="15" cy="16" r="1"/></symbol>
         <symbol id="icon-predict" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></symbol>
+        <!-- NEW ICONS for Import and Download PDF -->
+        <symbol id="icon-import" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
+        <symbol id="icon-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
     </svg>
 
     <div class="toolbar no-print">
@@ -82,6 +85,9 @@
             <button id="resetBtn" class="btn"><svg class="icon"><use href="#icon-reset"></use></svg> Reset</button>
             <button id="printBtn" class="btn"><svg class="icon"><use href="#icon-print"></use></svg> Print</button>
             <button id="atsBtn" class="btn btn-primary"><svg class="icon"><use href="#icon-ats"></use></svg> ATS</button>
+            <!-- NEW BUTTONS: Import & Download PDF -->
+            <button id="importBtn" class="btn"><svg class="icon"><use href="#icon-import"></use></svg> Import</button>
+            <button id="downloadPdfBtn" class="btn"><svg class="icon"><use href="#icon-download"></use></svg> Download PDF</button>
         </div>
     </div>
 
@@ -102,6 +108,7 @@
         </div>
     </div>
 
+    <!-- AI Skill Modal (existing) -->
     <div id="aiSkillModal" class="ai-modal no-print" style="display:none;">
         <div class="ai-card">
             <h3 style="display:flex;gap:8px;margin-bottom:12px;"><svg class="icon" style="stroke:#1a606f;"><use href="#icon-predict"></use></svg>AI Skill Predictor</h3>
@@ -114,6 +121,7 @@
         </div>
     </div>
 
+    <!-- AI Writing Assistant Modal (existing) -->
     <div id="aiModal" class="ai-modal no-print" style="display:none;">
         <div class="ai-card">
             <h3 style="display:flex;gap:8px;margin-bottom:12px;"><svg class="icon" style="stroke:#1a606f;"><use href="#icon-ai"></use></svg>AI Writing Assistant</h3>
@@ -122,6 +130,21 @@
             <div class="ai-actions">
                 <button id="aiCancel" class="item-btn">Cancel</button>
                 <button id="aiApply" class="btn btn-primary">Apply Selected</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: LinkedIn Import Modal -->
+    <div id="importModal" class="ai-modal no-print" style="display:none;">
+        <div class="ai-card">
+            <h3 style="display:flex;gap:8px;margin-bottom:12px;"><svg class="icon" style="stroke:#1a606f;"><use href="#icon-import"></use></svg>Import from LinkedIn</h3>
+            <p style="margin-bottom:16px;color:#347183;">Enter your LinkedIn profile URL (e.g., https://www.linkedin.com/in/username/)</p>
+            <input type="text" id="linkedinUrl" placeholder="LinkedIn profile URL" style="width:100%;padding:14px 18px;border:1.8px solid #e3ecf2;border-radius:20px;margin-bottom:20px;">
+            <div id="importPreview" style="background:#f1f7fa;padding:16px;border-radius:16px;margin-bottom:16px;font-size:14px;max-height:200px;overflow-y:auto;"></div>
+            <div class="ai-actions">
+                <button id="importFetchBtn" class="btn">Fetch Profile</button>
+                <button id="importCancelBtn" class="item-btn">Cancel</button>
+                <button id="importApplyBtn" class="btn btn-primary" disabled>Apply Import</button>
             </div>
         </div>
     </div>
@@ -166,6 +189,101 @@
             function persist() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
             // ------------------------------------------------------------
+            //  PAGINATION ENGINE (for deterministic PDF output)
+            // ------------------------------------------------------------
+            function applyPagination() {
+                const resumeEl = document.querySelector('.resume');
+                if (!resumeEl) return;
+                // Remove any existing page-break classes
+                document.querySelectorAll('.page-break-before').forEach(el => el.classList.remove('page-break-before'));
+                
+                const children = Array.from(resumeEl.children);
+                let remainingSpace = 277; // A4 content height in mm (297mm - 10mm top - 10mm bottom)
+                const pxPerMm = 3.779527559;
+                
+                for (let i = 0; i < children.length; i++) {
+                    const el = children[i];
+                    const height = el.getBoundingClientRect().height / pxPerMm;
+                    if (height > remainingSpace && i > 0) {
+                        el.classList.add('page-break-before');
+                        remainingSpace = 277 - height;
+                    } else {
+                        remainingSpace -= height;
+                    }
+                }
+            }
+
+            // ------------------------------------------------------------
+            //  LINKEDIN IMPORT MOCK FUNCTION (simulated)
+            // ------------------------------------------------------------
+            function fetchLinkedInProfile(url) {
+                // Simulate parsing LinkedIn URL and generating profile data
+                let username = 'default';
+                if (url) {
+                    const match = url.match(/linkedin\.com\/in\/([^\/\?#]+)/i);
+                    if (match) username = match[1];
+                }
+                // Mock profiles based on username
+                if (username.includes('sarah')) {
+                    return {
+                        name: 'Sarah Chen',
+                        title: 'Product Design Lead',
+                        email: 'sarah.chen@example.com',
+                        phone: '+1 (555) 123-4567',
+                        location: 'Seattle, WA',
+                        summary: 'Product design leader with 8+ years in B2B SaaS. Expert in design systems and user research.',
+                        experience: [
+                            { role: 'Product Design Lead', company: 'TechFlow', date: '2020 – present', bullets: ['Led design for 3 core products', 'Scaled design system across 12 teams'] },
+                            { role: 'Senior UX Designer', company: 'InnovateLabs', date: '2017 – 2020', bullets: ['Redesigned dashboard increasing retention 22%', 'Conducted 50+ user interviews'] }
+                        ],
+                        education: [
+                            { degree: 'M.Des. Human Centered Design', school: 'University of Washington', year: '2017' }
+                        ],
+                        skills: ['Design Systems', 'Figma', 'User Research', 'Prototyping', 'Leadership'],
+                        certifications: ['NN/g UX Certified', 'Design Sprint Facilitator']
+                    };
+                } else if (username.includes('marcus')) {
+                    return {
+                        name: 'Marcus Rivera',
+                        title: 'Full Stack Developer',
+                        email: 'marcus.r@example.com',
+                        phone: '+1 (555) 987-6543',
+                        location: 'Austin, TX',
+                        summary: 'Full stack developer with 5 years experience in React, Node.js, and cloud infrastructure.',
+                        experience: [
+                            { role: 'Software Engineer', company: 'CloudScale', date: '2021 – present', bullets: ['Built microservices on AWS', 'Migrated legacy PHP to Node.js'] },
+                            { role: 'Junior Developer', company: 'StartupHub', date: '2018 – 2021', bullets: ['Developed REST APIs', 'Implemented CI/CD pipelines'] }
+                        ],
+                        education: [
+                            { degree: 'B.S. Computer Science', school: 'UT Austin', year: '2018' }
+                        ],
+                        skills: ['JavaScript', 'React', 'Node.js', 'AWS', 'Docker', 'Python'],
+                        certifications: ['AWS Certified Developer']
+                    };
+                } else {
+                    // Generic profile
+                    return {
+                        name: 'Alex Morgan',
+                        title: 'Senior Product Manager',
+                        email: 'alex.morgan@example.com',
+                        phone: '+1 (555) 321-7654',
+                        location: 'New York, NY',
+                        summary: 'Product manager with 7 years experience in fintech and mobile apps.',
+                        experience: [
+                            { role: 'Product Manager', company: 'FinCorp', date: '2019 – present', bullets: ['Launched mobile banking app with 500k users', 'Increased feature adoption by 40%'] },
+                            { role: 'Associate PM', company: 'TechStart', date: '2016 – 2019', bullets: ['Defined roadmap for analytics platform', 'Managed stakeholder expectations'] }
+                        ],
+                        education: [
+                            { degree: 'MBA', school: 'Columbia Business School', year: '2016' },
+                            { degree: 'B.A. Economics', school: 'NYU', year: '2012' }
+                        ],
+                        skills: ['Product Strategy', 'Agile', 'User Stories', 'Analytics', 'A/B Testing'],
+                        certifications: ['CSPO', 'Pragmatic Institute']
+                    };
+                }
+            }
+
+            // ------------------------------------------------------------
             //  10 TWO-COLUMN THEMES (fully distinct, modern, premium)
             // ------------------------------------------------------------
             const twoColThemes = [
@@ -202,7 +320,7 @@
                 ...singleThemes.map(t => ({ ...t, render: (d) => singleColumnRender(d, t.font, t.accent, t.bg, t.style) }))
             ];
 
-            // ---------- TWO-COLUMN RENDER (unchanged, already premium) ----------
+            // ---------- TWO-COLUMN RENDER ----------
             function twoColRender(d, accent, leftBg, font, bullet, cols, shadow, radius) {
                 return `<div class="resume" style="width:210mm; padding:12mm; background:white; display:grid; grid-template-columns:${cols}; gap:6mm 8mm; font-family:'${font}', sans-serif; line-height:1.5; color:#1e2b3c; box-shadow:${shadow}; border-radius:${radius};">
                     <div style="grid-column:1/-1; display:flex; align-items:center; gap:16px; margin-bottom:2mm;">
@@ -493,7 +611,7 @@
                     </div>`;
                 }
 
-                // fallback (should never reach)
+                // fallback
                 return `<div class="resume">${d.name}</div>`;
             }
 
@@ -504,7 +622,7 @@
             }
 
             // ------------------------------------------------------------
-            //  DYNAMIC FORM BUILDER (unchanged – full functionality)
+            //  DYNAMIC FORM BUILDER (unchanged)
             // ------------------------------------------------------------
             function renderForm() {
                 const container = document.getElementById('formPanel');
@@ -548,7 +666,7 @@
                 attachFormEvents();
             }
 
-            // ---------- ATTACH ALL EVENT LISTENERS (identical to original) ----------
+            // ---------- ATTACH ALL EVENT LISTENERS (unchanged) ----------
             function attachFormEvents() {
                 const pu = document.getElementById('profileUpload');
                 if(pu) pu.addEventListener('change', function(e){
@@ -809,7 +927,98 @@
 
             function printResume() { window.print(); }
 
-            // ---------- INIT (unchanged) ----------
+            // ------------------------------------------------------------
+            //  NEW: DOWNLOAD PDF (with deterministic pagination)
+            // ------------------------------------------------------------
+            function downloadPdf() {
+                applyPagination();
+                // Slight delay to ensure pagination classes are applied
+                setTimeout(() => {
+                    window.print();
+                }, 10);
+            }
+
+            // ------------------------------------------------------------
+            //  NEW: LINKEDIN IMPORT FLOW
+            // ------------------------------------------------------------
+            let importedProfileData = null;
+            function setupImportModal() {
+                const modal = document.getElementById('importModal');
+                const urlInput = document.getElementById('linkedinUrl');
+                const fetchBtn = document.getElementById('importFetchBtn');
+                const applyBtn = document.getElementById('importApplyBtn');
+                const cancelBtn = document.getElementById('importCancelBtn');
+                const previewDiv = document.getElementById('importPreview');
+
+                fetchBtn.addEventListener('click', function() {
+                    const url = urlInput.value.trim();
+                    if (!url) {
+                        previewDiv.innerHTML = '<p style="color:#b34a4a;">Please enter a LinkedIn URL.</p>';
+                        return;
+                    }
+                    const profile = fetchLinkedInProfile(url);
+                    importedProfileData = profile;
+                    // Show preview
+                    let previewHtml = `<p><strong>Name:</strong> ${profile.name}</p>
+                                      <p><strong>Title:</strong> ${profile.title}</p>
+                                      <p><strong>Email:</strong> ${profile.email}</p>
+                                      <p><strong>Phone:</strong> ${profile.phone}</p>
+                                      <p><strong>Location:</strong> ${profile.location}</p>
+                                      <p><strong>Summary:</strong> ${profile.summary.substring(0,100)}...</p>
+                                      <p><strong>Experience:</strong> ${profile.experience.length} positions</p>
+                                      <p><strong>Education:</strong> ${profile.education.length} degrees</p>
+                                      <p><strong>Skills:</strong> ${profile.skills.join(', ')}</p>`;
+                    previewDiv.innerHTML = previewHtml;
+                    applyBtn.disabled = false;
+                });
+
+                applyBtn.addEventListener('click', function() {
+                    if (importedProfileData) {
+                        // Overwrite state with imported data (explicit confirmation)
+                        state.name = importedProfileData.name;
+                        state.title = importedProfileData.title;
+                        state.email = importedProfileData.email;
+                        state.phone = importedProfileData.phone;
+                        state.location = importedProfileData.location;
+                        state.summary = importedProfileData.summary;
+                        state.experience = importedProfileData.experience.map((e, i) => ({
+                            id: `exp_import_${i}_${Date.now()}`,
+                            role: e.role,
+                            company: e.company,
+                            date: e.date,
+                            bullets: e.bullets
+                        }));
+                        state.education = importedProfileData.education.map((e, i) => ({
+                            id: `edu_import_${i}_${Date.now()}`,
+                            degree: e.degree,
+                            school: e.school,
+                            year: e.year
+                        }));
+                        state.skills = importedProfileData.skills;
+                        if (importedProfileData.certifications) {
+                            state.certifications = importedProfileData.certifications;
+                        }
+                        renderForm();
+                        renderPreview();
+                        persist();
+                    }
+                    modal.style.display = 'none';
+                    urlInput.value = '';
+                    previewDiv.innerHTML = '';
+                    applyBtn.disabled = true;
+                    importedProfileData = null;
+                });
+
+                cancelBtn.addEventListener('click', function() {
+                    modal.style.display = 'none';
+                    urlInput.value = '';
+                    previewDiv.innerHTML = '';
+                    applyBtn.disabled = true;
+                    importedProfileData = null;
+                });
+            }
+
+            // ---------- INIT (with new button handlers) ----------
             function init() {
                 const sel = document.getElementById('themeSelector');
                 THEMES.forEach(t => { let o = document.createElement('option'); o.value = t.id; o.textContent = t.name; if(t.id === state.activeTheme) o.selected = true; sel.appendChild(o); });
@@ -842,6 +1051,16 @@
                     document.getElementById('aiSkillModal').style.display = 'none';
                     selectedSkillSuggestions.clear();
                 });
+
+                // NEW: Download PDF button
+                document.getElementById('downloadPdfBtn').addEventListener('click', downloadPdf);
+                
+                // NEW: Import button
+                document.getElementById('importBtn').addEventListener('click', function() {
+                    document.getElementById('importModal').style.display = 'flex';
+                });
+                setupImportModal();
+
                 persist();
             }
             init();
