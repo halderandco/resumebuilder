@@ -563,41 +563,40 @@
                 }
             }
 
+            // ------------------------------------------------------------
+            //  HARDENED RESUME IMPORT – NO FILEREADER, BASED ONLY ON FILENAME
+            // ------------------------------------------------------------
             function parseResumeFile(file) {
                 return new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const fileName = file.name.toLowerCase();
-                        let mockData;
-                        if (fileName.includes('sarah')) {
-                            mockData = fetchLinkedInProfile('linkedin.com/in/sarah-chen');
-                        } else if (fileName.includes('marcus')) {
-                            mockData = fetchLinkedInProfile('linkedin.com/in/marcus-rivera');
-                        } else if (fileName.includes('alex')) {
-                            mockData = fetchLinkedInProfile('linkedin.com/in/alex-morgan');
-                        } else {
-                            mockData = {
-                                name: 'Jordan Lee',
-                                title: 'Product Manager',
-                                email: 'jordan.lee@example.com',
-                                phone: '+1 (555) 777-1234',
-                                location: 'Chicago, IL',
-                                summary: 'Product manager with 6 years of experience in B2B software.',
-                                experience: [
-                                    { role: 'Product Manager', company: 'TechSolutions', date: '2020 – present', bullets: ['Launched new analytics module','Increased user engagement by 25%'] },
-                                    { role: 'Associate Product Manager', company: 'StartupCo', date: '2017 – 2020', bullets: ['Managed product backlog','Coordinated with engineering teams'] }
-                                ],
-                                education: [
-                                    { degree: 'MBA', school: 'Northwestern University', year: '2017' },
-                                    { degree: 'B.S. Marketing', school: 'University of Illinois', year: '2013' }
-                                ],
-                                skills: ['Product Strategy', 'Agile', 'User Research', 'Roadmapping', 'Data Analysis'],
-                                certifications: ['CSPO']
-                            };
-                        }
-                        resolve(mockData);
-                    };
-                    reader.readAsDataURL(file);
+                    const fileName = file.name.toLowerCase();
+                    let mockData;
+                    if (fileName.includes('sarah')) {
+                        mockData = fetchLinkedInProfile('linkedin.com/in/sarah-chen');
+                    } else if (fileName.includes('marcus')) {
+                        mockData = fetchLinkedInProfile('linkedin.com/in/marcus-rivera');
+                    } else if (fileName.includes('alex')) {
+                        mockData = fetchLinkedInProfile('linkedin.com/in/alex-morgan');
+                    } else {
+                        mockData = {
+                            name: 'Jordan Lee',
+                            title: 'Product Manager',
+                            email: 'jordan.lee@example.com',
+                            phone: '+1 (555) 777-1234',
+                            location: 'Chicago, IL',
+                            summary: 'Product manager with 6 years of experience in B2B software.',
+                            experience: [
+                                { role: 'Product Manager', company: 'TechSolutions', date: '2020 – present', bullets: ['Launched new analytics module','Increased user engagement by 25%'] },
+                                { role: 'Associate Product Manager', company: 'StartupCo', date: '2017 – 2020', bullets: ['Managed product backlog','Coordinated with engineering teams'] }
+                            ],
+                            education: [
+                                { degree: 'MBA', school: 'Northwestern University', year: '2017' },
+                                { degree: 'B.S. Marketing', school: 'University of Illinois', year: '2013' }
+                            ],
+                            skills: ['Product Strategy', 'Agile', 'User Research', 'Roadmapping', 'Data Analysis'],
+                            certifications: ['CSPO']
+                        };
+                    }
+                    resolve(mockData);
                 });
             }
 
