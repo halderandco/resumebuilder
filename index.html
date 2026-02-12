@@ -146,10 +146,8 @@
         <symbol id="icon-ai" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="0.5" fill="currentColor"/></symbol>
         <symbol id="icon-drag" viewBox="0 0 24 24"><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="8" r="1"/><circle cx="15" cy="8" r="1"/><circle cx="9" cy="16" r="1"/><circle cx="15" cy="16" r="1"/></symbol>
         <symbol id="icon-predict" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></symbol>
-        <symbol id="icon-import" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
         <symbol id="icon-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
         <symbol id="icon-crop" viewBox="0 0 24 24"><path d="M6.13 1L6 16a2 2 0 0 0 2 2h15"/><path d="M1 6.13L16 6a2 2 0 0 1 2 2v15"/></symbol>
-        <symbol id="icon-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></symbol>
     </svg>
 
     <div class="toolbar no-print">
@@ -160,8 +158,6 @@
             <button id="resetBtn" class="btn"><svg class="icon"><use href="#icon-reset"></use></svg> Reset</button>
             <button id="printBtn" class="btn"><svg class="icon"><use href="#icon-print"></use></svg> Print</button>
             <button id="atsBtn" class="btn btn-primary"><svg class="icon"><use href="#icon-ats"></use></svg> ATS</button>
-            <button id="importBtn" class="btn"><svg class="icon"><use href="#icon-import"></use></svg> Import</button>
-            <button id="importResumeBtn" class="btn"><svg class="icon"><use href="#icon-upload"></use></svg> Upload</button>
             <button id="downloadPdfBtn" class="btn"><svg class="icon"><use href="#icon-download"></use></svg> Download PDF</button>
         </div>
     </div>
@@ -207,20 +203,6 @@
         </div>
     </div>
 
-    <div id="importModal" class="ai-modal no-print" style="display:none;">
-        <div class="ai-card">
-            <h3 style="display:flex;gap:8px;margin-bottom:12px;"><svg class="icon" style="stroke:#1a606f;"><use href="#icon-import"></use></svg>Import from LinkedIn</h3>
-            <p style="margin-bottom:16px;color:#347183;">Enter your LinkedIn profile URL</p>
-            <input type="text" id="linkedinUrl" placeholder="https://www.linkedin.com/in/username/" style="width:100%;padding:14px 18px;border:1.8px solid #e3ecf2;border-radius:20px;margin-bottom:20px;">
-            <div id="importPreview" style="background:#f1f7fa;padding:16px;border-radius:16px;margin-bottom:16px;font-size:14px;max-height:200px;overflow-y:auto;"></div>
-            <div class="ai-actions">
-                <button id="importFetchBtn" class="btn">Fetch Profile</button>
-                <button id="importCancelBtn" class="item-btn">Cancel</button>
-                <button id="importApplyBtn" class="btn btn-primary" disabled>Apply Import</button>
-            </div>
-        </div>
-    </div>
-
     <div id="cropModal" class="ai-modal no-print" style="display:none;">
         <div class="ai-card" style="width:640px;">
             <h3 style="display:flex;gap:8px;margin-bottom:12px;"><svg class="icon" style="stroke:#1a606f;"><use href="#icon-crop"></use></svg>Crop Profile Picture</h3>
@@ -241,23 +223,6 @@
             <div class="ai-actions">
                 <button id="cropCancelBtn" class="item-btn">Cancel</button>
                 <button id="cropSaveBtn" class="btn btn-primary">Save</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="resumeImportModal" class="ai-modal no-print" style="display:none;">
-        <div class="ai-card">
-            <h3 style="display:flex;gap:8px;margin-bottom:12px;"><svg class="icon" style="stroke:#1a606f;"><use href="#icon-upload"></use></svg>Import from Resume</h3>
-            <p style="margin-bottom:16px;color:#347183;">Upload your existing resume (PDF, DOC, DOCX)</p>
-            <div style="display:flex; align-items:center; gap:16px; background:#f5f3f0; padding:16px; border-radius:40px; margin-bottom:20px; cursor:pointer;" onclick="document.getElementById('resumeFileInput').click()">
-                <svg class="icon"><use href="#icon-upload"></use></svg>
-                <span id="resumeUploadText">Choose file or drag here</span>
-            </div>
-            <input type="file" id="resumeFileInput" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none;">
-            <div id="resumeImportPreview" style="background:#f1f7fa;padding:16px;border-radius:16px;margin-bottom:16px;font-size:14px;max-height:250px;overflow-y:auto;"></div>
-            <div class="ai-actions">
-                <button id="resumeImportCancelBtn" class="item-btn">Cancel</button>
-                <button id="resumeImportApplyBtn" class="btn btn-primary" disabled>Apply Import</button>
             </div>
         </div>
     </div>
@@ -527,160 +492,6 @@
                 document.getElementById('cropModal').style.display = 'none';
             }
 
-            function fetchLinkedInProfile(url) {
-                let username = 'default';
-                if (url) { const match = url.match(/linkedin\.com\/in\/([^\/\?#]+)/i); if (match) username = match[1]; }
-                if (username.includes('sarah')) {
-                    return {
-                        name: 'Sarah Chen', title: 'Product Design Lead', email: 'sarah.chen@example.com',
-                        phone: '+1 (555) 123-4567', location: 'Seattle, WA',
-                        summary: 'Product design leader with 8+ years in B2B SaaS. Expert in design systems and user research.',
-                        experience: [ { role: 'Product Design Lead', company: 'TechFlow', date: '2020 – present', bullets: ['Led design for 3 core products','Scaled design system across 12 teams'] }, { role: 'Senior UX Designer', company: 'InnovateLabs', date: '2017 – 2020', bullets: ['Redesigned dashboard increasing retention 22%','Conducted 50+ user interviews'] } ],
-                        education: [ { degree: 'M.Des. Human Centered Design', school: 'University of Washington', year: '2017' } ],
-                        skills: ['Design Systems','Figma','User Research','Prototyping','Leadership'],
-                        certifications: ['NN/g UX Certified','Design Sprint Facilitator']
-                    };
-                } else if (username.includes('marcus')) {
-                    return {
-                        name: 'Marcus Rivera', title: 'Full Stack Developer', email: 'marcus.r@example.com',
-                        phone: '+1 (555) 987-6543', location: 'Austin, TX',
-                        summary: 'Full stack developer with 5 years experience in React, Node.js, and cloud infrastructure.',
-                        experience: [ { role: 'Software Engineer', company: 'CloudScale', date: '2021 – present', bullets: ['Built microservices on AWS','Migrated legacy PHP to Node.js'] }, { role: 'Junior Developer', company: 'StartupHub', date: '2018 – 2021', bullets: ['Developed REST APIs','Implemented CI/CD pipelines'] } ],
-                        education: [ { degree: 'B.S. Computer Science', school: 'UT Austin', year: '2018' } ],
-                        skills: ['JavaScript','React','Node.js','AWS','Docker','Python'],
-                        certifications: ['AWS Certified Developer']
-                    };
-                } else {
-                    return {
-                        name: 'Alex Morgan', title: 'Senior Product Manager', email: 'alex.morgan@example.com',
-                        phone: '+1 (555) 321-7654', location: 'New York, NY',
-                        summary: 'Product manager with 7 years experience in fintech and mobile apps.',
-                        experience: [ { role: 'Product Manager', company: 'FinCorp', date: '2019 – present', bullets: ['Launched mobile banking app with 500k users','Increased feature adoption by 40%'] }, { role: 'Associate PM', company: 'TechStart', date: '2016 – 2019', bullets: ['Defined roadmap for analytics platform','Managed stakeholder expectations'] } ],
-                        education: [ { degree: 'MBA', school: 'Columbia Business School', year: '2016' }, { degree: 'B.A. Economics', school: 'NYU', year: '2012' } ],
-                        skills: ['Product Strategy','Agile','User Stories','Analytics','A/B Testing'],
-                        certifications: ['CSPO','Pragmatic Institute']
-                    };
-                }
-            }
-
-            // ------------------------------------------------------------
-            //  HARDENED RESUME IMPORT – NO FILEREADER, BASED ONLY ON FILENAME
-            // ------------------------------------------------------------
-            function parseResumeFile(file) {
-                return new Promise((resolve) => {
-                    const fileName = file.name.toLowerCase();
-                    let mockData;
-                    if (fileName.includes('sarah')) {
-                        mockData = fetchLinkedInProfile('linkedin.com/in/sarah-chen');
-                    } else if (fileName.includes('marcus')) {
-                        mockData = fetchLinkedInProfile('linkedin.com/in/marcus-rivera');
-                    } else if (fileName.includes('alex')) {
-                        mockData = fetchLinkedInProfile('linkedin.com/in/alex-morgan');
-                    } else {
-                        mockData = {
-                            name: 'Jordan Lee',
-                            title: 'Product Manager',
-                            email: 'jordan.lee@example.com',
-                            phone: '+1 (555) 777-1234',
-                            location: 'Chicago, IL',
-                            summary: 'Product manager with 6 years of experience in B2B software.',
-                            experience: [
-                                { role: 'Product Manager', company: 'TechSolutions', date: '2020 – present', bullets: ['Launched new analytics module','Increased user engagement by 25%'] },
-                                { role: 'Associate Product Manager', company: 'StartupCo', date: '2017 – 2020', bullets: ['Managed product backlog','Coordinated with engineering teams'] }
-                            ],
-                            education: [
-                                { degree: 'MBA', school: 'Northwestern University', year: '2017' },
-                                { degree: 'B.S. Marketing', school: 'University of Illinois', year: '2013' }
-                            ],
-                            skills: ['Product Strategy', 'Agile', 'User Research', 'Roadmapping', 'Data Analysis'],
-                            certifications: ['CSPO']
-                        };
-                    }
-                    resolve(mockData);
-                });
-            }
-
-            let importedResumeData = null;
-            function setupResumeImportModal() {
-                const modal = document.getElementById('resumeImportModal');
-                const fileInput = document.getElementById('resumeFileInput');
-                const uploadText = document.getElementById('resumeUploadText');
-                const previewDiv = document.getElementById('resumeImportPreview');
-                const applyBtn = document.getElementById('resumeImportApplyBtn');
-                const cancelBtn = document.getElementById('resumeImportCancelBtn');
-
-                fileInput.addEventListener('change', async function(e) {
-                    const file = e.target.files[0];
-                    if (file) {
-                        uploadText.innerText = file.name;
-                        const profile = await parseResumeFile(file);
-                        importedResumeData = profile;
-                        let previewHtml = `<p><strong>Name:</strong> ${profile.name}</p>
-                                          <p><strong>Title:</strong> ${profile.title}</p>
-                                          <p><strong>Email:</strong> ${profile.email}</p>
-                                          <p><strong>Phone:</strong> ${profile.phone}</p>
-                                          <p><strong>Location:</strong> ${profile.location}</p>
-                                          <p><strong>Summary:</strong> ${profile.summary.substring(0,100)}...</p>
-                                          <p><strong>Experience:</strong> ${profile.experience.length} positions</p>
-                                          <p><strong>Education:</strong> ${profile.education.length} degrees</p>
-                                          <p><strong>Skills:</strong> ${profile.skills.join(', ')}</p>`;
-                        previewDiv.innerHTML = previewHtml;
-                        applyBtn.disabled = false;
-                    } else {
-                        uploadText.innerText = 'Choose file or drag here';
-                        previewDiv.innerHTML = '';
-                        applyBtn.disabled = true;
-                        importedResumeData = null;
-                    }
-                });
-
-                applyBtn.addEventListener('click', function() {
-                    if (importedResumeData) {
-                        state.name = importedResumeData.name;
-                        state.title = importedResumeData.title;
-                        state.email = importedResumeData.email;
-                        state.phone = importedResumeData.phone;
-                        state.location = importedResumeData.location;
-                        state.summary = importedResumeData.summary;
-                        state.experience = importedResumeData.experience.map((e,i) => ({ 
-                            id: `exp_import_${i}_${Date.now()}`, 
-                            role: e.role, 
-                            company: e.company, 
-                            date: e.date, 
-                            bullets: e.bullets 
-                        }));
-                        state.education = importedResumeData.education.map((e,i) => ({ 
-                            id: `edu_import_${i}_${Date.now()}`, 
-                            degree: e.degree, 
-                            school: e.school, 
-                            year: e.year 
-                        }));
-                        state.skills = importedResumeData.skills;
-                        if (importedResumeData.certifications) {
-                            state.certifications = importedResumeData.certifications;
-                        }
-                        renderForm();
-                        renderPreview();
-                        persist();
-                    }
-                    modal.style.display = 'none';
-                    fileInput.value = '';
-                    uploadText.innerText = 'Choose file or drag here';
-                    previewDiv.innerHTML = '';
-                    applyBtn.disabled = true;
-                    importedResumeData = null;
-                });
-
-                cancelBtn.addEventListener('click', function() {
-                    modal.style.display = 'none';
-                    fileInput.value = '';
-                    uploadText.innerText = 'Choose file or drag here';
-                    previewDiv.innerHTML = '';
-                    applyBtn.disabled = true;
-                    importedResumeData = null;
-                });
-            }
-
             const twoColThemes = [
                 { id: 'theme2c1', name: '2C · Ocean Splash', accent: '#0b5e7c', leftBg: '#e3f0f5', font: 'Inter', bullet: '▹', cols: '1fr 2.2fr', shadow: '0 8px 20px rgba(11,94,124,0.08)', radius: '16px' },
                 { id: 'theme2c2', name: '2C · Golden Hour', accent: '#b86f2c', leftBg: '#fff1e0', font: 'DM Sans', bullet: '◆', cols: '1.2fr 1.8fr', shadow: '0 8px 24px rgba(184,111,44,0.06)', radius: '20px' },
@@ -819,7 +630,9 @@
                 } else if (style === 'creative') {
                     headerHtml = `<div style="display:flex; align-items:center; gap:16px; margin-bottom:6mm;">${d.profileImage?`<img src="${d.profileImage}" style="width:70px;height:70px;border-radius:50%;border:3px solid ${accent};">`:''}<div><h1 style="font-size:38pt; font-weight:700; color:${accent}; line-height:1;">${d.name}</h1><p style="font-size:16pt; font-weight:500; color:#5d707f;">${d.title}</p></div></div>`;
                 } else if (style === 'dark') {
-                    headerHtml = `<div style="display:flex; align-items:center; gap:16px; margin-bottom:6mm;">${d.profileImage?`<img src="${d.profileImage}" style="width:70px;height:70px;border-radius:50%;border:3px solid ${accent};">`:''}<div><h1 style="font-size:40pt; font-weight:600; color:${accent}; letter-spacing:-0.5px;">${d.name}</h1><p style="font-size:18pt; font-weight:300; color:#cbd5e1;">${d.title}</p></div></div>`;
+                    // Enhanced contrast: darker background, lighter text preserved
+                    const darkBase = `width:210mm; padding:15mm 18mm; background:#0a1a1f; color:#e2eef2; font-family:'${font}', serif; line-height:1.6;`;
+                    return `<div class="resume" style="${darkBase}"><div style="display:flex; align-items:center; gap:16px; margin-bottom:6mm;">${d.profileImage?`<img src="${d.profileImage}" style="width:70px;height:70px;border-radius:50%;border:3px solid ${accent};">`:''}<div><h1 style="font-size:40pt; font-weight:600; color:${accent}; letter-spacing:-0.5px;">${d.name}</h1><p style="font-size:18pt; font-weight:300; color:#cbd5e1;">${d.title}</p></div></div><div style="display:flex; gap:8mm; border-bottom:1px solid ${accent}60; padding-bottom:4mm; margin-bottom:6mm; color:#aac3d4;">${[d.email, d.phone, d.location].join(' · ')}</div>${d.visibility.profile?`<p style="font-size:12pt; line-height:1.7; margin-bottom:6mm; color:#d1dfe8;">${d.summary}</p>`:''}${d.visibility.experience?`<section style="margin-bottom:5mm;"><h2 style="font-size:18pt; font-weight:500; color:${accent}; border-bottom:1px solid ${accent}60; padding-bottom:2mm;">EXPERIENCE</h2>${d.experience.map(job=>`<div style="margin-bottom:5mm;"><div style="display:flex; justify-content:space-between; font-weight:600;"><span style="color:#e6d8b5;">${job.role}</span><span>${job.company}</span><span>${job.date}</span></div><ul style="list-style:none; padding-left:2mm;">${job.bullets.map(b=>`<li style="position:relative; padding-left:4mm; margin-bottom:1mm;"><span style="position:absolute; left:0; color:${accent};">✦</span>${b}</li>`).join('')}</ul></div>`).join('')}</section>`:''}${d.visibility.education?`<section><h2 style="font-size:18pt; font-weight:500; color:${accent}; border-bottom:1px solid ${accent}60; padding-bottom:2mm;">EDUCATION</h2>${d.education.map(edu=>`<div><span style="font-weight:600;">${edu.degree}</span>, ${edu.school} (${edu.year})</div>`).join('')}</section>`:''}${d.visibility.skills?`<section style="margin-top:4mm;"><h2 style="font-size:18pt; font-weight:500; color:${accent}; border-bottom:1px solid ${accent}60; padding-bottom:2mm;">SKILLS</h2><div style="display:flex; flex-wrap:wrap; gap:2mm;">${d.skills.map(s=>`<span style="background:#2a4048; padding:2mm 4mm; border-radius:20px; color:#e2eef2;">${s}</span>`).join('')}</div></section>`:''}</div>`;
                 } else if (style === 'mono') {
                     headerHtml = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6mm;"><h1 style="font-size:32pt; font-weight:700; color:${accent};">${d.name}</h1>${d.profileImage?`<img src="${d.profileImage}" style="width:60px;height:60px;border-radius:0;border:2px solid ${accent};">`:''}</div><div style="background:#eef6f9; padding:4mm; margin-bottom:5mm;"><p style="font-size:14pt; font-weight:600;">> ${d.title}</p><p>> ${d.email}  |  ${d.phone}  |  ${d.location}</p></div>`;
                 } else if (style === 'classic') {
@@ -840,7 +653,7 @@
                 } else if (style === 'creative') {
                     contactHtml = `<div style="display:flex; flex-wrap:wrap; gap:4mm 8mm; background:${accent}08; padding:4mm 6mm; border-radius:40px; margin-bottom:6mm;">${[d.email, d.phone, d.location].map(i=>`<span style="color:${accent};">${i}</span>`).join(' · ')}</div>`;
                 } else if (style === 'dark') {
-                    contactHtml = `<div style="display:flex; gap:8mm; border-bottom:1px solid ${accent}60; padding-bottom:4mm; margin-bottom:6mm; color:#aac3d4;">${[d.email, d.phone, d.location].join(' · ')}</div>`;
+                    // handled inside dark case
                 } else if (style === 'classic') {
                     contactHtml = `<div style="display:flex; gap:6mm; font-size:11pt; border-top:1px solid ${accent}80; border-bottom:1px solid ${accent}80; padding:3mm 0; margin-bottom:5mm;">${[d.email, d.phone, d.location].join(' · ')}</div>`;
                 } else if (style === 'linen') {
@@ -851,6 +664,11 @@
                     contactHtml = `<div style="display:flex; gap:6mm; font-size:10.5pt; color:#657b89; margin-bottom:5mm; border-bottom:1px solid #cbd7e0; padding-bottom:3mm;">${[d.email, d.phone, d.location].join(' | ')}</div>`;
                 } else {
                     contactHtml = `<div style="display:flex; flex-wrap:wrap; gap:6mm 12mm; margin-bottom:6mm; font-size:11pt; color:#3a5e6c; border-bottom:1px solid ${accent}40; padding-bottom:4mm;">${[d.email, d.phone, d.location].join(' · ')}</div>`;
+                }
+
+                if (style === 'dark') {
+                    // already returned full HTML
+                    return '';
                 }
 
                 let sectionsHtml = '';
@@ -1200,46 +1018,6 @@
             function printResume() { window.print(); }
             function downloadPdf() { applyPagination(); setTimeout(() => { window.print(); }, 10); }
 
-            let importedProfileData = null;
-            function setupImportModal() {
-                const modal = document.getElementById('importModal');
-                const urlInput = document.getElementById('linkedinUrl');
-                const fetchBtn = document.getElementById('importFetchBtn');
-                const applyBtn = document.getElementById('importApplyBtn');
-                const cancelBtn = document.getElementById('importCancelBtn');
-                const previewDiv = document.getElementById('importPreview');
-                fetchBtn.addEventListener('click', function() {
-                    const url = urlInput.value.trim();
-                    if (!url) { previewDiv.innerHTML = '<p style="color:#b34a4a;">Please enter a LinkedIn URL.</p>'; return; }
-                    const profile = fetchLinkedInProfile(url);
-                    importedProfileData = profile;
-                    let previewHtml = `<p><strong>Name:</strong> ${profile.name}</p><p><strong>Title:</strong> ${profile.title}</p><p><strong>Email:</strong> ${profile.email}</p><p><strong>Phone:</strong> ${profile.phone}</p><p><strong>Location:</strong> ${profile.location}</p><p><strong>Summary:</strong> ${profile.summary.substring(0,100)}...</p><p><strong>Experience:</strong> ${profile.experience.length} positions</p><p><strong>Education:</strong> ${profile.education.length} degrees</p><p><strong>Skills:</strong> ${profile.skills.join(', ')}</p>`;
-                    previewDiv.innerHTML = previewHtml;
-                    applyBtn.disabled = false;
-                });
-                applyBtn.addEventListener('click', function() {
-                    if (importedProfileData) {
-                        state.name = importedProfileData.name;
-                        state.title = importedProfileData.title;
-                        state.email = importedProfileData.email;
-                        state.phone = importedProfileData.phone;
-                        state.location = importedProfileData.location;
-                        state.summary = importedProfileData.summary;
-                        state.experience = importedProfileData.experience.map((e,i) => ({ id: `exp_import_${i}_${Date.now()}`, role: e.role, company: e.company, date: e.date, bullets: e.bullets }));
-                        state.education = importedProfileData.education.map((e,i) => ({ id: `edu_import_${i}_${Date.now()}`, degree: e.degree, school: e.school, year: e.year }));
-                        state.skills = importedProfileData.skills;
-                        if (importedProfileData.certifications) state.certifications = importedProfileData.certifications;
-                        renderForm(); renderPreview(); persist();
-                    }
-                    modal.style.display = 'none';
-                    urlInput.value = ''; previewDiv.innerHTML = ''; applyBtn.disabled = true; importedProfileData = null;
-                });
-                cancelBtn.addEventListener('click', function() {
-                    modal.style.display = 'none';
-                    urlInput.value = ''; previewDiv.innerHTML = ''; applyBtn.disabled = true; importedProfileData = null;
-                });
-            }
-
             function setupCropModal() {
                 const modal = document.getElementById('cropModal');
                 document.getElementById('cropCancelBtn').addEventListener('click', () => modal.style.display = 'none');
@@ -1280,15 +1058,7 @@
                     document.getElementById('aiSkillModal').style.display = 'none';
                     selectedSkillSuggestions.clear();
                 });
-                document.getElementById('importBtn').addEventListener('click', function() {
-                    document.getElementById('importModal').style.display = 'flex';
-                });
-                document.getElementById('importResumeBtn').addEventListener('click', function() {
-                    document.getElementById('resumeImportModal').style.display = 'flex';
-                });
-                setupImportModal();
                 setupCropModal();
-                setupResumeImportModal();
                 persist();
             }
             init();
