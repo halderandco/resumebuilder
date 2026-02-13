@@ -132,6 +132,55 @@
             .theme-selector { padding: 6px 24px 6px 12px; font-size: 12px; }
         }
     </style>
+    <!-- ===== FIXED PRINT STYLES – professional margins, zero page margins, perfect alignment ===== -->
+    <style>
+        @media print {
+            @page {
+                margin: 0;
+                size: A4;
+            }
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .toolbar, .form-panel, .ats-card, .preview-panel > :not(.preview-scroll), .no-print {
+                display: none !important;
+            }
+            .preview-panel {
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                display: block !important;
+                width: 100% !important;
+                height: auto !important;
+            }
+            .preview-scroll {
+                transform: none !important;
+                width: 210mm !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                background: white !important;
+            }
+            .resume {
+                margin: 0 !important;
+                width: 210mm !important;
+                min-height: 297mm !important;
+                box-sizing: border-box !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
+        }
+    </style>
+    <!-- ===== END FIXED PRINT STYLES ===== -->
 </head>
 <body>
     <svg style="display:none;" xmlns="http://www.w3.org/2000/svg">
@@ -266,24 +315,36 @@
 
             function persist() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
+            // ===== FIXED PAGINATION – dynamic, theme‑aware, professional =====
             function applyPagination() {
                 const resumeEl = document.querySelector('.resume');
                 if (!resumeEl) return;
                 document.querySelectorAll('.page-break-before').forEach(el => el.classList.remove('page-break-before'));
                 const children = Array.from(resumeEl.children);
-                let remainingSpace = 277;
+                
+                // Get the resume's own padding – this respects each theme's unique internal margins
+                const style = window.getComputedStyle(resumeEl);
+                const pt = parseFloat(style.paddingTop) || 0;
+                const pb = parseFloat(style.paddingBottom) || 0;
                 const pxPerMm = 3.779527559;
+                const paddingTopMm = pt / pxPerMm;
+                const paddingBottomMm = pb / pxPerMm;
+                // A4 height = 297mm. Available space is page height minus top/bottom padding.
+                const availableHeight = 297 - paddingTopMm - paddingBottomMm;
+                let remainingSpace = availableHeight;
+                
                 for (let i = 0; i < children.length; i++) {
                     const el = children[i];
                     const height = el.getBoundingClientRect().height / pxPerMm;
                     if (height > remainingSpace && i > 0) {
                         el.classList.add('page-break-before');
-                        remainingSpace = 277 - height;
+                        remainingSpace = availableHeight - height;
                     } else {
                         remainingSpace -= height;
                     }
                 }
             }
+            // ===== END FIXED PAGINATION =====
 
             let cropState = {
                 image: null,
@@ -336,25 +397,27 @@
                 const ctx = canvas.getContext('2d');
                 const img = new Image();
                 img.onload = function() {
+                    modal.style.display = 'flex';
+
                     cropState.image = img;
                     cropState.imgWidth = img.width;
                     cropState.imgHeight = img.height;
                     cropState.canvas = canvas;
                     cropState.ctx = ctx;
-                    
+
                     const container = document.getElementById('cropContainer');
                     const containerWidth = container.clientWidth;
                     const containerHeight = 400;
                     canvas.width = containerWidth;
                     canvas.height = containerHeight;
-                    
+
                     const ratio = Math.min(containerWidth / img.width, containerHeight / img.height);
                     cropState.displayWidth = img.width * ratio;
                     cropState.displayHeight = img.height * ratio;
                     cropState.offsetX = (containerWidth - cropState.displayWidth) / 2;
                     cropState.offsetY = (containerHeight - cropState.displayHeight) / 2;
                     cropState.scale = ratio;
-                    
+
                     const size = Math.min(cropState.displayWidth, cropState.displayHeight) * 0.7;
                     cropState.cropBox = {
                         x: cropState.offsetX + (cropState.displayWidth - size) / 2,
@@ -362,10 +425,9 @@
                         w: size,
                         h: size
                     };
-                    
+
                     drawCropCanvas();
                     updateCropBoxDiv();
-                    modal.style.display = 'flex';
                 };
                 img.src = imageDataUrl;
             }
@@ -630,7 +692,6 @@
                 } else if (style === 'creative') {
                     headerHtml = `<div style="display:flex; align-items:center; gap:16px; margin-bottom:6mm;">${d.profileImage?`<img src="${d.profileImage}" style="width:70px;height:70px;border-radius:50%;border:3px solid ${accent};">`:''}<div><h1 style="font-size:38pt; font-weight:700; color:${accent}; line-height:1;">${d.name}</h1><p style="font-size:16pt; font-weight:500; color:#5d707f;">${d.title}</p></div></div>`;
                 } else if (style === 'dark') {
-                    // Enhanced contrast: darker background, lighter text preserved
                     const darkBase = `width:210mm; padding:15mm 18mm; background:#0a1a1f; color:#e2eef2; font-family:'${font}', serif; line-height:1.6;`;
                     return `<div class="resume" style="${darkBase}"><div style="display:flex; align-items:center; gap:16px; margin-bottom:6mm;">${d.profileImage?`<img src="${d.profileImage}" style="width:70px;height:70px;border-radius:50%;border:3px solid ${accent};">`:''}<div><h1 style="font-size:40pt; font-weight:600; color:${accent}; letter-spacing:-0.5px;">${d.name}</h1><p style="font-size:18pt; font-weight:300; color:#cbd5e1;">${d.title}</p></div></div><div style="display:flex; gap:8mm; border-bottom:1px solid ${accent}60; padding-bottom:4mm; margin-bottom:6mm; color:#aac3d4;">${[d.email, d.phone, d.location].join(' · ')}</div>${d.visibility.profile?`<p style="font-size:12pt; line-height:1.7; margin-bottom:6mm; color:#d1dfe8;">${d.summary}</p>`:''}${d.visibility.experience?`<section style="margin-bottom:5mm;"><h2 style="font-size:18pt; font-weight:500; color:${accent}; border-bottom:1px solid ${accent}60; padding-bottom:2mm;">EXPERIENCE</h2>${d.experience.map(job=>`<div style="margin-bottom:5mm;"><div style="display:flex; justify-content:space-between; font-weight:600;"><span style="color:#e6d8b5;">${job.role}</span><span>${job.company}</span><span>${job.date}</span></div><ul style="list-style:none; padding-left:2mm;">${job.bullets.map(b=>`<li style="position:relative; padding-left:4mm; margin-bottom:1mm;"><span style="position:absolute; left:0; color:${accent};">✦</span>${b}</li>`).join('')}</ul></div>`).join('')}</section>`:''}${d.visibility.education?`<section><h2 style="font-size:18pt; font-weight:500; color:${accent}; border-bottom:1px solid ${accent}60; padding-bottom:2mm;">EDUCATION</h2>${d.education.map(edu=>`<div><span style="font-weight:600;">${edu.degree}</span>, ${edu.school} (${edu.year})</div>`).join('')}</section>`:''}${d.visibility.skills?`<section style="margin-top:4mm;"><h2 style="font-size:18pt; font-weight:500; color:${accent}; border-bottom:1px solid ${accent}60; padding-bottom:2mm;">SKILLS</h2><div style="display:flex; flex-wrap:wrap; gap:2mm;">${d.skills.map(s=>`<span style="background:#2a4048; padding:2mm 4mm; border-radius:20px; color:#e2eef2;">${s}</span>`).join('')}</div></section>`:''}</div>`;
                 } else if (style === 'mono') {
@@ -653,7 +714,6 @@
                 } else if (style === 'creative') {
                     contactHtml = `<div style="display:flex; flex-wrap:wrap; gap:4mm 8mm; background:${accent}08; padding:4mm 6mm; border-radius:40px; margin-bottom:6mm;">${[d.email, d.phone, d.location].map(i=>`<span style="color:${accent};">${i}</span>`).join(' · ')}</div>`;
                 } else if (style === 'dark') {
-                    // handled inside dark case
                 } else if (style === 'classic') {
                     contactHtml = `<div style="display:flex; gap:6mm; font-size:11pt; border-top:1px solid ${accent}80; border-bottom:1px solid ${accent}80; padding:3mm 0; margin-bottom:5mm;">${[d.email, d.phone, d.location].join(' · ')}</div>`;
                 } else if (style === 'linen') {
@@ -667,7 +727,6 @@
                 }
 
                 if (style === 'dark') {
-                    // already returned full HTML
                     return '';
                 }
 
