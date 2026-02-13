@@ -59,9 +59,9 @@
         .cert-item{background:#f7fcff;border-radius:18px;padding:16px;margin-bottom:12px;display:flex;align-items:center;gap:12px;border:1px solid #d4e7ef;}
         .cert-input{flex:1;}
         .skill-chip{background:#eaf3f8;border-radius:30px;padding:8px 16px;display:inline-flex;align-items:center;gap:8px;margin:0 6px 8px 0;font-size:13px;border:1px solid #c3dce5;}
-        .crop-container{position:relative;width:100%;height:400px;margin-bottom:16px;background:#f0f0f0;border-radius:12px;overflow:hidden;user-select:none;}
+        .crop-container{position:relative;width:100%;height:400px;margin-bottom:16px;background:#f0f0f0;border-radius:12px;overflow:hidden;user-select:none;touch-action:none;}
         #cropCanvas{display:block;width:100%;height:100%;object-fit:contain;}
-        #cropBox{position:absolute;border:2px solid white;box-shadow:0 0 0 9999px rgba(0,0,0,0.5);cursor:move;top:20%;left:20%;width:60%;height:60%;box-sizing:border-box;}
+        #cropBox{position:absolute;border:2px solid white;box-shadow:0 0 0 9999px rgba(0,0,0,0.5);cursor:move;top:20%;left:20%;width:60%;height:60%;box-sizing:border-box;touch-action:none;}
         .crop-handle{position:absolute;width:12px;height:12px;background:white;border:1px solid #1a404f;border-radius:2px;}
     </style>
     <style>
@@ -252,6 +252,7 @@
         </div>
     </div>
 
+    <!-- ===== ENHANCED CROPPER – touch support, zoom, fallback dimensions, smooth ===== -->
     <div id="cropModal" class="ai-modal no-print" style="display:none;">
         <div class="ai-card" style="width:640px;">
             <h3 style="display:flex;gap:8px;margin-bottom:12px;"><svg class="icon" style="stroke:#1a606f;"><use href="#icon-crop"></use></svg>Crop Profile Picture</h3>
@@ -275,6 +276,7 @@
             </div>
         </div>
     </div>
+    <!-- ===== END ENHANCED CROPPER ===== -->
 
     <script>
         (function(){
@@ -322,14 +324,12 @@
                 document.querySelectorAll('.page-break-before').forEach(el => el.classList.remove('page-break-before'));
                 const children = Array.from(resumeEl.children);
                 
-                // Get the resume's own padding – this respects each theme's unique internal margins
                 const style = window.getComputedStyle(resumeEl);
                 const pt = parseFloat(style.paddingTop) || 0;
                 const pb = parseFloat(style.paddingBottom) || 0;
                 const pxPerMm = 3.779527559;
                 const paddingTopMm = pt / pxPerMm;
                 const paddingBottomMm = pb / pxPerMm;
-                // A4 height = 297mm. Available space is page height minus top/bottom padding.
                 const availableHeight = 297 - paddingTopMm - paddingBottomMm;
                 let remainingSpace = availableHeight;
                 
@@ -346,23 +346,28 @@
             }
             // ===== END FIXED PAGINATION =====
 
+            // ========== ENHANCED CROPPER – cross‑device, touch, zoom, robust ==========
             let cropState = {
                 image: null,
                 canvas: null,
                 ctx: null,
                 imgWidth: 0,
                 imgHeight: 0,
+                containerWidth: 0,
+                containerHeight: 400,
+                fitScale: 1,           // initial fit-to-container scale
+                zoom: 1,              // additional zoom factor
                 displayWidth: 0,
                 displayHeight: 0,
                 offsetX: 0,
                 offsetY: 0,
-                scale: 1,
                 cropBox: { x: 0, y: 0, w: 0, h: 0 },
                 isDragging: false,
                 dragMode: null,
                 startX: 0,
                 startY: 0,
-                startBox: null
+                startBox: null,
+                animationFrame: null
             };
 
             function updateCropBoxDiv() {
@@ -391,41 +396,120 @@
                 ctx.strokeRect(cropBox.x, cropBox.y, cropBox.w, cropBox.h);
             }
 
+            function clampCropBox() {
+                const { cropBox, offsetX, offsetY, displayWidth, displayHeight } = cropState;
+                cropBox.x = Math.max(offsetX, Math.min(offsetX + displayWidth - cropBox.w, cropBox.x));
+                cropBox.y = Math.max(offsetY, Math.min(offsetY + displayHeight - cropBox.h, cropBox.y));
+                cropBox.w = Math.min(displayWidth, Math.max(50, cropBox.w));
+                cropBox.h = cropBox.w; // keep square
+                if (cropBox.x + cropBox.w > offsetX + displayWidth) cropBox.x = offsetX + displayWidth - cropBox.w;
+                if (cropBox.y + cropBox.h > offsetY + displayHeight) cropBox.y = offsetY + displayHeight - cropBox.h;
+            }
+
+            function zoomAtCenter(delta) {
+                const oldZoom = cropState.zoom;
+                let newZoom = oldZoom * delta;
+                newZoom = Math.max(0.3, Math.min(3, newZoom));
+                if (newZoom === oldZoom) return;
+                
+                const { cropBox, offsetX, offsetY, displayWidth, displayHeight, fitScale, imgWidth, imgHeight, containerWidth, containerHeight } = cropState;
+                const oldDisplayWidth = displayWidth;
+                const oldDisplayHeight = displayHeight;
+                
+                // calculate new display dimensions
+                const newDisplayWidth = imgWidth * fitScale * newZoom;
+                const newDisplayHeight = imgHeight * fitScale * newZoom;
+                
+                // get centre of crop box in image coordinates (relative to image top-left)
+                const imgCropCenterX = (cropBox.x + cropBox.w/2 - offsetX) / oldDisplayWidth * imgWidth;
+                const imgCropCenterY = (cropBox.y + cropBox.h/2 - offsetY) / oldDisplayHeight * imgHeight;
+                
+                // new offsets to keep that centre at same screen position
+                const newOffsetX = containerWidth/2 - (imgCropCenterX / imgWidth * newDisplayWidth);
+                const newOffsetY = containerHeight/2 - (imgCropCenterY / imgHeight * newDisplayHeight);
+                
+                cropState.zoom = newZoom;
+                cropState.displayWidth = newDisplayWidth;
+                cropState.displayHeight = newDisplayHeight;
+                cropState.offsetX = newOffsetX;
+                cropState.offsetY = newOffsetY;
+                
+                // clamp offsets
+                cropState.offsetX = Math.min(containerWidth, Math.max(containerWidth - newDisplayWidth, cropState.offsetX));
+                cropState.offsetY = Math.min(containerHeight, Math.max(containerHeight - newDisplayHeight, cropState.offsetY));
+                
+                // adjust crop box size proportionally (keep same relative size)
+                const relSize = cropBox.w / oldDisplayWidth;
+                cropState.cropBox.w = newDisplayWidth * relSize;
+                cropState.cropBox.h = cropState.cropBox.w;
+                
+                // ensure crop box stays within image bounds
+                clampCropBox();
+                
+                drawCropCanvas();
+                updateCropBoxDiv();
+            }
+
             function initCropper(imageDataUrl) {
                 const modal = document.getElementById('cropModal');
                 const canvas = document.getElementById('cropCanvas');
                 const ctx = canvas.getContext('2d');
                 const img = new Image();
+                
                 img.onload = function() {
+                    // Show modal FIRST so container has dimensions
                     modal.style.display = 'flex';
-
-                    cropState.image = img;
-                    cropState.imgWidth = img.width;
-                    cropState.imgHeight = img.height;
-                    cropState.canvas = canvas;
-                    cropState.ctx = ctx;
-
+                    
+                    // Fallback dimensions if container.clientWidth is 0 (rare, but happens on some mobile)
                     const container = document.getElementById('cropContainer');
-                    const containerWidth = container.clientWidth;
+                    let containerWidth = container.clientWidth;
+                    if (containerWidth === 0) {
+                        // Use modal card width minus padding
+                        const card = modal.querySelector('.ai-card');
+                        containerWidth = card.clientWidth - 64; // 32px padding each side
+                        if (containerWidth < 100) containerWidth = 576; // ultimate fallback
+                    }
                     const containerHeight = 400;
+                    
                     canvas.width = containerWidth;
                     canvas.height = containerHeight;
-
-                    const ratio = Math.min(containerWidth / img.width, containerHeight / img.height);
-                    cropState.displayWidth = img.width * ratio;
-                    cropState.displayHeight = img.height * ratio;
-                    cropState.offsetX = (containerWidth - cropState.displayWidth) / 2;
-                    cropState.offsetY = (containerHeight - cropState.displayHeight) / 2;
-                    cropState.scale = ratio;
-
-                    const size = Math.min(cropState.displayWidth, cropState.displayHeight) * 0.7;
-                    cropState.cropBox = {
-                        x: cropState.offsetX + (cropState.displayWidth - size) / 2,
-                        y: cropState.offsetY + (cropState.displayHeight - size) / 2,
+                    
+                    const fitScale = Math.min(containerWidth / img.width, containerHeight / img.height);
+                    const displayWidth = img.width * fitScale;
+                    const displayHeight = img.height * fitScale;
+                    const offsetX = (containerWidth - displayWidth) / 2;
+                    const offsetY = (containerHeight - displayHeight) / 2;
+                    const size = Math.min(displayWidth, displayHeight) * 0.7;
+                    const cropBox = {
+                        x: offsetX + (displayWidth - size) / 2,
+                        y: offsetY + (displayHeight - size) / 2,
                         w: size,
                         h: size
                     };
-
+                    
+                    cropState = {
+                        image: img,
+                        canvas,
+                        ctx,
+                        imgWidth: img.width,
+                        imgHeight: img.height,
+                        containerWidth,
+                        containerHeight,
+                        fitScale,
+                        zoom: 1,
+                        displayWidth,
+                        displayHeight,
+                        offsetX,
+                        offsetY,
+                        cropBox,
+                        isDragging: false,
+                        dragMode: null,
+                        startX: 0,
+                        startY: 0,
+                        startBox: null,
+                        animationFrame: null
+                    };
+                    
                     drawCropCanvas();
                     updateCropBoxDiv();
                 };
@@ -433,30 +517,37 @@
             }
 
             function setupCropEvents() {
-                const cropBoxEl = document.getElementById('cropBox');
                 const container = document.getElementById('cropContainer');
+                const cropBoxEl = document.getElementById('cropBox');
                 
-                function onMouseDown(e) {
+                // unified pointer handler
+                function getPointerCoords(e) {
                     e.preventDefault();
                     const rect = container.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const box = cropState.cropBox;
-                    
-                    const handleSize = 12;
-                    if (Math.abs(x - box.x) < handleSize && Math.abs(y - box.y) < handleSize) {
-                        cropState.dragMode = 'nw';
-                    } else if (Math.abs(x - (box.x + box.w)) < handleSize && Math.abs(y - box.y) < handleSize) {
-                        cropState.dragMode = 'ne';
-                    } else if (Math.abs(x - box.x) < handleSize && Math.abs(y - (box.y + box.h)) < handleSize) {
-                        cropState.dragMode = 'sw';
-                    } else if (Math.abs(x - (box.x + box.w)) < handleSize && Math.abs(y - (box.y + box.h)) < handleSize) {
-                        cropState.dragMode = 'se';
-                    } else if (x >= box.x && x <= box.x + box.w && y >= box.y && y <= box.y + box.h) {
-                        cropState.dragMode = 'move';
+                    let clientX, clientY;
+                    if (e.touches) {
+                        clientX = e.touches[0].clientX;
+                        clientY = e.touches[0].clientY;
                     } else {
-                        cropState.dragMode = null;
+                        clientX = e.clientX;
+                        clientY = e.clientY;
                     }
+                    return { x: clientX - rect.left, y: clientY - rect.top };
+                }
+                
+                function startDrag(e) {
+                    e.preventDefault();
+                    const { x, y } = getPointerCoords(e);
+                    const box = cropState.cropBox;
+                    const handleSize = 20; // larger hit area for touch
+                    
+                    // detect handle or move
+                    if (Math.hypot(x - box.x, y - box.y) < handleSize) cropState.dragMode = 'nw';
+                    else if (Math.hypot(x - (box.x + box.w), y - box.y) < handleSize) cropState.dragMode = 'ne';
+                    else if (Math.hypot(x - box.x, y - (box.y + box.h)) < handleSize) cropState.dragMode = 'sw';
+                    else if (Math.hypot(x - (box.x + box.w), y - (box.y + box.h)) < handleSize) cropState.dragMode = 'se';
+                    else if (x >= box.x && x <= box.x + box.w && y >= box.y && y <= box.y + box.h) cropState.dragMode = 'move';
+                    else cropState.dragMode = null;
                     
                     if (cropState.dragMode) {
                         cropState.isDragging = true;
@@ -466,57 +557,86 @@
                     }
                 }
                 
-                function onMouseMove(e) {
+                function onDrag(e) {
                     if (!cropState.isDragging) return;
                     e.preventDefault();
-                    const rect = container.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const dx = x - cropState.startX;
-                    const dy = y - cropState.startY;
-                    const newBox = { ...cropState.startBox };
                     
-                    if (cropState.dragMode === 'move') {
-                        newBox.x = Math.max(cropState.offsetX, Math.min(cropState.offsetX + cropState.displayWidth - newBox.w, cropState.startBox.x + dx));
-                        newBox.y = Math.max(cropState.offsetY, Math.min(cropState.offsetY + cropState.displayHeight - newBox.h, cropState.startBox.y + dy));
-                    } else if (cropState.dragMode === 'se') {
-                        newBox.w = Math.min(cropState.offsetX + cropState.displayWidth - newBox.x, Math.max(50, cropState.startBox.w + dx));
+                    if (cropState.animationFrame) cancelAnimationFrame(cropState.animationFrame);
+                    cropState.animationFrame = requestAnimationFrame(() => {
+                        const { x, y } = getPointerCoords(e);
+                        const dx = x - cropState.startX;
+                        const dy = y - cropState.startY;
+                        const newBox = { ...cropState.startBox };
+                        const { offsetX, offsetY, displayWidth, displayHeight } = cropState;
+                        
+                        if (cropState.dragMode === 'move') {
+                            newBox.x = cropState.startBox.x + dx;
+                            newBox.y = cropState.startBox.y + dy;
+                        } else if (cropState.dragMode === 'se') {
+                            newBox.w = Math.max(50, cropState.startBox.w + dx);
+                            newBox.h = newBox.w;
+                        } else if (cropState.dragMode === 'nw') {
+                            newBox.w = Math.max(50, cropState.startBox.w - dx);
+                            newBox.h = newBox.w;
+                            newBox.x = cropState.startBox.x + (cropState.startBox.w - newBox.w);
+                            newBox.y = cropState.startBox.y + (cropState.startBox.h - newBox.h);
+                        } else if (cropState.dragMode === 'ne') {
+                            newBox.w = Math.max(50, cropState.startBox.w + dx);
+                            newBox.h = newBox.w;
+                            newBox.y = cropState.startBox.y + (cropState.startBox.h - newBox.h);
+                        } else if (cropState.dragMode === 'sw') {
+                            newBox.w = Math.max(50, cropState.startBox.w - dx);
+                            newBox.h = newBox.w;
+                            newBox.x = cropState.startBox.x + (cropState.startBox.w - newBox.w);
+                        }
+                        
+                        // clamp within image bounds
+                        newBox.x = Math.max(offsetX, Math.min(offsetX + displayWidth - newBox.w, newBox.x));
+                        newBox.y = Math.max(offsetY, Math.min(offsetY + displayHeight - newBox.h, newBox.y));
+                        newBox.w = Math.min(displayWidth, newBox.w);
                         newBox.h = newBox.w;
-                    } else if (cropState.dragMode === 'nw') {
-                        newBox.w = Math.min(newBox.x + cropState.startBox.w - cropState.offsetX, Math.max(50, cropState.startBox.w - dx));
-                        newBox.h = newBox.w;
-                        newBox.x = cropState.startBox.x + (cropState.startBox.w - newBox.w);
-                        newBox.y = cropState.startBox.y + (cropState.startBox.h - newBox.h);
-                    } else if (cropState.dragMode === 'ne') {
-                        newBox.w = Math.min(cropState.offsetX + cropState.displayWidth - newBox.x, Math.max(50, cropState.startBox.w + dx));
-                        newBox.h = newBox.w;
-                        newBox.y = cropState.startBox.y + (cropState.startBox.h - newBox.h);
-                    } else if (cropState.dragMode === 'sw') {
-                        newBox.w = Math.min(newBox.x + cropState.startBox.w - cropState.offsetX, Math.max(50, cropState.startBox.w - dx));
-                        newBox.h = newBox.w;
-                        newBox.x = cropState.startBox.x + (cropState.startBox.w - newBox.w);
+                        
+                        cropState.cropBox = newBox;
+                        drawCropCanvas();
+                        updateCropBoxDiv();
+                        cropState.animationFrame = null;
+                    });
+                }
+                
+                function endDrag(e) {
+                    if (cropState.isDragging) {
+                        e.preventDefault();
+                        cropState.isDragging = false;
+                        cropState.dragMode = null;
+                        if (cropState.animationFrame) {
+                            cancelAnimationFrame(cropState.animationFrame);
+                            cropState.animationFrame = null;
+                        }
                     }
-                    
-                    newBox.x = Math.max(cropState.offsetX, Math.min(cropState.offsetX + cropState.displayWidth - newBox.w, newBox.x));
-                    newBox.y = Math.max(cropState.offsetY, Math.min(cropState.offsetY + cropState.displayHeight - newBox.h, newBox.y));
-                    
-                    cropState.cropBox = newBox;
-                    drawCropCanvas();
-                    updateCropBoxDiv();
                 }
                 
-                function onMouseUp(e) {
-                    cropState.isDragging = false;
-                    cropState.dragMode = null;
-                }
+                // mouse events
+                container.addEventListener('mousedown', startDrag);
+                window.addEventListener('mousemove', onDrag);
+                window.addEventListener('mouseup', endDrag);
                 
-                container.addEventListener('mousedown', onMouseDown);
-                window.addEventListener('mousemove', onMouseMove);
-                window.addEventListener('mouseup', onMouseUp);
+                // touch events
+                container.addEventListener('touchstart', startDrag, { passive: false });
+                window.addEventListener('touchmove', onDrag, { passive: false });
+                window.addEventListener('touchend', endDrag);
+                window.addEventListener('touchcancel', endDrag);
                 
-                document.getElementById('cropZoomInBtn').onclick = () => {};
-                document.getElementById('cropZoomOutBtn').onclick = () => {};
+                // zoom implementation
+                document.getElementById('cropZoomInBtn').onclick = () => zoomAtCenter(1.2);
+                document.getElementById('cropZoomOutBtn').onclick = () => zoomAtCenter(0.8);
                 document.getElementById('cropResetBtn').onclick = () => {
+                    if (!cropState.image) return;
+                    const { containerWidth, containerHeight, fitScale, imgWidth, imgHeight } = cropState;
+                    cropState.zoom = 1;
+                    cropState.displayWidth = imgWidth * fitScale;
+                    cropState.displayHeight = imgHeight * fitScale;
+                    cropState.offsetX = (containerWidth - cropState.displayWidth) / 2;
+                    cropState.offsetY = (containerHeight - cropState.displayHeight) / 2;
                     const size = Math.min(cropState.displayWidth, cropState.displayHeight) * 0.7;
                     cropState.cropBox = {
                         x: cropState.offsetX + (cropState.displayWidth - size) / 2,
@@ -553,6 +673,7 @@
                 persist();
                 document.getElementById('cropModal').style.display = 'none';
             }
+            // ========== END ENHANCED CROPPER ==========
 
             const twoColThemes = [
                 { id: 'theme2c1', name: '2C · Ocean Splash', accent: '#0b5e7c', leftBg: '#e3f0f5', font: 'Inter', bullet: '▹', cols: '1fr 2.2fr', shadow: '0 8px 20px rgba(11,94,124,0.08)', radius: '16px' },
